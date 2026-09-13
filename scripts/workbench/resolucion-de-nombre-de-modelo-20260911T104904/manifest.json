@@ -1,0 +1,37 @@
+{
+  "question": "Como resuelve la referencia un nombre de modelo punteado, y que le falta a nuestro arbol para que Django encuentre el destinatario de un Many2one declarado con ese nombre",
+  "instrument": [
+    "git show origin/main:<ruta> sobre odoo-tools (solo lectura)",
+    "grep -n sobre odoo/orm/fields_relational.py y odoo/orm/fields.py de odoo19c",
+    "django/db/models/utils.py::make_model_tuple y django/db/models/fields/related.py del paquete instalado",
+    "uv run pytest --reuse-db sobre la base QA caliente, leyendo el traceback de django_db_setup",
+    "construccion de modelos desechables (app_label='base') bajo django.setup() completo, con un fields.Many2one de 0, 1 y 3 puntos — M18",
+    "lectura de django/apps/registry.py::populate y de related.py::related_model para situar apps_ready / models_ready / ready en las tres fases — M19",
+    "collect_system_check_summary() en proceso, agrupando errors por id — M22",
+    "recorrido AST de constantes de cadena bajo src/ cruzado con apps.get_model bajo django.setup() — M23"
+  ],
+  "metric": "Simbolos y lineas verbatim de la referencia y de Django que participan en la resolucion del comodelo; el traceback real que produce un nombre punteado sin destinatario; y la CONDUCTA medida en proceso de make_model_tuple ante 0, 1 y 2+ puntos, cruzada con la distribucion por numero de puntos de los 224 _name del arbol",
+  "blind_to": [
+    "El comportamiento en runtime de la resolucion diferida: las trece mediciones leen codigo y un traceback, no ejercitan un resolutor que aun no existe",
+    "El radio de deconstruct(): si Many2one pasara a devolver una subclase de ForeignKey, makemigrations veria otra ruta de clase, y eso NO se ha medido aqui",
+    "El caso en que el addon test_orm no este en el arbol, donde sync_apps no ve sus modelos y la relacion muerta no existe",
+    "Los comodelos de otros addons (res.users, res.partner): siguen muertos tras el resolutor hasta que sus clases declaren _name",
+    "One2many y Many2many: One2many resuelve con apps.get_model(self.comodel_name) (fields_relational.py:354) — mismo fallo ante 2+ puntos por OTRO mecanismo, fuera del alcance de este resolutor. Sucesor declarado, no plegado aqui.",
+    "El campo declarado con ETIQUETA DE DJANGO ('base.ResPartner'), que hoy es la forma mayoritaria del arbol y no toma ninguno de los tres caminos medidos en M18.",
+    "El borde de import tardio (H-API-577): un modelo cuyo _name se prepara antes de que el receptor de orm.registry este conectado no lo ve la direccion (b), porque _ensure_seeded esta guardado por apps.ready (M19) y en Fase 2 vale False. MEDIDO que la cadena esta cerrada por construccion para todo modulo que use la fachada: fields/__init__.py:78 importa orm.fields_relational, que en su linea 82 hace 'from orm.registry import IR_MODELS, name_of'. La ceguera restante son los 17 archivos con _name que no importan ni fields ni orm (medido con grep -rlE sobre src/ y addons/).",
+    "Los system checks solo recorren el registro GLOBAL: un pendiente colgado dentro de un StateApps o de un isolate_apps no lo veria _check_lazy_references (M22).",
+    "El censo de etiquetas label_lower recorre CONSTANTES de cadena: una etiqueta compuesta en tiempo de ejecucion (f'{app}.{modelo}') es invisible, y addons/ quedo fuera del recorrido (M23).",
+    "Que los dos vocabularios no se solapen —0 de las 41 etiquetas es ademas un _name— es un hecho de HOY, no una propiedad: el dia que una cadena sea las dos cosas, el orden de las dos consultas de _deferred_comodel pasa a decidir."
+  ],
+  "destination": [
+    "src/orm/registry.py — el registro por nombre al que se enganchara el resolutor diferido",
+    "scripts/workbench/resolucion-de-nombre-de-modelo-20260911T104904/mediciones.md"
+  ],
+  "source": "odoo19c (odoo-tools, solo lectura) y el paquete django instalado en .venv",
+  "control": "El positivo REAL es el ValueError de M18: un cuerpo de clase con fields.Many2one('ir.model.fields') levanta hoy \"Invalid model reference\" en tiempo de ejecucion del cuerpo, antes de que exista ninguna entrada pendiente. Ese caso tiene que ir de rojo a verde. Despues: remote_field.model is IrModelFields; related_model is IrModelFields tras django.setup(); ninguna clave centinela de un _name ya registrado queda en _pending_operations; los dos ordenes de declaracion; la auto-referencia; y f.deconstruct()[3]['to'] == target._meta.label_lower — el centinela NUNCA aterriza en una migracion. Anulacion por direccion: retirada la direccion (a) caen auto-referencia y referente-primero; retirada la (b) cae destino-primero; retirada la traduccion vuelve el ValueError de M18. Un django_db_setup que pase sin estas comprobaciones no separa resuelto de silenciado (M9). Anulacion (d): retirada la consulta a apps.get_model, no cae un caso sino los 17 — el arbol no levanta, porque 41 etiquetas label_lower de 31 migraciones van al centinela (M23). La granularidad de ese control es el arbol, no el caso; su positivo real son group_ids y paperformat_id de base.IrActionsReport.",
+  "reproducible": "eval \"$(python3 scripts/reference_roots.py --env)\" y luego los grep de cada medicion; el traceback, con uv run pytest tests/unit/scripts/ -q --reuse-db con el addon presente",
+  "tasks": [
+    "#324",
+    "#332"
+  ]
+}

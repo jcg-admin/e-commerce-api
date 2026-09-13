@@ -1,0 +1,9 @@
+
+Los identificadores van en INGLÉS; los comentarios y docstrings, en
+español. Traducir el nombre, no buscarle un sinónimo más evocador:
+  Modelo → Model (no Probe) · _Base se queda _Base.
+OJO: un modelo CONCRETO no puede empezar ni terminar en guion bajo
+  (Django models.E023). Lo vigila check_model_name_lookup.py.
+
+Medido: 29 archivos. Deuda heredada congelada: 3531 (tarea #147).
+EXIT=0

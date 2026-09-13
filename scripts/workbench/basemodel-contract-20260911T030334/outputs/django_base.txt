@@ -1,0 +1,76 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/base.py  (2519 lineas)
+
+=== ModelBase(type)  :94-458  metodos=5 atributos=0
+  DEF 	__new__	97-389	-	(cls, name, bases, attrs, **kwargs)	
+  DEF 	add_to_class	391-395	-	(cls, name, value)	
+  DEF 	_prepare	397-450	-	(cls)	Create some methods once self._meta has been populated.
+  DEF 	_base_manager	453-454	property	(cls)	
+  DEF 	_default_manager	457-458	property	(cls)	
+
+=== Model(AltersData)  :481-2465  metodos=65 atributos=1
+  ATTR	pk	686	pk = property(_get_pk_val, _set_pk_val)
+  DEF 	__init__	482-595	-	(self, *args, **kwargs)	
+  DEF 	from_db	598-608	classmethod	(cls, db, field_names, values)	
+  DEF 	__repr__	610-611	-	(self)	
+  DEF 	__str__	613-614	-	(self)	
+  DEF 	__eq__	616-624	-	(self, other)	
+  DEF 	__hash__	626-629	-	(self)	
+  DEF 	__reduce__	631-635	-	(self)	
+  DEF 	__getstate__	637-652	-	(self)	Hook to allow choosing the attributes to pickle.
+  DEF 	__setstate__	654-674	-	(self, state)	
+  DEF 	_get_pk_val	676-678	-	(self, meta=None)	
+  DEF 	_set_pk_val	680-684	-	(self, value)	
+  DEF 	_is_pk_set	688-693	-	(self, meta=None)	
+  DEF 	get_deferred_fields	695-703	-	(self)	Return a set containing names of deferred fields for this instance.
+  DEF 	refresh_from_db	705-787	-	(self, using=None, fields=None, from_queryset=None)	Reload field values from the database.
+  DEF 	arefresh_from_db	789-792	-	(self, using=None, fields=None, from_queryset=None)	
+  DEF 	serializable_value	794-809	-	(self, field_name)	Return the value of the field name for this instance. If the field is
+  DEF 	save	811-879	-	(self, *, force_insert=False, force_update=False, using=None, update_fields=None)	Save the current instance. Override this in a subclass if you want to
+  DEF 	asave	883-896	-	(self, *, force_insert=False, force_update=False, using=None, update_fields=None)	
+  DEF 	_validate_force_insert	901-918	classmethod	(cls, force_insert)	
+  DEF 	save_base	920-988	-	(self, raw=False, force_insert=False, force_update=False, using=None, update_fields=None)	Handle the parts of saving which should be done only once per save,
+  DEF 	_save_parents	992-1037	-	(self, cls, using, update_fields, force_insert, updated_parents=None)	Save all the parents of cls using values from self.
+  DEF 	_save_table	1039-1174	-	(self, raw=False, cls=None, force_insert=False, force_update=False, using=None, update_fields=None)	Do the heavy-lifting involved in saving. Update or insert the data
+  DEF 	_do_update	1176-1213	-	(self, base_qs, using, pk_val, values, update_fields, forced_update, returning_fields)	Try to update the model. Return True if the model was updated (if an
+  DEF 	_do_insert	1215-1226	-	(self, manager, using, fields, returning_fields, raw)	Do an INSERT. If returning_fields is defined then this method should
+  DEF 	_assign_returned_values	1228-1235	-	(self, returned_values, returning_fields)	
+  DEF 	_prepare_related_fields_for_save	1237-1289	-	(self, operation_name, fields=None)	
+  DEF 	delete	1291-1300	-	(self, using=None, keep_parents=False)	
+  DEF 	adelete	1304-1308	-	(self, using=None, keep_parents=False)	
+  DEF 	_get_FIELD_display	1312-1318	-	(self, field)	
+  DEF 	_get_next_or_previous_by_FIELD	1320-1339	-	(self, field, is_next, **kwargs)	
+  DEF 	_get_next_or_previous_in_order	1341-1362	-	(self, is_next)	
+  DEF 	_get_field_expression_map	1364-1408	-	(self, meta, exclude=None)	
+  DEF 	prepare_database_save	1410-1415	-	(self, field)	
+  DEF 	clean	1417-1425	-	(self)	Hook for doing any extra model-wide validation after clean() has been
+  DEF 	validate_unique	1427-1441	-	(self, exclude=None)	Check unique constraints on the model and raise ValidationError if any
+  DEF 	_get_unique_checks	1443-1509	-	(self, exclude=None, include_meta_constraints=False)	Return a list of checks to perform. Since validate_unique() could be
+  DEF 	_perform_unique_checks	1511-1558	-	(self, unique_checks)	
+  DEF 	_perform_date_checks	1560-1589	-	(self, date_checks)	
+  DEF 	date_error_message	1591-1606	-	(self, lookup_type, field_name, unique_for)	
+  DEF 	unique_error_message	1608-1638	-	(self, model_class, unique_check)	
+  DEF 	get_constraints	1640-1645	-	(self)	
+  DEF 	validate_constraints	1647-1665	-	(self, exclude=None)	
+  DEF 	full_clean	1667-1712	-	(self, exclude=None, validate_unique=True, validate_constraints=True)	Call clean_fields(), clean(), validate_unique(), and
+  DEF 	clean_fields	1714-1740	-	(self, exclude=None)	Clean all fields and raise a ValidationError containing a dict
+  DEF 	check	1743-1777	classmethod	(cls, **kwargs)	
+  DEF 	_check_composite_pk	1780-1836	classmethod	(cls)	
+  DEF 	_check_db_table_comment	1839-1859	classmethod	(cls, databases)	
+  DEF 	_check_swappable	1862-1886	classmethod	(cls)	Check if the swapped model exists.
+  DEF 	_check_model	1889-1899	classmethod	(cls)	
+  DEF 	_check_managers	1902-1907	classmethod	(cls, **kwargs)	Perform all manager checks.
+  DEF 	_check_fields	1910-1917	classmethod	(cls, **kwargs)	Perform all field checks.
+  DEF 	_check_m2m_through_same_relationship	1920-1955	classmethod	(cls)	Check if no relationship model is used by more than one m2m field.
+  DEF 	_check_id_field	1958-1974	classmethod	(cls)	Check if `id` field is a primary key.
+  DEF 	_check_field_name_clashes	1977-2044	classmethod	(cls)	Forbid field shadowing in multi-table inheritance.
+  DEF 	_check_column_name_clashes	2047-2070	classmethod	(cls)	
+  DEF 	_check_model_name_db_lookup_clashes	2073-2094	classmethod	(cls)	
+  DEF 	_check_property_name_related_field_accessor_clashes	2097-2115	classmethod	(cls)	
+  DEF 	_check_single_primary_key	2118-2129	classmethod	(cls)	
+  DEF 	_check_unique_together	2132-2159	classmethod	(cls)	Check the value of "unique_together" option.
+  DEF 	_check_indexes	2162-2170	classmethod	(cls, databases)	
+  DEF 	_check_local_fields	2173-2249	classmethod	(cls, fields, option)	
+  DEF 	_check_ordering	2252-2358	classmethod	(cls)	Check "ordering" option -- is it a list of strings and do all fields
+  DEF 	_check_long_column_names	2361-2438	classmethod	(cls, databases)	Check that any auto-generated column names are shorter than the limits
+  DEF 	_get_expr_references	2441-2454	classmethod	(cls, expr)	
+  DEF 	_check_constraints	2457-2465	classmethod	(cls, databases)	

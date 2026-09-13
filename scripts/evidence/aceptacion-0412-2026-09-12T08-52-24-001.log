@@ -1,0 +1,60 @@
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_declared_address_dispatches_its_inverse.py", line 35, in <module>
+    old_config = runner.setup_databases()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/test/runner.py", line 1026, in setup_databases
+    return _setup_databases(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/test/utils.py", line 241, in setup_databases
+    serialize_connection.creation.serialize_db_to_string()
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py", line 164, in serialize_db_to_string
+    serializers.serialize("json", get_objects(), indent=None, stream=out)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/core/serializers/__init__.py", line 134, in serialize
+    s.serialize(queryset, **options)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/core/serializers/base.py", line 109, in serialize
+    for count, obj in enumerate(queryset, start=1):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py", line 160, in get_objects
+    yield from queryset.iterator(chunk_size=chunk_size)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 508, in _iterator
+    yield from iterable
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/query.py", line 128, in __iter__
+    obj = model_cls.from_db(
+          ^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 605, in from_db
+    new = cls(*values)
+          ^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 1393, in _model_init_marking_the_load
+    _DJANGO_MODEL_INIT(self, *args, **kwargs)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 513, in __init__
+    _setattr(self, field.attname, val)
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 1713, in __set__
+    field._insert_cache(
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 4619, in _insert_cache
+    field_cache = self._get_cache(get_environment())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 4482, in _get_cache
+    memo_key = (self, env.cache_key(self) if _has_context_buckets(self) else None)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 4469, in _has_context_buckets
+    return field in field_depends_context
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/registry.py", line 835, in __contains__
+    return bool(self[field])
+                ~~~~^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/registry.py", line 831, in __getitem__
+    self._table = self._build()
+                  ^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/registry.py", line 818, in _build
+    declared = self._declared_by_the_field(field, model)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/registry.py", line 812, in _declared_by_the_field
+    return producer(model)[self.INDEX]
+           ^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 4158, in get_depends
+    depends.extend(deps(model) if callable(deps) else deps)
+                   ^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/addons/base/models/res_company.py", line 543, in <lambda>
+    self._get_company_address_field_names()])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: ResCompany._get_company_address_field_names() missing 1 required positional argument: 'self'
+EXIT=1

@@ -1,0 +1,26 @@
+      5 src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+      2 /home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:123: AttributeError: 'CharField' object has no attribute '__get__'. Did you mean: '__ge__'?
+      2 /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py:206: AttributeError: 'NoneType' object has no attribute 'split'
+      1 src/tools/sql.py:338: AttributeError: 'NoneType' object has no attribute 'isidentifier'
+      1 src/orm/fields.py:1610: AttributeError: 'ComputeDispatchProbe' object has no attribute 'default_get'
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign grupo #3.display_name
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign clave.uno.display_name
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign ComputeDispatchProbe object (None).label
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente.display_name
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente Sin Correo.display_name
+      1 src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente Con Nombre.display_name
+      1 src/addons/base/models/res_partner.py:1222: django.core.exceptions.ValidationError: ['Another partner already has this barcode']
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:53: AssertionError: assert 'ORIGMXMM' == 'FIXDMXMM'
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:47: AssertionError: assert 'Banco original' == 'Banco corregido'
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:179: AssertionError: assert False
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:136: assert False
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:78: assert False
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:68: AttributeError: 'One2many' object has no attribute 'store'
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Properties devolvió Properties
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: One2many devolvió One2many
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Monetary devolvió DecimalField
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Many2one devolvió ForeignKey
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Json devolvió JSONField
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Image devolvió Image
+      1 /home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Html devolvió Html
+EXIT=0

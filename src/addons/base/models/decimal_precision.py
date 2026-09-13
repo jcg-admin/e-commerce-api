@@ -92,8 +92,6 @@ class DecimalPrecision(models.OriginMixin, models.Model):
         cambia lo que ``precision_get`` ya había memorizado —incluido el
         fallback a 2 de un uso que hasta ahora no existía.
         """
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
         res = [cls.objects.create(**vals) for vals in vals_list]
         registry.clear_cache('stable')
         return res

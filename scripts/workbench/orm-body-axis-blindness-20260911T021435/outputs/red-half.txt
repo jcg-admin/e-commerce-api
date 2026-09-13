@@ -1,0 +1,19 @@
+# Mitad ROJA del TDD del emparejamiento — 2026-09-11T02:23:36, api@742ae2dc
+# uv run pytest tests/unit/scripts/test_counterpart_body.py -q
+# Los 2 verdes documentan el ESTADO ACTUAL (la ceguera y la mala
+# comparacion); los 9 rojos son el criterio que aun no existe.
+
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheCollapseByNameComparesTheWrongBody::test_the_new_pairing_puts_property_against_property
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheCollapseByNameComparesTheWrongBody::test_the_sibling_gets_its_own_pair_or_none_at_all
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheModuleLevelFunctionIsPaired::test_a_module_writer_is_now_visible[create_column]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheModuleLevelFunctionIsPaired::test_a_module_writer_is_now_visible[drop_constraint]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheDissolvedBaseKeepsItsPairs::test_the_mixin_still_pairs_against_base_model[create]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheDissolvedBaseKeepsItsPairs::test_the_mixin_still_pairs_against_base_model[copy]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheScopePublishesEachRoute::test_the_three_routes_sum_to_the_compared_pairs
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheKeyCarriesTheOwner::test_a_class_symbol_is_keyed_by_owner_and_name
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheKeyCarriesTheOwner::test_a_module_symbol_keeps_the_bare_name
+9 failed, 2 passed, 1 warning in 6.27s

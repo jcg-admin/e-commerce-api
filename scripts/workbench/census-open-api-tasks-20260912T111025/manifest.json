@@ -1,0 +1,32 @@
+{
+  "question": "De las tareas de capa `api` que el store da por abiertas, ¿cuáles ya están cerradas DE HECHO — es decir, un commit de alguno de los seis árboles nombra su cita — y cuáles nunca se han trabajado?",
+  "instrument": [
+    "thyrox@36052983 — src/task/census_open_tasks.py --layer api --out-dir scripts/evidence",
+    "thyrox@36052983 — tests/task/test_census_open_tasks.py (30 aserciones; dos anulaciones: el filtro de capa corta exactamente 1b, y la derivación del descuento propio corta exactamente 3h y 3i)"
+  ],
+  "metric": "filas de `tasks` con `submodule = 'api'` y `status != 'completed'` (universo declarado: 473 filas de capa api en total, 284 abiertas — 268 `pending` + 16 `in_progress`), repartidas en tres cubos por su evidencia: `closed_in_tree` si su `citation_id` aparece en el mensaje de un commit de `git log --all` de las seis raíces (los cinco clones consumidores más el proveedor thyrox); `owned_but_open` si la cita el contenido de un archivo que no sea render del tablero; `orphan` si ninguna de las dos.",
+  "blind_to": [
+    "un commit que cierre la tarea SIN nombrar su cita — cae en `owned_but_open` o en `orphan`, y el censo no lo puede distinguir de una tarea nunca trabajada",
+    "si el trabajo del commit TERMINÓ: nombrar la cita prueba que el trabajo aterrizó, no que cerró. `closed_in_tree` es una lista de triaje para el ejecutor, no un veredicto de cierre",
+    "el criterio alterno de universo: `citation_id LIKE 'TASK-API-%'` da 427 filas y 252 abiertas, no 473/284. Los dos son válidos y miden poblaciones distintas — la columna `submodule` es clasificación y el prefijo de la cita es identidad (`correct_layer`: «el id es identidad, no clasificación»), así que una fila acuñada GEN y luego clasificada api entra por un criterio y no por el otro",
+    "una cita nombrada en el CUERPO de un commit de un repo que no esté en el alcance de las seis raíces",
+    "el `:estado:` de un hallazgo citante cuando el archivo vive fuera de las seis raíces: `finding_state` devuelve None y el cubo no se entera",
+    "un archivo que enumere el tablero y NO esté bajo el destino declarado ni en la lista fija — el descuento es por tramo de ruta, no por contenido; un volcado nuevo en una ruta nueva vuelve a contaminar hasta que alguien lo declare"
+  ],
+  "control": "el censo de `api` y el de `docs` sobre la misma base devuelven poblaciones disjuntas. La anulación que lo prueba está en la suite del instrumento: fijado el filtro a 'docs' como hacía el probe original, cae EXACTAMENTE la aserción 1b — «el censo de api devuelve sus dos abiertas» — y ninguna más.",
+  "reproducible": "python3 /home/user/thyrox/src/task/census_open_tasks.py --layer api --out-dir /home/user/kaupamex-api/scripts/evidence",
+  "outputs": [
+    "scripts/evidence/census-open-api-tasks-<ISO>.log",
+    "scripts/evidence/census_open_api_tasks.json"
+  ],
+  "source": [
+    "kaupamex-docs: .claude/eventos/close-open-docs-tasks-20260912T100232/ — el banco fechado que respondió la parte DOCS del mismo encargo, con las tres fallas de instrumento que su porte conserva corregidas",
+    "thyrox: agent-results/agent_store.sqlite3 — la base medida"
+  ],
+  "tasks": [
+    "TASK-DOCS-0405"
+  ],
+  "destination": "docs: source/gestion/pm/api/iniciativas/ — el reparto de las abiertas de api en sus tres cubos, y la lista de triaje de `closed_in_tree` para el ejecutor",
+  "measured_at": "PENDIENTE-AL-CORRER",
+  "corrected_premise": "La primera ejecucion (thyrox@3e8c2885) conto su PROPIA salida como prosa citante: `orphan` cayo de 224 a 0 y las 249 de `owned_but_open` estaban citadas por `scripts/evidence/census_open_api_tasks.json`. La lista de descuento de render describia el arbol de `docs` y no el destino de `api`. Corregido en thyrox@36052983: el descuento es parametro del corpus y se deriva del `--out-dir`."
+}

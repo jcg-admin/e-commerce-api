@@ -60,6 +60,7 @@ from typing import TypeVar
 from django.apps import apps
 from django.core.exceptions import FieldDoesNotExist
 from django.db import DEFAULT_DB_ALIAS, connections, models
+from django.db.models.fields.related import RelatedField
 from django.db.models.query_utils import DeferredAttribute
 from django.utils.timezone import localtime
 from psycopg.types.json import Jsonb
@@ -70,12 +71,14 @@ from tools.constants import PREFETCH_MAX
 from tools.misc import SENTINEL, OrderedSet, remove_accents, unique
 from tools.translate import _
 from orm import registry as orm_registry
-from orm.registry import (UNACCENT_ENABLED, Registry,
+from orm.registry import (IR_MODELS, UNACCENT_ENABLED,   # noqa: F401
+                          Registry,
                           field_computed as registry_field_computed,
                          field_depends_context, is_not_null)
 from tools.sql import (SQL, convert_column, create_column, drop_not_null,
                        pg_varchar, set_not_null, sql_order_by_type)
 
+from orm.model_classes import ensure_field_setup
 from orm.fields_binary import Binary, Image                    # noqa: F401
 from orm.fields_misc import Boolean, Json                      # noqa: F401
 from orm.fields_numeric import Float, Integer, Monetary        # noqa: F401
@@ -96,6 +99,14 @@ from orm.fields_textual import Char, Html, Text                # noqa: F401
 from orm.utils import (COLLECTION_TYPES, as_record_list, browse, expand_ids,
                        model_field_registry, model_of, model_of_field,
                        record_ids)
+
+#: La clave del almacén de la instancia donde se anotan los campos escritos
+#: cuyo inverso todavía no se ha despachado. Vive en ``__dict__`` y no en una
+#: ranura porque es lo que ya hace ``_orm_building`` en este mismo descriptor;
+#: la escribe :meth:`ComputedFieldDescriptor._mark_pending_inverse` y la
+#: **saca** —no la lee— :meth:`~orm.models.RecordLoaderMixin.save`, que es lo
+#: que impide que un segundo ``save()`` de la misma fila vuelva a despacharlo.
+PENDING_INVERSE_FIELDS = '_pending_inverse_fields'
 
 #: El **registro de tipos de campo**, no la lista de exportables del módulo.
 #:
@@ -885,10 +896,12 @@ def _expression_getter(self, field_expr):
     El caso base sólo sabe leer **el campo entero**; cualquier otra expresión
     la resuelve quien la entienda, sobreescribiendo este método.
 
-    La divergencia de forma: allá el getter es ``self.__get__`` —el descriptor
-    del campo—; aquí un campo de Django no es descriptor de lectura, así que
-    es ``getattr(record, self.name)``. Mismo contrato: dado un registro,
-    devuelve el valor.
+    La divergencia de forma: allá el getter es ``self.__get__`` —el campo *es*
+    su propio descriptor—; aquí el descriptor es otro objeto
+    (:class:`FieldDescriptor`, instalado por :func:`_install_field_descriptor`
+    sobre todo campo), así que el getter es ``getattr(record, self.name)``, que
+    pasa por él. Mismo contrato y mismo cuerpo: dado un registro, devuelve el
+    valor leyendo la caché del ORM.
     """
     if field_expr == self.name:
         return lambda record: getattr(record, self.name)
@@ -1034,6 +1047,18 @@ _DJANGO_FIELD_INIT = models.Field.__init__
 _DJANGO_FIELD_KWARGS = frozenset(
     inspect.signature(_DJANGO_FIELD_INIT).parameters) - {'self'}
 
+#: Los mismos parámetros **en orden**, para nombrar lo que llegó por posición.
+#:
+#: Los veinticinco son ``POSITIONAL_OR_KEYWORD`` (medido sobre la firma), así
+#: que ``Char('Etiqueta')`` y ``Char(verbose_name='Etiqueta')`` son la misma
+#: declaración escrita de dos maneras. La fuente no tiene el problema —su
+#: ``__init__`` recibe ``string`` y el resto por palabra (``odoo19c:
+#: odoo/orm/fields.py:314-317``)—; aquí, sin este mapa, ``_args__`` guardaba
+#: sólo la mitad por palabra y la fusión reconstruía un campo sin su etiqueta.
+_DJANGO_FIELD_POSITIONAL = tuple(
+    name for name in inspect.signature(_DJANGO_FIELD_INIT).parameters
+    if name != 'self')
+
 
 def _field_init_with_copy(self, *args, **kwargs):
     """Anota lo que el autor declaró — ≙ ``self._args__`` de la fuente.
@@ -1048,8 +1073,14 @@ def _field_init_with_copy(self, *args, **kwargs):
     Los parámetros que Django no conoce se retiran antes de delegar. ``copy``
     es uno de ellos y tiene además su atributo propio, porque el duplicado lo
     consulta campo a campo (``copy_data``, ``:5438``) sin pasar por el setup.
+
+    **Lo posicional se nombra antes de anotarse.** ``_args__`` es lo que la
+    fusión de :func:`_field_get_attrs` lee para reconstruir el campo; una
+    etiqueta que llegó como primer posicional y no se nombró se pierde en esa
+    reconstrucción sin que nada lo delate.
     """
-    declared = dict(kwargs)
+    declared = dict(zip(_DJANGO_FIELD_POSITIONAL, args))
+    declared.update(kwargs)
     for key in tuple(kwargs):
         if key not in _DJANGO_FIELD_KWARGS:
             del kwargs[key]
@@ -1080,6 +1111,38 @@ def _field_deconstruct_without_copy(self):
 
 models.Field.deconstruct = _field_deconstruct_without_copy
 
+_DJANGO_FIELD_CLONE = models.Field.clone
+
+
+def _field_clone_with_args(self):
+    """El duplicado conserva lo que el autor declaró.
+
+    ``Field.clone`` de Django reconstruye el campo desde ``deconstruct()``
+    (``django/db/models/fields/__init__.py``), y ``deconstruct`` sólo emite lo
+    que **Django** conoce: el vocabulario de la fuente —``compute``,
+    ``inverse``, ``related``, ``store``— no viaja. Medido sobre un
+    ``CharField('Label', max_length=9, compute='_c')``: ``_args__`` pasa de
+    ``['compute', 'max_length']`` a ``['max_length', 'verbose_name']``.
+
+    Importa porque ``clone`` **no es un rodeo**: es la vía por la que un campo
+    declarado en una base abstracta de Django llega a cada modelo concreto
+    (``ModelBase.__new__`` → ``parent._meta.fields`` → ``field.clone()``). Sin
+    esta línea, una base abstracta que declarara ``compute=`` lo perdía en
+    silencio en todos sus descendientes: el campo quedaba con columna y sin
+    cómputo, que es exactamente la clase de fallo mudo que
+    ``metrica-decide-la-conclusion.md`` describe.
+
+    La fuente no tiene contraparte porque no tiene el problema: allá la
+    herencia **fusiona** ``_args__`` por la MRO (``:395-411``) en vez de
+    duplicar el objeto.
+    """
+    copy = _DJANGO_FIELD_CLONE(self)
+    copy._args__ = dict(self._args__ or {})
+    return copy
+
+
+models.Field.clone = _field_clone_with_args
+
 
 #
 # El bloque de setup del campo — ≙ ``__set_name__`` / ``_get_attrs`` /
@@ -1104,10 +1167,19 @@ def _field_get_attrs(self, model_class, name):
     ≙ ``Field._get_attrs`` (``:414-486``). Recibe lo declarado en ``_args__``
     y devuelve el diccionario con lo que la fuente **deriva** de ello.
 
-    Tres de sus bloques —``compute``, ``related`` y ``precompute``— ya estaban
-    portados en :func:`~orm.fields_nonstored.apply_source_defaults`, que los
-    aplica en el sitio de declaración con el mismo centinela de "no declarado".
-    No se duplican aquí: dos copias del mismo criterio divergirían.
+    **Los tres bloques de derivación viven aquí, que es donde la fuente los
+    pone.** Estuvieron portados en
+    :func:`~orm.fields_nonstored.apply_source_defaults`, que los aplica en el
+    **sitio de declaración** — y ése es justo el orden invertido: allá
+    ``store`` se deriva antes de que exista la cadena de la MRO, así que una
+    redeclaración no puede corregirlo. La fuente deriva **después** de fusionar,
+    dentro de esta misma función (``:443-465``), y por eso el porte los trae.
+
+    Mientras las fachadas de ``fields_textual``/``fields_nonstored`` sigan
+    enrutando al construir, ``apply_source_defaults`` conserva su copia: es la
+    duplicación que ``TASK-API-0417`` cierra al retirar el enrutado. No se
+    retira en este pase porque hoy es lo único que decide qué clase se
+    construye.
     """
     attrs = {}
     modules = []
@@ -1134,6 +1206,70 @@ def _field_get_attrs(self, model_class, name):
         # Un campo de estado se reinicia al duplicar: el duplicado empieza de
         # cero, no en el estado del original.
         attrs['copy'] = attrs.get('copy', False)
+    if attrs.get('compute'):
+        # ``:443-451`` — un calculado no se almacena, se calcula elevado si
+        # tiene columna, no se copia (salvo que tenga columna y sea escribible)
+        # y es de sólo lectura (salvo que tenga inversa).
+        attrs['store'] = store = attrs.get('store', False)
+        attrs['compute_sudo'] = attrs.get('compute_sudo', store)
+        if not (attrs['store'] and not attrs.get('readonly', True)):
+            attrs['copy'] = attrs.get('copy', False)
+        attrs['readonly'] = attrs.get('readonly', not attrs.get('inverse'))
+    if attrs.get('related'):
+        # ``:452-458`` — un related no se almacena, se calcula elevado, no se
+        # copia y es de sólo lectura. Va DESPUÉS del bloque de ``compute`` y
+        # lo pisa: un ``related=`` con ``compute=`` acaba con forma de related.
+        attrs['store'] = store = attrs.get('store', False)
+        attrs['compute_sudo'] = attrs.get('compute_sudo',
+                                          attrs.get('related_sudo', True))
+        attrs['copy'] = attrs.get('copy', False)
+        attrs['readonly'] = attrs.get('readonly', True)
+    if attrs.get('precompute'):
+        # ``:459-465`` — avisa y apaga. ``precompute`` sólo tiene efecto sobre
+        # un calculado (o un related, que es un calculado con otro nombre) y
+        # con columna. Fuera de ahí la fuente lo dice en vez de tragárselo.
+        if not attrs.get('compute') and not attrs.get('related'):
+            warnings.warn(
+                f"precompute attribute doesn't make any sense on non computed "
+                f"field {self}", stacklevel=1)
+            attrs['precompute'] = False
+        elif not attrs.get('store'):
+            warnings.warn(
+                f"precompute attribute has no impact on non stored field "
+                f"{self}", stacklevel=1)
+            attrs['precompute'] = False
+        elif self.many_to_many:
+            # El tercer caso es NUESTRO, y es de stack. Un muchos-a-muchos no
+            # se puede adelantar al ``INSERT``: su valor no vive en una columna
+            # de la fila sino en una tabla intermedia que necesita el ``pk``
+            # para tener a quién apuntar. La fuente no lo tiene porque su ORM
+            # asigna el id antes de ejecutar la cola de recálculo, y por eso
+            # declara ``tag_ids`` con ``precompute=True``
+            # (``odoo19c: account_account.py:107``).
+            warnings.warn(
+                f"precompute attribute has no impact on a many2many field: "
+                f"its join table needs the pk of a row that does not exist "
+                f"yet {self}", stacklevel=1)
+            attrs['precompute'] = False
+    if (attrs.get('readonly') and attrs.get('store')
+            and 'editable' not in attrs):
+        # ``editable=False`` es la forma NATIVA de Django de decir «esto no lo
+        # escribe el cliente», y es la que DRF ya consume: ``get_field_kwargs``
+        # (``rest_framework/utils/field_mapping.py:124-128``) hace
+        # ``if ... or not model_field.editable: kwargs['read_only'] = True`` y
+        # retorna. El contrato del endpoint sale del riel del anfitrión, sin
+        # override en ningún serializer — el stack lo trae hecho.
+        #
+        # Aplica al calculado **y al related**, que es lo que la fuente declara
+        # para los dos (``:451`` y ``:458``, ambos ``readonly``). La guarda de
+        # ``store`` es lo que la hace correcta: sin columna no hay contrato de
+        # escritura que proteger, y con ella el campo ya está publicado.
+        #
+        # **Vivía en ``apply_source_defaults``**, que la aplicaba como kwarg del
+        # constructor. Aquí es un atributo derivado como los demás, y por eso
+        # llega igual a un campo que declaró ``store``/``readonly`` sin pasar
+        # por una fachada.
+        attrs['editable'] = False
     if attrs.get('company_dependent',
                  getattr(self, 'company_dependent', False)):
         # El respaldo sobre la instancia es la divergencia de mecanismo: allá
@@ -1195,6 +1331,35 @@ models.Field._get_attrs = _field_get_attrs
 models.Field._setup_attrs__ = _field_setup_attrs
 
 _DJANGO_FIELD_CONTRIBUTE = models.Field.contribute_to_class
+_DJANGO_SET_ATTRIBUTES_FROM_NAME = models.Field.set_attributes_from_name
+
+
+def _field_set_attributes_from_name(self, name):
+    """Un campo sin ``store`` no tiene columna, y por tanto no es concreto.
+
+    ≙ la consecuencia de ``store`` en la fuente: allá un campo con
+    ``store=False`` no declara ``column_type``, así que el motor no le crea
+    columna ni lo pide en un ``SELECT`` (``odoo19c: odoo/orm/fields.py:455``).
+    Aquí el equivalente son las dos banderas que este método deja puestas.
+
+    **El sitio del parche es éste y no ``get_attname_column``**, y no es
+    indiferente: ``ForeignKey`` sobrescribe ``get_attname_column`` y
+    **ninguna** de las dos relacionales sobrescribe este método (medido sobre
+    ``vars(models.ForeignKey)`` y ``vars(models.OneToOneField)``). Parchear el
+    otro dejaría fuera justo a la familia que más barato es equivocarse.
+
+    Django ya deriva ``concrete`` de la columna —``self.concrete = self.column
+    is not None``—, así que basta con anular la columna; las dos líneas se
+    escriben juntas porque el orden del método original no garantiza que la
+    derivación quede después.
+    """
+    _DJANGO_SET_ATTRIBUTES_FROM_NAME(self, name)
+    if self.store is False:
+        self.column = None
+        self.concrete = False
+
+
+models.Field.set_attributes_from_name = _field_set_attributes_from_name
 
 
 #: Marca de «esta instancia se está construyendo».
@@ -1252,19 +1417,16 @@ class FieldDescriptor(DeferredAttribute):
     (:ref:`h-api-1067`). El cuerpo se porta al descriptor; el sitio cambia, el
     comportamiento no.
 
-    **Por qué se instala SÓLO donde hay ``compute``.** ``DeferredAttribute`` no
-    declara ``__set__``: es un descriptor de NO datos, así que
-    ``instance.__dict__`` gana y su ``__get__`` sólo se consulta cuando el valor
-    falta. Ese ``__dict__`` **es** la rama de acierto de caché de la fuente.
-    Declarar ``__set__`` lo convierte en descriptor de datos y entonces toda
-    lectura de todo campo pasa por Python: medido sobre 300 000 lecturas con un
-    cuerpo vacío, **42.6 ns contra 132.9 ns — 3.12×** en el camino más caliente
-    del ORM. Lo que el ``__dict__`` de Django no cubre son las tres ramas que
-    la fuente añade —recálculo pendiente, cómputo al fallar la caché, y el
-    reparto en tres cubos de la escritura— y las tres sólo tienen receptor donde
-    el campo declara ``compute``. Ahí el coste del descriptor es despreciable
-    frente a la llamada al método de cómputo. Una columna llana conserva el
-    camino rápido de Django.
+    **Se instala sobre TODO campo, y por eso aquí no hay ``__set__``.** La
+    fuente consulta ``env.cache`` para todo campo (``:1667``); un puerto que
+    instale el descriptor sólo sobre el calculado tiene dos cachés y un lector
+    que consulta la que no es. ``DeferredAttribute`` no declara ``__set__``: es
+    un descriptor de NO datos, así que ``instance.__dict__`` gana y este
+    ``__get__`` sólo se consulta cuando el valor falta — que es exactamente
+    cuando el recordset, cuyo ``__dict__`` está vacío, necesita la caché del
+    ORM. Medido sobre 300 000 lecturas: el de NO datos cuesta **1.00×** lo que
+    el atributo llano, porque en el camino caliente no se le consulta. La
+    escritura, que sí cuesta **3.24×**, vive en :class:`ComputedFieldDescriptor`.
 
     Precedente propio del árbol: ``_CompanyDependentAttribute``
     (``orm/fields_company_dependent.py:167``) ya porta comportamiento de campo a
@@ -1277,6 +1439,12 @@ class FieldDescriptor(DeferredAttribute):
             # ``:1644-1645`` — acceso por la clase: devuelve el descriptor.
             return self
 
+        # El primer consumidor tras ``apps.ready`` dispara la fase de setup
+        # que la fuente corre desde su cargador (``ensure_field_setup``): sin
+        # ella un ``related=`` sobre un campo de Django no tiene ``compute``.
+        if ensure_field_setup.pending:
+            ensure_field_setup()
+
         field = self.field
         environment = get_environment()
 
@@ -1288,10 +1456,26 @@ class FieldDescriptor(DeferredAttribute):
             if not instance._has_field_access(field, 'read'):
                 instance._check_field_access(field, 'read')
 
-        # ``:1653-1661`` — la rama ``record_len != 1`` NO tiene receptor: aquí
-        # ``instance`` es UNA fila, nunca un recordset de N. ``ensure_one`` está
-        # ausente del árbol por esa misma razón (divergencia de stack ya
-        # declarada en ``orm/utils.py``).
+        # ``:1653-1661`` — la rama de tamaño, y SÍ tiene receptor. Un recordset
+        # ES una instancia del modelo de Django, y desde TASK-API-0402 toda
+        # fila de :class:`~orm.models.BaseModel` lleva la terna: la instala
+        # ``_from_ids`` con N ids, y ``__init__``/``from_db`` con ``(pk,)``.
+        # La terna es una ranura de ``__slots__`` (``models.py:362`` de la
+        # fuente), así que NO vive en ``__dict__``: un ``__dict__.get('_ids')``
+        # devuelve ``None`` siempre y esta rama quedaría muerta — el control
+        # que no discrimina (H-API-1106). ``None`` sólo lo da una fila de
+        # ``django.db.models.Model`` fuera de ``BaseModel``, que es una fila y
+        # sobre la que la rama no aplica.
+        own_ids = getattr(instance, '_ids', None)
+        if own_ids is not None and len(own_ids) != 1:
+            if own_ids:
+                # ``:1656-1658`` — que ``ensure_one`` levante la excepción.
+                instance.ensure_one()
+                raise AssertionError('unreachable')
+            # ``:1659-1661`` — recordset vacío: el valor nulo del campo.
+            return field.convert_to_record(
+                field.convert_to_cache(False, instance, validate=False),
+                instance)
 
         if field.compute and getattr(field, 'store', False):
             # ``:1664-1666`` — procesa los cómputos pendientes.
@@ -1389,6 +1573,22 @@ class FieldDescriptor(DeferredAttribute):
             else:
                 field.compute_value(instance)
                 if record_id in tuple(field._cache_missing_ids(instance)):
+                    if field.attname in instance.__dict__:
+                        # **El cómputo SÍ asignó — al almacén, no a la caché
+                        # del ORM.** ``__set__`` escribe siempre
+                        # ``instance.__dict__[attname]`` y sólo siembra
+                        # ``env.cache`` con ``pk``; sobre una fila nueva la
+                        # clave es ``None`` y la caché nunca la recibe, así
+                        # que ``_cache_missing_ids`` la sigue reportando
+                        # ausente. Es el mismo acierto que la rama del
+                        # almacén de arriba, y responde igual: la forma de
+                        # registro, traducida. Medido en la sonda E del
+                        # workbench ``fachadas-construyen-una-vez``: la
+                        # primera lectura levantaba *Compute method failed to
+                        # assign* con el valor ya en ``after_dict``; la
+                        # segunda lo devolvía por el almacén.
+                        return field.convert_to_record(
+                            instance.__dict__[field.attname], instance)
                     if getattr(field, 'readonly', False) and not field.store:
                         raise ValueError(
                             f'Compute method failed to assign '
@@ -1417,6 +1617,53 @@ class FieldDescriptor(DeferredAttribute):
         # así que se vuelve a pedir en vez de reusar la referencia de arriba.
         field_cache = field._get_cache(environment)
         return field.convert_to_record(field_cache[record_id], instance)
+
+
+class ComputedFieldDescriptor(FieldDescriptor):
+    """El mismo ``__get__``, más ``__set__`` — ≙ ``Field.__set__`` (``:1807``).
+
+    **Por qué la escritura vive en una subclase y no en la base.**
+    ``DeferredAttribute`` no declara ``__set__``: es un descriptor de NO datos,
+    así que ``instance.__dict__`` gana y su ``__get__`` sólo se consulta cuando
+    el valor falta. Declarar ``__set__`` lo convierte en descriptor de datos, y
+    entonces **toda** lectura de **todo** campo pasa por Python. Medido sobre
+    300 000 lecturas con un cuerpo vacío
+    (``scripts/workbench/two-caches-descriptor-20260911T053450/outputs/``
+    ``descriptor_cost.txt``): el descriptor de NO datos cuesta **1.00×** lo que
+    el atributo llano —22.8 ns contra 22.8 ns, porque nunca se le consulta— y
+    el de datos **3.24×** (73.9 ns). El coste no lo trae el descriptor: lo trae
+    ``__set__``.
+
+    Por eso el reparto es por **capacidad**, no por comodidad: la lectura la
+    necesitan todos los campos —es donde vive la caché del ORM— y la escritura
+    en tres cubos sólo tiene receptor donde el campo declara ``compute``. Ahí el
+    3.24× es despreciable frente a la llamada al método de cómputo.
+    """
+
+    def _mark_pending_inverse(self, instance):
+        """Anota que este campo quedó escrito y su inverso no se ha despachado.
+
+        **Es la segunda mitad de la divergencia que el docstring de**
+        :meth:`__set__` **ya declara**, no una razón nueva. La fuente manda la
+        fila persistida a ``records.write({name: value})`` (``:1841``), y su
+        ``write`` despacha el inverso al final del mismo cuerpo —
+        ``fields[0].determine_inverse(real_recs)``
+        (``odoo19c: odoo/orm/models.py:4493``)—. Aquí la asignación **no**
+        entra en ``write`` —emitiría un UPDATE donde la de Django no emite
+        ninguno—, así que el despacho se queda sin sitio: se anota al asignar
+        y lo recoge :meth:`~orm.models.RecordLoaderMixin.save`, que es el
+        momento en que la fila llega a la base.
+
+        No se anota en los otros dos cubos, y el motivo lo da la fuente:
+        ``is_protected`` es *"records being computed: no business logic, no
+        recomputation"* (``:1822``) y ``_orm_building`` es la carga de caché.
+        Un inverso ES lógica de negocio.
+        """
+        field = self.field
+        if not getattr(field, 'inverse', None):
+            return
+        instance.__dict__.setdefault(PENDING_INVERSE_FIELDS, set()).add(
+            field.name)
 
     def __set__(self, instance, value):
         """≙ ``Field.__set__`` (``:1807-1841``) — el reparto en tres cubos.
@@ -1466,6 +1713,19 @@ class FieldDescriptor(DeferredAttribute):
                 field._insert_cache(
                     instance,
                     [field.convert_to_cache(value, instance, validate=False)])
+            if not getattr(field, 'concrete', True):
+                # **Un campo SIN COLUMNA no puede venir de la fila.** El
+                # cargador de Django puebla por ``opts.concrete_fields``, así
+                # que un campo sin columna sólo llega hasta aquí por el bucle
+                # de sobrantes de ``Model.__init__`` — es decir, porque quien
+                # construyó lo pasó como argumento. Ése es exactamente el
+                # ``vals`` del que la fuente saca sus ``determine_inverses`` en
+                # ``create`` (``odoo19c: odoo/orm/models.py:4682``), y por eso
+                # la marca sí corresponde: el tramo sigue sin ser una
+                # escritura —ni ``modified()``, ni marca de sucio— pero el
+                # inverso que ``create`` despacha (``:4717-4733``) necesita
+                # saber qué campos trajo el llamador.
+                self._mark_pending_inverse(instance)
             return
 
         environment = get_environment()
@@ -1500,49 +1760,251 @@ class FieldDescriptor(DeferredAttribute):
                 parent = getattr(instance, field.related.split('.')[0], None)
                 if parent is not None and not parent.pk:
                     setattr(parent, field.name, value)
+            self._mark_pending_inverse(instance)
             return
 
         # ``:1838-1841`` — fila real. Ver la divergencia del docstring.
         field.write(instance, field.convert_to_write(value, instance))
         instance.modified([field.name])
+        self._mark_pending_inverse(instance)
+
+
+def _collect_field_definitions(field, cls, name):
+    """Las definiciones de ``name`` a lo largo de la MRO, de la base al hijo.
+
+    ≙ ``_init_model_class_fields`` (``odoo19c: odoo/orm/model_classes.py:
+    366-374``), que recoge ``cls._field_definitions`` recorriendo
+    ``reversed(model_cls._model_classes__)`` y acumula en ``definitions[name]``
+    una lista por nombre. Allá el recorrido lo hace el cargador del registro;
+    aquí lo hace este enganche, que es el único momento en que existen a la vez
+    la clase completa y el campo que se está montando.
+
+    **Qué se salta, y por qué son dos razones distintas:**
+
+    - una base que **es** modelo de Django: su campo ya pasó por
+      ``contribute_to_class`` y vive en ``_meta``, no en ``vars(base)`` —lo que
+      queda ahí es un ``DeferredAttribute``—, y Django además **prohíbe**
+      redeclararlo en la subclase (``FieldError: Local field 'x' … clashes``).
+      El recorrido no puede verlo y no hay nada que fusionar;
+    - el propio ``field``: ``ModelBase.__new__`` lo separó de ``new_attrs``
+      antes de crear la clase, así que no está en ``vars(cls)``; la guarda es
+      contra el caso en que sí lo esté.
+
+    Medido en consecuencia: hoy la rama de fusión es **inalcanzable** —cero
+    bases llanas del árbol declaran un ``models.Field``—. Se vuelve alcanzable
+    exactamente cuando ``TASK-API-0418`` retire :class:`NonStored`, que es una
+    clase suelta y por eso hoy no cuenta como definición de campo.
+    """
+    if '_base_fields__' in (field._args__ or {}):
+        # Ya es el campo fusionado: volver a recoger daría una cadena de
+        # cadenas. ≙ la rama ``_direct`` de la fuente, que no reentra.
+        return (field,)
+    chain = []
+    for base in reversed(cls.__mro__):
+        if issubclass(base, models.Model):
+            continue
+        declared = vars(base).get(name)
+        if isinstance(declared, models.Field) and declared is not field:
+            chain.append(declared)
+    chain.append(field)
+    return tuple(chain)
+
+
+def _merge_field_definitions(chain):
+    """Un campo nuevo con la unión de lo declarado — ≙ ``:378-381``.
+
+    La fuente construye ``Field(_base_fields__=tuple(fields_))`` con la clase
+    del **último** eslabón y deja que ``_get_attrs`` fusione los ``_args__`` al
+    montar. La clase la fija el último y no el ``store``: la fuente no enruta
+    por almacenamiento en ningún punto del flujo (``api@0734b906``).
+
+    **La divergencia es que aquí la unión viaja también en el ``__init__``.**
+    Allá basta con ``_base_fields__`` porque el constructor de un campo son
+    tres líneas y no deriva nada. Aquí ``CharField.__init__`` materializa
+    ``MaxLengthValidator`` sobre la ``cached_property`` ``validators``, así que
+    un campo construido vacío y rellenado con ``__dict__.update`` queda con
+    ``max_length=9`` y ``validators=[]`` — medido, y por eso el porte pasa los
+    parámetros de Django por donde Django los espera.
+
+    Lo que el envoltorio de ``__init__`` no conozca lo retira antes de delegar,
+    de modo que el vocabulario de la fuente llega a ``_args__`` sin llegar a
+    Django.
+
+    **Cota declarada:** la reconstrucción sale de ``_args__``, que sólo tiene lo
+    que llegó a ``Field.__init__``. Una relacional pasa ``to`` y ``on_delete``
+    a **su** ``__init__`` y nunca al de ``Field``, así que su reconstrucción
+    falla. No se alcanza hoy —la rama entera es inalcanzable— y su desenlace es
+    ``TASK-API-0419``.
+    """
+    merged = {}
+    for declared in chain:
+        merged.update(declared._args__ or {})
+    merged['_base_fields__'] = chain
+    return type(chain[-1])(**merged)
 
 
 def _field_contribute_to_class(self, cls, name, private_only=False):
     """El cuerpo de ``__set_name__``, en el enganche que este ORM sí ejecuta.
 
-    Va **después** de ``super()``: la fuente fija ``self.name`` antes de
-    montar, y aquí quien lo fija es ``set_attributes_from_name`` de Django.
+    El orden es el de la fuente —recoger por la MRO, fusionar, derivar
+    ``store``, enrutar una vez— y **no** el que este puerto tenía. La versión
+    anterior llamaba a ``super()`` primero, con la razón de que
+    ``set_attributes_from_name`` fija ``self.name``. La razón no se sostiene:
+    :func:`_field_setup_attrs` no lee ``self.name``, ``self.model``,
+    ``self.attname`` ni ``self.column`` — recibe el ``name`` por parámetro.
+    Y el orden invertido **costaba** el campo: ``get_attname_column`` decide la
+    columna leyendo un ``store`` que todavía era el defecto de clase, así que
+    un ``compute=`` acababa con columna y pidiéndose en cada ``SELECT``.
+
+    ``private_only`` se refuerza con el ``store`` derivado. Sin él, un campo sin
+    columna sigue en ``_meta.local_fields`` y el ORM lo pide a la base:
+    ``ProgrammingError``. La forma —``private_only=True`` **y** ``column=None``—
+    es la que el propio stack usa en ``GenericForeignKey``, que declara las dos.
     """
-    _DJANGO_FIELD_CONTRIBUTE(self, cls, name, private_only=private_only)
+    chain = _collect_field_definitions(self, cls, name)
+    if len(chain) > 1:
+        _merge_field_definitions(chain).contribute_to_class(
+            cls, name, private_only=private_only)
+        return
+
+    #: La rama de un solo eslabón ≙ el atajo ``_direct`` de la fuente
+    #: (``:375-377``), con una divergencia declarada: allá un ``related=`` no
+    #: es ``_direct`` (``:404``) y baja por la rama de fusión aunque se declare
+    #: una sola vez. Aquí, con un eslabón, fusionar sería construir un campo
+    #: idéntico al que ya se tiene; la diferencia observable es nula porque
+    #: :func:`_field_get_attrs` deriva lo mismo en los dos caminos.
     self._setup_attrs__(cls, name)
+    _DJANGO_FIELD_CONTRIBUTE(
+        self, cls, name, private_only=private_only or self.store is False)
     _install_field_descriptor(self, cls)
+    phase = getattr(self, 'setup_nonrelated__', None)
+    if phase is not None:
+        #: ``setup_nonrelated`` (``odoo19c: odoo/orm/fields.py:1043``) es la
+        #: FASE de la fuente: corre con la clase ya construida, que es lo que
+        #: la decision de ``ondelete`` necesita y el sitio de declaracion no
+        #: tiene. Lo cuelga quien lo necesita —hoy ``Many2one``— porque este
+        #: modulo es la base que aquel importa, y al reves seria un ciclo.
+        phase(self, cls)
 
 
 def _install_field_descriptor(field, cls):
-    """Cuelga :class:`FieldDescriptor` del campo calculado, y sólo de ése.
+    """Cuelga el descriptor de la fuente sobre el campo, y elige cuál.
 
-    Dos guardas, y ninguna es de comodidad:
+    **Todo campo lee por el descriptor; sólo el calculado escribe por él.** La
+    fuente tiene UNA caché (``env.cache``) y ``Field.__get__`` la consulta
+    siempre, para todo campo (``odoo19c: odoo/orm/fields.py:1667``). Instalarlo
+    sólo sobre el calculado dejaba al puerto con **dos** cachés y un lector que
+    consultaba la que no era: ``_insert_cache`` escribía en la del ORM y una
+    lectura llana caía al ``DeferredAttribute`` de Django, que emite
+    ``refresh_from_db``. Medido sobre un recordset con la caché sembrada
+    (``scripts/workbench/two-caches-descriptor-20260911T053450/outputs/``
+    ``id_resolution_on_recordset.txt``): ``rs.label`` iba a la base y reventaba,
+    mientras ``rs.id`` —que sí tiene descriptor propio, :class:`IdFromIds`—
+    respondía ``7``.
 
-    1. **``compute`` declarado.** Es donde las tres ramas del cuerpo de la
-       fuente tienen trabajo; sobre una columna llana el ``__dict__`` de Django
-       ya hace de acierto de caché, y convertir su descriptor en uno de datos
-       cuesta **3.12×** por lectura (medido en
-       ``scripts/evidence/medicion-211-descriptor.txt``).
-    2. **El atributo de clase es un ``DeferredAttribute`` PELADO.** Un
-       ``ForeignKeyDeferredAttribute`` o un ``_CompanyDependentAttribute`` ya
-       son descriptores de datos con su propio camino de lectura y escritura
-       portado; sustituirlos rompería la relación o el eje por empresa. Por eso
-       la condición es de tipo exacto, no ``isinstance``.
+    Las dos guardas que quedan, y ninguna es de comodidad:
+
+    1. **Quién escribe.** ``compute`` declarado → :class:`ComputedFieldDescriptor`
+       (con ``__set__``, descriptor de datos); si no → :class:`FieldDescriptor`
+       (sin ``__set__``, de NO datos, coste medido **1.00×**). El reparto lo
+       justifica el docstring de la subclase.
+    2. **El atributo de clase es un ``DeferredAttribute`` PELADO, o no hay
+       ninguno.** Un ``ForeignKeyDeferredAttribute`` o un
+       ``_CompanyDependentAttribute`` ya son descriptores de datos con su
+       propio camino de lectura y escritura portado; sustituirlos rompería la
+       relación o el eje por empresa. Por eso la condición es de tipo exacto,
+       no ``isinstance``. El campo relacional sobre recordset lo cierra su
+       propio sucesor, **TASK-API-0402**.
+
+       El ``None`` es el caso del campo **sin columna**, y no es un hueco: el
+       ``contribute_to_class`` de Django cuelga su descriptor sólo ``if
+       self.column`` (verbatim en el paquete instalado), así que un
+       ``store=False`` sale de ahí sin nada. Sin esta rama el atributo se
+       resolvía por la MRO al objeto ``Field`` crudo de la base y una lectura
+       nunca despachaba el cómputo — el campo respondía con el descriptor en
+       vez de con su valor.
     """
-    if not getattr(field, 'compute', None):
-        return
     current = cls.__dict__.get(field.attname)
-    if type(current) is not DeferredAttribute:
+    # Re-invocable desde ``Field.setup``: un campo ``related=`` no tiene
+    # ``compute`` en ``contribute_to_class`` —se lo cuelga ``setup_related``
+    # (``:632``) en la fase de setup—, así que aquí recibía el descriptor
+    # base, que NO define ``__set__``: la asignación del cómputo caía al
+    # ``__dict__`` y la caché nunca se enteraba (medido en
+    # ``probe_plain_row_assignment_lands_in_cache.py``: ``_model_setitem``
+    # trazado, ``_field_write`` nunca). La fuente no distingue: allá el
+    # descriptor es el propio ``Field`` y ``compute`` llega antes del primer
+    # acceso. Aquí el equivalente es promoverlo cuando el setup lo declara.
+    if type(current) is FieldDescriptor and getattr(field, 'compute', None):
+        setattr(cls, field.attname, ComputedFieldDescriptor(field))
         return
-    setattr(cls, field.attname, FieldDescriptor(field))
+    if current is not None and type(current) is not DeferredAttribute:
+        return
+    descriptor = (ComputedFieldDescriptor if getattr(field, 'compute', None)
+                  else FieldDescriptor)
+    setattr(cls, field.attname, descriptor(field))
 
 
 models.Field.contribute_to_class = _field_contribute_to_class
+
+
+# ---------------------------------------------------------------------------
+# La compuerta relacional de ``store`` — ≙ ``if self.store:`` en
+# ``odoo19c: odoo/orm/fields_relational.py:1279`` (``Many2many.setup_nonrelated``
+# crea la tabla de relación SÓLO si el campo está almacenado; ``:1517`` y
+# ``:1554`` la tocan al escribir sólo bajo la misma guarda). La fuente no tiene
+# accessor inverso: un relacional sin ``store`` es un campo calculado que
+# devuelve registros del comodelo y nada más.
+#
+# En Django el mismo contenido se construye con dos piezas que el stack ya
+# trae —«con qué construirlo», sin dependencia de fuera—:
+#
+# 1. ``remote_field.related_name = '+'`` — la relación queda ``hidden``
+#    (``related.py:hidden``), y ``contribute_to_related_class`` no instala
+#    accessor ni nombre de consulta inversa en el comodelo.
+# 2. Para ``ManyToManyField``, enrutar al ``contribute_to_class`` de
+#    ``RelatedField`` (el abuelo): ``ManyToManyField.contribute_to_class``
+#    crea la tabla intermedia y el ``ManyToManyDescriptor`` DESPUÉS de
+#    ``super()`` (``related.py:1961-2008``), así que nuestro parche sobre
+#    ``Field`` no alcanza a impedirlo — hay que decidir antes de entrar.
+#
+# ``store`` se deriva ANTES con ``_setup_attrs__`` (idempotente: vuelve a
+# correr dentro de ``_field_contribute_to_class`` con el mismo resultado),
+# porque el orden de la MRO obliga a conocerlo antes de que Django lea
+# ``related_name``.
+# ---------------------------------------------------------------------------
+_DJANGO_RELATED_CONTRIBUTE = RelatedField.contribute_to_class
+_DJANGO_M2M_CONTRIBUTE = models.ManyToManyField.contribute_to_class
+
+
+def _hidden_reverse_name(cls, name):
+    """El nombre oculto que el propio stack genera para un ``related_name='+'``
+    de M2M (``related.py:1977-1981``): distingue dos relacionales ocultos del
+    mismo modelo sin exponer ninguno."""
+    return '_%s_%s_%s_+' % (cls._meta.app_label, cls.__name__.lower(), name)
+
+
+def _related_contribute_to_class(self, cls, name, private_only=False, **kwargs):
+    """``RelatedField.contribute_to_class`` con la compuerta de ``store``."""
+    self._setup_attrs__(cls, name)
+    if self.store is False and not cls._meta.abstract:
+        self.remote_field.related_name = '+'
+    _DJANGO_RELATED_CONTRIBUTE(
+        self, cls, name, private_only=private_only, **kwargs)
+
+
+def _m2m_contribute_to_class(self, cls, name, **kwargs):
+    """``ManyToManyField.contribute_to_class`` con la compuerta de ``store``:
+    sin ``store`` no nace la tabla de relación ni el descriptor de M2M."""
+    self._setup_attrs__(cls, name)
+    if self.store is False and not cls._meta.abstract:
+        self.remote_field.related_name = _hidden_reverse_name(cls, name)
+        _DJANGO_RELATED_CONTRIBUTE(self, cls, name, **kwargs)
+        return
+    _DJANGO_M2M_CONTRIBUTE(self, cls, name, **kwargs)
+
+
+RelatedField.contribute_to_class = _related_contribute_to_class
+models.ManyToManyField.contribute_to_class = _m2m_contribute_to_class
 
 
 # === Los seis del censo de ``odoo/orm/fields.py`` (tarea #209) ==============
@@ -1564,14 +2026,11 @@ T = TypeVar('T')
 #: ≙ ``IR_MODELS`` (``:37``) — los siete modelos del registro que un
 #: ``Many2one`` NO puede proteger con ``on_delete=PROTECT``.
 #:
-#: Su consumidor en la fuente es ``fields_relational.py:289``:
-#: ``if self.ondelete == 'restrict' and self.comodel_name in IR_MODELS``. La
-#: razón es que el propio registro se desmonta al desinstalar un módulo, y una
-#: FK que lo proteja convierte esa operación en un error.
-IR_MODELS = (
-    'ir.model', 'ir.model.data', 'ir.model.fields', 'ir.model.fields.selection',
-    'ir.model.relation', 'ir.model.constraint', 'ir.module.module',
-)
+#: Re-exportado de :data:`orm.registry.IR_MODELS`, donde vive. La fuente lo
+#: declara aquí y lo consume desde ``fields_relational.py:289``; aquí esa
+#: arista cerraría un 2-ciclo, porque este módulo es además la fachada que
+#: re-exporta ``orm.fields_relational`` (``:92``) y la fuente no tiene esa
+#: arista. Mismo traslado y misma causa que :data:`UNACCENT_ENABLED`.
 
 #: ≙ ``PYTHON_INEQUALITY_OPERATOR`` (``:45``) — la comparación **en memoria**.
 #:
@@ -1748,6 +2207,15 @@ def type_for(field):
     delega aquí desde el 2026-08-30: el mapa tenía dos dueños y el de la
     referencia es éste.
     """
+    #: Lo que la FACHADA declaró gana sobre lo que el campo construido
+    #: aparenta: ``make_dispatcher`` anota ``declared_type`` con el
+    #: ``base_type`` del tipo de la fuente, que es el porte del atributo de
+    #: clase ``type`` de la referencia. Sin esta rama un
+    #: ``Selection(related=…)`` —``CharField`` sin ``choices`` todavía—
+    #: publicaba ``char`` y rompía la comparación de ``setup_related``.
+    declared = getattr(field, 'declared_type', None)
+    if declared:
+        return declared
     internal = field.get_internal_type()
     if internal == 'CharField' and getattr(field, 'choices', None):
         return 'selection'
@@ -1991,6 +2459,59 @@ models.Field.type = property(type_for)
 #: patrón vacío devuelve una condición sobre el campo, y uno escalar devuelve
 #: un booleano. Con ``False`` universal el escalar se aplicaba a los dos.
 models.Field.relational = property(lambda self: self.is_relation)
+
+#: ``comodel_name`` — el modelo de los valores de un campo de relacion.
+#:
+#: La fuente lo declara en la base abstracta de los tres campos de relacion
+#: (``odoo19c: odoo/orm/fields_relational.py:36`` — ``comodel_name: str``) y
+#: lo puebla ``_setup_attrs`` al resolver la cadena que el programador escribe
+#: en ``Many2one('res.partner')``.
+#:
+#: Instalado como valor llano por :data:`_CLASS_ATTRIBUTE_DEFAULTS` valia
+#: ``None`` **incluso en un ForeignKey**, que es lo contrario de lo que la
+#: fuente garantiza — medido sobre ``ResUsers._fields['partner']``:
+#: ``type='many2one'``, ``relational=True``, ``comodel_name=None``.
+#:
+#: Aqui el destino lo trae el stack hecho: ``Field.related_model`` es el
+#: modelo apuntado, resuelto por Django cuando la app esta lista. Lo unico que
+#: falta es TRADUCIRLO al vocabulario de la fuente, y eso lo sabe el registro
+#: por nombre: ``registry.name_of`` devuelve el ``_name`` del modelo cuando lo
+#: declara. Sin ``_name`` cae a la etiqueta de Django, que es lo mas cercano a
+#: un identificador estable de modelo que este arbol tiene.
+#:
+#: **La derivacion se queda; el ser de solo lectura se retira** (H-API-1094).
+#: La fuente declara ``comodel_name: str`` como ANOTACION sin valor, asi que
+#: alla no hay descriptor: el nombre lo escribe el ``__init__`` del campo y
+#: vive en el ``__dict__`` de la instancia. Un ``property`` es descriptor de
+#: DATOS —tiene ``__set__``— y por eso ganaba sobre el ``__dict__`` y rehusaba
+#: la asignacion con ``property … has no setter``. Eso rompia la mitad de
+#: escritura de ``setup_related`` (``:645-649``), que asigna los cinco
+#: ``related_attrs`` con ``setattr``.
+#:
+#: Un descriptor NO de datos —solo ``__get__``— reproduce la semantica de la
+#: fuente sin una sola linea de sincronizacion: Python consulta primero el
+#: ``__dict__`` de la instancia, de modo que un valor asignado gana por el
+#: orden de busqueda del lenguaje y la derivacion solo corre cuando no hay
+#: ninguno. La alternativa —``property`` con ``fset`` que escribe ``__dict__``
+#: y ``fget`` que lo lee primero— exige dos sitios que no pueden discrepar.
+class _ComodelName:
+    """El nombre del comodelo, derivado del destino que Django ya resuelve."""
+
+    __slots__ = ()
+
+    def __get__(self, field, owner=None):
+        if field is None:
+            return self
+        if not field.is_relation:
+            return None
+        remote = getattr(field, 'related_model', None)
+        if remote is None or isinstance(remote, str):
+            # Referencia perezosa sin resolver todavia: la cadena que se escribio.
+            return remote
+        return orm_registry.name_of(remote) or remote._meta.label
+
+
+models.Field.comodel_name = _ComodelName()
 
 #: ≙ ``Field._by_type__`` colgado de la clase, como en la fuente.
 models.Field._by_type__ = _by_type__
@@ -3027,6 +3548,42 @@ def _field_setup_nonrelated(self, model):
 models.Field.setup_nonrelated = _field_setup_nonrelated
 
 
+def _first_record(corecord):
+    """El primer registro de un eslabón, o el eslabón vacío.
+
+    ≙ ``next(iter(corecord), corecord)`` de ``traverse_related`` (``:670``) y
+    ``_compute_related`` (``:692``): al atravesar una relación de varios se
+    toma el primero, y si no hay ninguno se conserva el contenedor vacío.
+
+    **Divergencia de mecanismo, medida:** allá ``record[name]`` sobre un
+    ``Many2one`` devuelve un recordset —iterable, de cero o un elemento—.
+    Aquí lo devuelve la ``ForeignKey`` de Django: la **fila** cuando hay una,
+    ``None`` cuando la columna es ``NULL``. Una fila corriente de Django no es
+    iterable (``TypeError`` en ``iter``), y un ``None`` tampoco; en los dos
+    casos el eslabón YA es «el primero o el vacío», que es lo que la fuente
+    obtiene con el ``next``. Un recordset nuestro (``orm.models.BaseModel``)
+    sí itera, y para él el ``next`` es el de la fuente.
+    """
+    try:
+        return next(iter(corecord), corecord)
+    except TypeError:
+        return corecord
+
+
+def _end_of_chain(value, related_field):
+    """Lee el último campo de la cadena sobre el eslabón final.
+
+    ≙ ``value[self.related_field.name]`` (``:696``). Allá un eslabón vacío es
+    un recordset vacío y leerle un campo devuelve el valor falso del campo
+    (``Field.falsy_value``). Aquí el eslabón vacío es ``None`` —lo que la FK
+    devuelve— y leerle con ``[]`` sería ``TypeError``: se traduce al mismo
+    valor falso que la fuente produce.
+    """
+    if value is None:
+        return getattr(related_field, 'falsy_value', None)
+    return value[related_field.name]
+
+
 def _field_traverse_related(self, record):
     """≙ ``Field.traverse_related`` (``:666``) — «traverse the fields of the
     related field ``self`` except for the last one, and return it as a pair
@@ -3039,7 +3596,7 @@ def _field_traverse_related(self, record):
     """
     for name in self.related.split('.')[:-1]:
         corecord = record[name]
-        record = next(iter(corecord), corecord)
+        record = _first_record(corecord)
     return record, self.related_field
 
 
@@ -3076,12 +3633,13 @@ def _field_compute_related(self, records):
     lo que la deja funcionar, y invertirlo la anularía en silencio — el N+1
     no rompe nada, sólo cuesta.
     """
+    records = as_record_list(records)
     values = list(records)
     for name in self.related.split('.')[:-1]:
-        values = [next(iter(value := element[name]), value) for element in values]
+        values = [_first_record(element[name]) for element in values]
     for record, value in zip(records, values):
         record[self.name] = self._process_related(
-            value[self.related_field.name], get_environment())
+            _end_of_chain(value, self.related_field), get_environment())
 
 
 models.Field._compute_related = _field_compute_related
@@ -3154,20 +3712,36 @@ def walk_related_chain(field, model):
     fuente que preservar, y un ``_nombre`` importado entre módulos sería el
     defecto que PEP 8 nombra.
 
-    **Divergencia de mecanismo, medida:** aquí ``_fields`` es una ``property``
-    de **instancia** (``orm/models.py:1355``), y este recorrido corre sobre la
-    **clase** — Django liga los campos al construirla, así que no hay fase de
-    espera que replicar. El cuerpo de esa property es
-    ``{f.name: f for f in self._meta.get_fields()}``, y eso es exactamente lo
-    que se consulta: el mismo registro, alcanzado desde la clase.
+    **Divergencia de mecanismo, medida:** allá ``_fields`` es un atributo de la
+    clase de registro, y este recorrido corre sobre la **clase** — Django liga
+    los campos al construirla, así que no hay fase de espera que replicar. El
+    registro se consulta con :func:`~orm.utils.model_field_registry`, que es el
+    cuerpo que ``BaseModel._fields`` invoca: **el mismo** mapa, alcanzado desde
+    la clase.
+
+    > **Corregido (TASK-API-0417).** Este recorrido construía su propio mapa con
+    > ``{f.name: f for f in current._meta.get_fields()}``. La primera redacción
+    > de esta nota decía que ese mapa era «estrictamente más estrecho porque un
+    > campo sin columna se contribuye con ``private_only=True`` y no aparece
+    > ahí», y **eso es falso**: medido sobre ``TestOrmCategory``,
+    > ``_meta.private_fields`` da ``['depth', 'root_categ', 'display_name',
+    > 'dummy']`` y los cuatro salen en ``get_fields()`` con ``hidden=False``.
+    > ``Options.get_fields()`` **sí** devuelve los campos privados.
+    >
+    > Lo que el mapa propio no alcanzaba es la otra población que
+    > :func:`~orm.utils.model_field_registry` une: los ``NonStored`` que viven
+    > en el ``vars()`` de una clase del MRO y que **ningún** ``_meta`` ve,
+    > porque no son campos de Django. Mientras las fachadas enrutaban, un
+    > ``related=`` devolvía justo uno de ésos. El cambio se conserva por esa
+    > razón —y caduca con TASK-API-0418, que retira ``NonStored`` como clase—;
+    > la ceguera de :ref:`h-api-1025` **no** tiene aquí un tercer sitio.
 
     Lanza ``KeyError`` nombrando el eslabón que falta, como la fuente
     (``:611-615``).
     """
     field_seq, current = [], model
     for name in field.related.split('.'):
-        by_name = {f.name: f for f in current._meta.get_fields()}
-        link = by_name.get(name)
+        link = model_field_registry(current).get(name)
         if link is None:
             raise KeyError(
                 f'El campo {name} de la definición related de {field.name} '
@@ -3234,6 +3808,54 @@ def _field_setup_related(self, model):
         if attribute not in self.__dict__ and prop.startswith('_related_'):
             setattr(self, attribute, getattr(field_seq[-1], prop, None))
 
+    _retarget_related_relation(self, field_seq[-1])
+
+
+#: Las ``cached_property`` de Django que derivan de ``remote_field.model``
+#: (``related.py:111,790-802,891,911``). Se vacían al reapuntar la relación:
+#: un valor cacheado contra el placeholder describiría al modelo equivocado.
+_RELATION_CACHED_PROPERTIES = (
+    'related_model', 'related_fields', 'reverse_related_fields',
+    'local_related_fields', 'foreign_related_fields', 'path_infos',
+    'reverse_path_infos', 'cached_col',
+)
+
+
+def _retarget_related_relation(field, end_of_chain):
+    """Reapunta una relación ``related=`` sin ``to`` al comodelo de la cadena.
+
+    En la fuente el comodelo de un ``Many2one(related=...)`` viene de
+    ``_related_comodel_name`` (``:643-647``): la fachada no exige ``to``. En
+    este stack ``ForeignKey`` exige un destino al construirse, y el que se
+    declara sin él lleva un **placeholder** que Django ya resolvió y cacheó
+    —``remote_field.model``, ``related_model`` y sus derivadas— antes de que
+    ``setup_related`` corra. Copiar ``comodel_name`` (el bucle de arriba) deja
+    el nombre bien y el descriptor mal: ``ForwardManyToOneDescriptor.__set__``
+    comprueba contra ``remote_field.model._meta.concrete_model``
+    (``related_descriptors.py:285``) y rechaza la fila del comodelo real.
+
+    Medido en la sonda C del workbench ``fachadas-construyen-una-vez``:
+    ``comodel_name`` copiado correcto y ``remote_model`` en el placeholder,
+    con *Cannot assign ... must be a ... instance* al leer.
+    """
+    if not (field.is_relation and getattr(end_of_chain, 'is_relation', False)):
+        return
+    target = getattr(end_of_chain, 'related_model', None)
+    if target is None or isinstance(target, str):
+        return
+    remote = getattr(field, 'remote_field', None)
+    if remote is None or remote.model is target:
+        return
+    remote.model = target
+    #: ``ForeignKey.contribute_to_related_class`` fijó el nombre de la clave
+    #: del placeholder (``related.py:1196``); el del comodelo real puede
+    #: diferir.
+    if getattr(remote, 'field_name', None) is not None:
+        remote.field_name = target._meta.pk.name
+    for cached in _RELATION_CACHED_PROPERTIES:
+        field.__dict__.pop(cached, None)
+    remote.__dict__.pop('related_model', None)
+
 
 models.Field.setup_related = _field_setup_related
 
@@ -3266,17 +3888,13 @@ models.Field.setup_related = _field_setup_related
 #: método ya está colgado.
 
 
-#: ``:774-778`` — de dónde copia ``setup_related`` cada atributo. Son
-#: properties allá y funciones aquí por la misma razón que el resto del
-#: parche: se cuelgan de ``models.Field``, que no se puede reabrir con
-#: ``property`` sin pisar lo que Django ya declare con ese nombre.
-models.Field._related_comodel_name = property(
-    lambda self: getattr(self, 'comodel_name', None))
-models.Field._related_string = property(lambda self: self.string)
-models.Field._related_help = property(lambda self: getattr(self, 'help', None))
-models.Field._related_groups = property(
-    lambda self: getattr(self, 'groups', None))
-models.Field._related_aggregator = property(lambda self: self.aggregator)
+#: ``:774-778`` — los cinco ``_related_*`` los instala el bucle de la seccion
+#: «El campo relacionado y la columna», con ``property(attrgetter(...))``, que
+#: es la forma literal de la fuente. Aqui vivia una SEGUNDA declaracion de los
+#: cinco con lambdas defensivas, que pisaba la primera en silencio: dos fuentes
+#: de verdad para un mismo simbolo, y la que ganaba no era la fiel. Retirada en
+#: H-API-1094; medido antes de retirarla: los cinco atributos de origen existen
+#: siempre en ``models.Field``, asi que el ``attrgetter`` no puede levantar.
 
 
 def _field_setup(self, model):
@@ -3294,6 +3912,13 @@ def _field_setup(self, model):
         self.setup_related(model)
     else:
         self.setup_nonrelated(model)
+    # ``setup_related`` acaba de declarar ``compute``
+    # (``odoo19c: odoo/orm/fields.py:632``, ``self.compute = self._compute_related``).
+    # En la fuente el campo ES su propio descriptor, así que ese ``compute``
+    # rige desde el instante en que se asigna; aquí el descriptor se eligió en
+    # ``contribute_to_class``, antes de que ``compute`` existiera, y se vuelve a
+    # elegir con el campo ya armado.
+    _install_field_descriptor(self, model)
     self._setup_done = True
 
 
@@ -3516,7 +4141,20 @@ def get_depends(self, model):
                         f'{model.__name__}.{self.name}: la ruta related '
                         f'{self.related!r} atraviesa un campo que no lleva a '
                         f'ningun modelo')
-                field = model_field_registry(field_model)[field_name]
+                registry_of_model = model_field_registry(field_model)
+                if field_name not in registry_of_model:
+                    # **El eslabón ausente se NOMBRA.** Antes salía como un
+                    # ``KeyError`` pelado con sólo el segmento —diez mil veces
+                    # ``KeyError: 'company_id'``— y no decía ni qué campo
+                    # declara la cadena ni sobre qué modelo se rompió. La
+                    # fuente no necesita el mensaje porque su ``_fields``
+                    # siempre tiene el nombre; aquí la cadena viaja portada
+                    # verbatim y el eslabón puede faltar de verdad.
+                    raise ValueError(
+                        f'{model.__name__}.{self.name}: la ruta related '
+                        f'{self.related!r} pide {field_name!r} sobre '
+                        f'{field_model.__name__}, que no lo declara')
+                field = registry_of_model[field_name]
                 depends_context.extend(field.get_depends(field_model)[1])
                 field_model = _comodel_of(field, orm_registry)
             depends_context = tuple(unique(depends_context))
@@ -3773,6 +4411,54 @@ models.Field.determine_inverse = determine_inverse
 NonStored.determine_inverse = determine_inverse
 
 
+def determine_compute(field, records):
+    """Ejecuta el cómputo declarado del campo y devuelve lo que produce.
+
+    Es el cuerpo EFECTIVO de la rama ``elif self.compute:`` del descriptor de
+    la fuente (``odoo19c: odoo/orm/fields.py:1736-1737``, con su comentario
+    *"non-stored field or new record without origin: compute"*) **para un campo
+    sin columna**. Allá esa rama llama ``self.compute_value(recs)`` (``:1744``),
+    que termina en ``records._compute_field_value(self)``, cuyo cuerpo entero es
+    (``odoo19c: odoo/orm/models.py:4953-4959``)::
+
+        determine(field.compute, self)
+
+        if field.store and any(self._ids):
+            ...
+
+    Con ``store=False`` el segundo bloque no se alcanza, así que lo que queda es
+    la llamada a :func:`determine` — la misma forma que :func:`determine_inverse`
+    (``odoo19c: odoo/orm/fields.py:1921``).
+
+    Se declara **CONSTRUYE** por el criterio de las dos categorías: no hay
+    símbolo hecho —Django no conoce la noción de un método de cómputo sobre un
+    campo— pero las primitivas están (``getattr`` y ``callable``, que es lo que
+    :func:`determine` ya usa) y no hace falta ninguna dependencia de fuera.
+
+    POR QUÉ NO SE LLAMA ``compute_value``: ese nombre ya está tomado en este
+    módulo (``:4179``) por el porte de ``Field.compute_value``, que sí hace la
+    ceremonia completa —desmarcar de la cola, ``protecting``, llevar al caché—
+    y por tanto sólo aplica a un campo CON columna. Un :class:`NonStored` no
+    tiene ni cola ni caché que tocar: llamar a aquél desde aquí ejecutaría un
+    mecanismo que no le corresponde.
+
+    DIVERGENCIA DE MECANISMO, ya declarada: el cómputo de la fuente **asigna**
+    sobre el recordset y el descriptor relee el caché; aquí **devuelve**, y ese
+    retorno es el canal. Es la divergencia 1 de
+    :class:`~orm.models.DisplayNameMixin`, que precede a esta función y que los
+    cinco modelos que declaraban su ``_compute_display_name`` ya ejercían.
+    """
+    return determine(field.compute, records)
+
+
+#: Se instala desde AQUÍ y no desde ``fields_nonstored`` por la misma razón que
+#: ``determine_domain`` y ``determine_inverse``: este módulo importa aquél
+#: (``:83``), así que el import inverso sería un ciclo. Sólo sobre
+#: :class:`NonStored`: el campo con columna ya tiene la ceremonia completa en
+#: :func:`compute_value`, que es lo que la fuente le da.
+NonStored.determine_compute = determine_compute
+
+
 ############################################################################
 #
 # Cache management methods — ≙ ``odoo19c: odoo/orm/fields.py:1520-1630``
@@ -4016,17 +4702,27 @@ def _update_cache(self, records, cache_value, dirty=False):
 
 
 def _invoke_compute_method(field, records):
-    """Llama al método que ``field.compute`` nombra, sobre cada fila.
+    """Despacha ``field.compute`` sobre cada fila — por :func:`determine`.
 
-    ≙ ``BaseModel._compute_field_value`` (``odoo19c: odoo/orm/models.py``) en
-    lo que este stack necesita. La fuente lo invoca sobre el *recordset*
-    entero y el método itera por dentro con ``for record in self``; aquí la
-    unidad es la instancia, así que el bucle vive de este lado y el método
-    recibe una fila. Es la misma adaptación de :func:`~orm.utils.record_ids`,
-    vista desde el otro lado.
+    ≙ ``BaseModel._compute_field_value`` (``odoo19c: odoo/orm/models.py:4953``),
+    cuyo cuerpo es ``determine(field.compute, self)``. El despacho va por
+    :func:`determine` y no por ``getattr`` porque ``compute`` tiene DOS formas
+    en la fuente y las dos llegan aquí: el **nombre** de un método del modelo
+    (``compute='_compute_total'``) y un **invocable** — ``setup_related``
+    instala ``self.compute = self._compute_related`` (``:632``), un método
+    ligado al campo. Medido antes de este cambio
+    (``scripts/workbench/fachadas-construyen-una-vez-*/``
+    ``probe_related_setup_phase_when_reachable.py``): con ``getattr`` la
+    lectura de un ``related=`` moría con ``TypeError: attribute name must be
+    string, not 'method'``.
+
+    La fuente lo invoca sobre el *recordset* entero y el método itera por
+    dentro con ``for record in self``; aquí la unidad es la instancia, así
+    que el bucle vive de este lado y el método recibe una fila. Es la misma
+    adaptación de :func:`~orm.utils.record_ids`, vista desde el otro lado.
     """
     for record in as_record_list(records):
-        getattr(record, field.compute)()
+        determine(field.compute, record)
 
 
 def recompute(self, records):

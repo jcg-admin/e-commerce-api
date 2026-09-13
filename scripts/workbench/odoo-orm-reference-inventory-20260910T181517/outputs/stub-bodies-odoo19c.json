@@ -1,0 +1,496 @@
+{
+  "alias": "odoo19c",
+  "root": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm",
+  "total": 38,
+  "by_bucket": {
+    "overload": 14,
+    "plain": 21,
+    "other_decorator": 3
+  },
+  "plain_implemented_elsewhere": 17,
+  "plain_not_implemented_in_package": 4,
+  "by_file": {
+    "decorators.py": 4,
+    "domains.py": 5,
+    "environments.py": 4,
+    "fields.py": 1,
+    "fields_misc.py": 1,
+    "fields_relational.py": 7,
+    "models.py": 12,
+    "registry.py": 2,
+    "table_objects.py": 2
+  },
+  "by_owner": {
+    "<module>": 4,
+    "Domain": 4,
+    "DomainNary": 1,
+    "Environment": 4,
+    "Field": 1,
+    "Id": 1,
+    "_Relational": 3,
+    "_RelationalMulti": 4,
+    "BaseModel": 12,
+    "DummyRLock": 2,
+    "TableObject": 2
+  },
+  "stubs": [
+    {
+      "file": "decorators.py",
+      "owner": "<module>",
+      "name": "constrains",
+      "lineno": 83,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "decorators.py",
+      "owner": "<module>",
+      "name": "constrains",
+      "lineno": 88,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "decorators.py",
+      "owner": "<module>",
+      "name": "depends",
+      "lineno": 239,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "decorators.py",
+      "owner": "<module>",
+      "name": "depends",
+      "lineno": 244,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "domains.py",
+      "owner": "Domain",
+      "name": "__eq__",
+      "lineno": 369,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "domains.py::DomainBool",
+        "domains.py::DomainNot",
+        "domains.py::DomainNary",
+        "domains.py::DomainCustom",
+        "domains.py::DomainCondition",
+        "environments.py::Environment",
+        "fields_properties.py::Property",
+        "identifiers.py::NewId",
+        "models.py::BaseModel",
+        "models.py::ReversibleComparator"
+      ]
+    },
+    {
+      "file": "domains.py",
+      "owner": "Domain",
+      "name": "__hash__",
+      "lineno": 372,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "domains.py::DomainBool",
+        "domains.py::DomainNot",
+        "domains.py::DomainNary",
+        "domains.py::DomainCustom",
+        "domains.py::DomainCondition",
+        "environments.py::Environment",
+        "fields_properties.py::Property",
+        "identifiers.py::NewId",
+        "models.py::BaseModel",
+        "models.py::ReversibleComparator"
+      ]
+    },
+    {
+      "file": "domains.py",
+      "owner": "Domain",
+      "name": "_as_predicate",
+      "lineno": 409,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "domains.py::DomainBool",
+        "domains.py::DomainNot",
+        "domains.py::DomainAnd",
+        "domains.py::DomainOr",
+        "domains.py::DomainCustom",
+        "domains.py::DomainCondition"
+      ]
+    },
+    {
+      "file": "domains.py",
+      "owner": "Domain",
+      "name": "_to_sql",
+      "lineno": 470,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "domains.py::DomainBool",
+        "domains.py::DomainNot",
+        "domains.py::DomainNary",
+        "domains.py::DomainCustom",
+        "domains.py::DomainCondition"
+      ]
+    },
+    {
+      "file": "domains.py",
+      "owner": "DomainNary",
+      "name": "INVERSE",
+      "lineno": 635,
+      "decorators": [
+        "classproperty"
+      ],
+      "bucket": "other_decorator",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "environments.py",
+      "owner": "Environment",
+      "name": "ref",
+      "lineno": 151,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "environments.py",
+      "owner": "Environment",
+      "name": "ref",
+      "lineno": 155,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "environments.py",
+      "owner": "Environment",
+      "name": "protecting",
+      "lineno": 403,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "environments.py",
+      "owner": "Environment",
+      "name": "protecting",
+      "lineno": 407,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "fields.py",
+      "owner": "Field",
+      "name": "setup_nonrelated",
+      "lineno": 557,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_numeric.py::Monetary",
+        "fields_relational.py::_Relational",
+        "fields_relational.py::Many2one",
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many",
+        "fields_selection.py::Selection"
+      ]
+    },
+    {
+      "file": "fields_misc.py",
+      "owner": "Id",
+      "name": "update_db",
+      "lineno": 100,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields.py::Field",
+        "fields_relational.py::Many2one",
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_Relational",
+      "name": "_update_inverse",
+      "lineno": 81,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_numeric.py::Integer",
+        "fields_relational.py::Many2one",
+        "fields_relational.py::_RelationalMulti"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_Relational",
+      "name": "convert_to_record_multi",
+      "lineno": 85,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_relational.py::Many2one",
+        "fields_relational.py::_RelationalMulti"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_Relational",
+      "name": "setup_inverses",
+      "lineno": 96,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_RelationalMulti",
+      "name": "convert_to_display_name",
+      "lineno": 715,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields.py::Field",
+        "fields_reference.py::Reference",
+        "fields_relational.py::Many2one",
+        "fields_temporal.py::Date",
+        "fields_temporal.py::Datetime"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_RelationalMulti",
+      "name": "write_real",
+      "lineno": 766,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_RelationalMulti",
+      "name": "write_new",
+      "lineno": 769,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many"
+      ]
+    },
+    {
+      "file": "fields_relational.py",
+      "owner": "_RelationalMulti",
+      "name": "_condition_to_sql_relational",
+      "lineno": 839,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_relational.py::One2many",
+        "fields_relational.py::Many2many"
+      ]
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "_post_model_setup__",
+      "lineno": 484,
+      "decorators": [
+        "api.model"
+      ],
+      "bucket": "other_decorator",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "init",
+      "lineno": 3250,
+      "decorators": [
+        "api.private"
+      ],
+      "bucket": "other_decorator",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "_validate_properties_definition",
+      "lineno": 5070,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "fields_properties.py::PropertiesDefinition"
+      ]
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "_register_hook",
+      "lineno": 5819,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": []
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "_unregister_hook",
+      "lineno": 5822,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": []
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "mapped",
+      "lineno": 6120,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "mapped",
+      "lineno": 6124,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "grouped",
+      "lineno": 6218,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "grouped",
+      "lineno": 6222,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "__getitem__",
+      "lineno": 6669,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "__getitem__",
+      "lineno": 6672,
+      "decorators": [
+        "typing.overload"
+      ],
+      "bucket": "overload",
+      "overridden_elsewhere": null
+    },
+    {
+      "file": "models.py",
+      "owner": "BaseModel",
+      "name": "onchange",
+      "lineno": 6996,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "decorators.py::<module>"
+      ]
+    },
+    {
+      "file": "registry.py",
+      "owner": "DummyRLock",
+      "name": "acquire",
+      "lineno": 1191,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": []
+    },
+    {
+      "file": "registry.py",
+      "owner": "DummyRLock",
+      "name": "release",
+      "lineno": 1193,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": []
+    },
+    {
+      "file": "table_objects.py",
+      "owner": "TableObject",
+      "name": "get_definition",
+      "lineno": 52,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "table_objects.py::Constraint",
+        "table_objects.py::Index"
+      ]
+    },
+    {
+      "file": "table_objects.py",
+      "owner": "TableObject",
+      "name": "apply_to_database",
+      "lineno": 72,
+      "decorators": [],
+      "bucket": "plain",
+      "overridden_elsewhere": [
+        "table_objects.py::Constraint",
+        "table_objects.py::Index"
+      ]
+    }
+  ]
+}

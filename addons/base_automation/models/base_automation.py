@@ -87,6 +87,7 @@ regla dueña). ``action_server_ids`` se conserva como el nombre del
 accesor (``@property``), fiel a la referencia, aunque su mecanismo interno
 sea la tabla-liga y no un O2M directo.
 """
+import api
 import datetime
 import logging
 import re
@@ -890,6 +891,7 @@ class BaseAutomation(MailThread, MailActivityMixin, TimeStampedModel):
         self._update_registry()
         return result
 
+    @api.model_create_multi
     @classmethod
     def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: base_automation.py:491-498``).
@@ -913,8 +915,6 @@ class BaseAutomation(MailThread, MailActivityMixin, TimeStampedModel):
         del módulo— así que se conserva la consulta y no su efecto, que es lo
         que ``save()`` ya hacía.
         """
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
         automations = [cls.objects.create(**vals) for vals in vals_list]
         for automation in automations:
             automation._update_cron()

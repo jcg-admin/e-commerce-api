@@ -1,0 +1,11 @@
+/home/user/kaupamex-api/src/orm/fields.py:4068: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_code should be searchable. This is necessary to determine which records to recompute when base.ResCountry.code is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+/home/user/kaupamex-api/src/orm/fields.py:4068: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_group_codes should be searchable. This is necessary to determine which records to recompute when base.ResCountry.country_group_codes is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+create(country=mx): despachos=1 (esperado 1) | partner.country_id=156 (esperado 156) -> ACIERTA
+write({'country': mx}): despachos=1 (esperado 1) | partner.country_id=156 (esperado 156) -> ACIERTA
+country = ar; save(): despachos=1 (esperado 1) | partner.country_id=10 (esperado 10) -> ACIERTA
+leer (Mexico) y save(): despachos=0 (esperado 0) | partner.country_id=156 (esperado 156) -> ACIERTA
+
+veredicto: 4 de 4 aciertan
+EXIT=0

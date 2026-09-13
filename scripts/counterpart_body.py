@@ -23,6 +23,7 @@ cuando cambia que se mide. Pesado por los siete factores: **claridad** y
 mas en el pre-commit, que son milisegundos sobre archivos en staging.
 """
 import ast
+import collections
 import dataclasses
 import pathlib
 import sys
@@ -43,6 +44,13 @@ BOTH = 'ambas'
 #: como acuerdo publica un verde que no discrimina (sub-patron D de
 #: ``metrica-decide-la-conclusion.md``).
 INDETERMINATE = 'indeterminado por granularidad de metodo'
+
+#: Las tres vias por las que un simbolo halla su contraparte. Se declaran aqui
+#: —no en un eje— porque el emparejamiento es del MOTOR: un eje decide que se
+#: compara, no quien es la contraparte de quien.
+BY_OWNER = 'por clase duena'
+MODULE_LEVEL = 'funcion de modulo'
+BY_NAME = 'por nombre, duena divergente'
 
 
 @dataclasses.dataclass(frozen=True)
@@ -130,10 +138,19 @@ class Finding:
     ours: str
     theirs: str
     direction: str
+    owner: str = ''
 
     @property
     def key(self):
-        return f'{self.path}::{self.symbol}'
+        """La clave DEL SIMBOLO, no la del nombre.
+
+        Sin la clase duena dos hermanas comparten entrada de baseline: congelar
+        ``models.py::__init__`` autorizaria el de cualquiera de las nueve clases
+        que lo declaran en ese archivo. La funcion de modulo conserva el nombre
+        desnudo porque no tiene duena que la desambigue.
+        """
+        symbol = f'{self.owner}.{self.symbol}' if self.owner else self.symbol
+        return f'{self.path}::{symbol}'
 
 
 @dataclasses.dataclass(frozen=True)
@@ -144,6 +161,12 @@ class Scope:
     files_with_counterpart: int
     pairs_compared: int
     pairs_indeterminate: int = 0
+    #: Por que via emparejo cada par comparado. Las tres suman
+    #: ``pairs_compared``: un denominador que no dice como se compuso no es
+    #: auditable, y la tercera es la que mide cuanto pesa el respaldo.
+    pairs_by_owner: int = 0
+    pairs_module_level: int = 0
+    pairs_by_name: int = 0
 
 
 #: Las raices espejadas: el prefijo nuestro y su destino en la referencia. Las
@@ -265,30 +288,129 @@ def methods_of(path):
             if isinstance(member, (ast.FunctionDef, ast.AsyncFunctionDef))}
 
 
+@dataclasses.dataclass(frozen=True)
+class Pair:
+    """Un simbolo y su contraparte, con la via por la que se hallaron."""
+
+    name: str
+    owner: str
+    ours: object
+    theirs: object
+    route: str
+
+    @property
+    def key(self):
+        return f'{self.owner}.{self.name}' if self.owner else self.name
+
+
+def _functions(declarations):
+    """Las declaraciones de funcion, separadas en las de clase y las de modulo."""
+    in_class, at_module = [], []
+    for declaration in declarations:
+        if declaration.kind != 'function':
+            continue
+        (in_class if declaration.owner else at_module).append(declaration)
+    return in_class, at_module
+
+
+def pair_declarations(our_path, their_path):
+    """Los pares simbolo-contraparte, por tres vias y en este orden.
+
+    ``methods_of`` devolvia ``{nombre: nodo}``, y eso tiene dos consecuencias.
+    La conocida es la **ceguera**: la funcion de modulo —la forma dominante de
+    ``odoo/tools``— no entra. La grave es que el dict **colapsa por nombre**,
+    asi que con clases hermanas gana la ultima de cada lado y el motor compara
+    dos cuerpos que no son contraparte, **sin que nada lo delate**. Medido
+    sobre ``src/orm`` + ``src/tools``: 89 nombres con hermanos, y en
+    ``fields_properties.py`` nuestro ``PropertiesDefinition.__init__`` se
+    comparaba contra ``Property.__init__`` de la fuente teniendo el nuestro.
+
+    Las tres vias, en orden, y **ninguna es prescindible**:
+
+    1. ``BY_OWNER`` — misma clase duena en los dos lados. Es la unica que
+       garantiza contraparte, y resuelve 522 de los 585 pares que el
+       instrumento viejo veia.
+    2. ``MODULE_LEVEL`` — funcion de modulo del mismo nombre en los dos lados.
+       Es la ceguera que se cierra: 241 pares mas.
+    3. ``BY_NAME`` — el respaldo, y **no es opcional**: nuestro puerto disuelve
+       ``BaseModel`` en mixins, asi que ``create`` vive aqui en
+       ``DefaultGetMixin`` y alli en ``BaseModel``. Son los 63 pares restantes,
+       los 63 en clase de ambos lados, y **todos del nucleo del ORM**. Un
+       emparejamiento estricto por duena los perderia justo donde mas importan.
+       ``Scope`` publica cuantos resolvio cada via para que ese peso se vea.
+
+    *Metrica:* pares de simbolo del mismo nombre presentes en los dos lados del
+    espejo, por AST, sin colapsar por nombre.
+    *Ciega a:* el simbolo portado bajo OTRO nombre —no hay tabla de
+    equivalencia, asi que un renombre se lee como ausencia—; y, dentro de la
+    via 3 con varios candidatos por lado, cual de ellos es la contraparte real:
+    se emparejan en orden de linea, que es determinista y no es juicio.
+    """
+    ours_in_class, ours_at_module = _functions(declarations_of(our_path))
+    theirs_in_class, theirs_at_module = _functions(declarations_of(their_path))
+
+    pairs = []
+    theirs_by_owner = {(d.owner, d.name): d for d in theirs_in_class}
+    taken = set()
+
+    remaining_ours = []
+    for mine in ours_in_class:
+        yours = theirs_by_owner.get((mine.owner, mine.name))
+        if yours is not None and id(yours) not in taken:
+            taken.add(id(yours))
+            pairs.append(Pair(mine.name, mine.owner, mine.node, yours.node,
+                              BY_OWNER))
+        else:
+            remaining_ours.append(mine)
+
+    theirs_at_module_by_name = {d.name: d for d in theirs_at_module}
+    for mine in ours_at_module:
+        yours = theirs_at_module_by_name.get(mine.name)
+        if yours is not None:
+            pairs.append(Pair(mine.name, '', mine.node, yours.node,
+                              MODULE_LEVEL))
+
+    leftovers = collections.defaultdict(list)
+    for yours in theirs_in_class:
+        if id(yours) not in taken:
+            leftovers[yours.name].append(yours)
+    for candidates in leftovers.values():
+        candidates.sort(key=lambda d: d.lineno)
+    for mine in sorted(remaining_ours, key=lambda d: d.lineno):
+        candidates = leftovers.get(mine.name)
+        if candidates:
+            yours = candidates.pop(0)
+            pairs.append(Pair(mine.name, mine.owner, mine.node, yours.node,
+                              BY_NAME))
+    return pairs
+
+
 def compare(paths, axis):
     """Los hallazgos del eje y el alcance sobre el que se midieron."""
     paths = list(paths)
-    findings, with_counterpart, pairs, indeterminate = [], 0, 0, 0
+    findings, with_counterpart, compared, indeterminate = [], 0, 0, 0
+    by_route = collections.Counter()
     for path in paths:
         reference = counterpart(path)
         if reference is None or not reference.is_file():
             continue
         with_counterpart += 1
-        ours, theirs = methods_of(path), methods_of(reference)
-        for name, node in ours.items():
-            if name not in theirs:
-                continue
-            mine = classify(node, axis.ours, axis)
-            yours = classify(theirs[name], axis.reference, axis)
+        for pair in pair_declarations(path, reference):
+            mine = classify(pair.ours, axis.ours, axis)
+            yours = classify(pair.theirs, axis.reference, axis)
             if ABSENT in (mine, yours):
                 continue
-            pairs += 1
+            compared += 1
+            by_route[pair.route] += 1
             verdict = direction(mine, yours, axis)
             if verdict == INDETERMINATE:
                 indeterminate += 1
             elif verdict is not None:
-                findings.append(Finding(str(path), name, mine, yours, verdict))
-    return findings, Scope(len(paths), with_counterpart, pairs, indeterminate)
+                findings.append(Finding(str(path), pair.name, mine, yours,
+                                        verdict, pair.owner))
+    return findings, Scope(
+        len(paths), with_counterpart, compared, indeterminate,
+        by_route[BY_OWNER], by_route[MODULE_LEVEL], by_route[BY_NAME])
 
 
 def tree_files(roots):

@@ -1,0 +1,6 @@
+Sujeto.__dict__["id"] : DeferredAttribute
+getattr(Sujeto, "id") : DeferredAttribute
+MRO                   : ['Sujeto', 'DescriptorBase', 'Model', 'AltersData', 'object']
+  _ids=()           -> .id = AttributeError: 'NoneType' object has no attribute 'attname'
+  _ids=(7,)         -> .id = AttributeError: 'NoneType' object has no attribute 'attname'
+  _ids=(7, 18)      -> .id = AttributeError: 'NoneType' object has no attribute 'attname'

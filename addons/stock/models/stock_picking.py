@@ -147,6 +147,7 @@ import uuid
 from collections import defaultdict
 
 import fields
+import api
 import models
 from django.apps import apps
 from django.db import transaction
@@ -220,7 +221,7 @@ XMLID_LOCATION_SUPPLIERS = 'stock.stock_location_suppliers'
 XMLID_LOCATION_CUSTOMERS = 'stock.stock_location_customers'
 
 
-class StockPickingType(TimeStampedModel):
+class StockPickingType(models.DefaultGetMixin, TimeStampedModel):
     """``stock.picking.type`` — la plantilla que gobierna una clase de albarán."""
 
     # Atributos de clase de modelo — los cinco que la referencia declara
@@ -436,33 +437,42 @@ class StockPickingType(TimeStampedModel):
 
     # -- creación, copia y escritura --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :157-173``).
 
         Sin secuencia explícita pero con prefijo, se crea la ``ir.sequence``
         que le corresponde: con almacén el prefijo lleva su código delante
-        (``WH/IN/``); sin él, el prefijo a secas.
+        (``WH/IN/``); sin él, el prefijo a secas. El bucle por ``vals`` es el
+        de la referencia.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
         ir_sequence = apps.get_model('base', 'IrSequence')
-        if not vals.get('sequence_id') and vals.get('sequence_code'):
-            warehouse = vals.get('warehouse')
-            if warehouse is not None:
-                vals['sequence_id'] = ir_sequence.objects.create(
-                    name=_('Secuencia %(code)s de %(warehouse)s') % {
-                        'code': vals['sequence_code'], 'warehouse': warehouse.name},
-                    prefix=f"{warehouse.code}/{vals['sequence_code']}/",
-                    padding=5,
-                    company=warehouse.company,
-                )
-            else:
-                vals['sequence_id'] = ir_sequence.objects.create(
-                    name=_('Secuencia %(code)s') % {'code': vals['sequence_code']},
-                    prefix=vals['sequence_code'],
-                    padding=5,
-                    company=vals.get('company'),
-                )
-        return cls.objects.create(**vals)
+        for vals in vals_list:
+            if not vals.get('sequence_id') and vals.get('sequence_code'):
+                warehouse = vals.get('warehouse')
+                if warehouse is not None:
+                    vals['sequence_id'] = ir_sequence.objects.create(
+                        name=_('Secuencia %(code)s de %(warehouse)s') % {
+                            'code': vals['sequence_code'], 'warehouse': warehouse.name},
+                        prefix=f"{warehouse.code}/{vals['sequence_code']}/",
+                        padding=5,
+                        company=warehouse.company,
+                    )
+                else:
+                    vals['sequence_id'] = ir_sequence.objects.create(
+                        name=_('Secuencia %(code)s') % {'code': vals['sequence_code']},
+                        prefix=vals['sequence_code'],
+                        padding=5,
+                        company=vals.get('company'),
+                    )
+        return super().create(vals_list)
 
     def copy_data(self, default=None):
         """≙ ``copy_data`` (``odoo19c: :175-183``).
@@ -1014,7 +1024,8 @@ class PickingTypeFavoriteUserRel(models.Model):
         return f'{self.picking_type_id}:{self.user_id}'
 
 
-class StockPicking(MailThread, MailActivityMixin, TimeStampedModel):
+class StockPicking(MailThread, MailActivityMixin, models.DefaultGetMixin,
+                   TimeStampedModel):
     """``stock.picking`` — una transferencia (albarán).
 
     .. warning:: Porte parcial declarado — tarea **#330**, segundo pase.
@@ -1476,8 +1487,9 @@ class StockPicking(MailThread, MailActivityMixin, TimeStampedModel):
 
     # -- ciclo de vida: crear, escribir, borrar --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :1117-1139``).
 
         Sin nombre explícito (o con el placeholder ``/``), y con un tipo de
@@ -1492,11 +1504,12 @@ class StockPicking(MailThread, MailActivityMixin, TimeStampedModel):
         clase); aquí el llamador confirma explícitamente con
         :meth:`action_confirm`.
         """
-        picking_type = vals.get('picking_type')
-        if vals.get('name', '') in ('', '/') and picking_type is not None \
-                and picking_type.sequence_id is not None:
-            vals['name'] = picking_type.sequence_id.next_by_id()
-        return cls.objects.create(**vals)
+        for vals in vals_list:
+            picking_type = vals.get('picking_type')
+            if vals.get('name', '') in ('', '/') and picking_type is not None \
+                    and picking_type.sequence_id is not None:
+                vals['name'] = picking_type.sequence_id.next_by_id()
+        return super().create(vals_list)
 
     def write(self, vals):
         """≙ ``write`` (``odoo19c: :1139-1170``).
@@ -2212,9 +2225,9 @@ class StockPicking(MailThread, MailActivityMixin, TimeStampedModel):
             impactados = set(
                 self._get_impacted_pickings(move_dest_ids)) - destinos_pickings
             lineas = [
-                _('La cantidad reservada de %(origen)s bajó a '
-                  '%(nueva)s (esperada: %(vieja)s).') % {
-                    'origen': orig, 'nueva': nuevo, 'vieja': viejo}
+                _('La cantidad reservada de %(origin)s bajó a '
+                  '%(new)s (esperada: %(old)s).') % {
+                    'origin': orig, 'new': nuevo, 'old': viejo}
                 for orig in origin_pickings
                 for (nuevo, viejo) in [
                     rendering_context[m][1] for m in rendering_context

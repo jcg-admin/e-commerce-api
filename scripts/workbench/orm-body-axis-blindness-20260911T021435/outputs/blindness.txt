@@ -1,0 +1,23 @@
+archivos recorridos           : 77
+archivos con contraparte      : 67
+pares que methods_of ve       : 585
+pares de funcion de modulo    : 241  (ciegos hoy)
+universo emparejable          : 826
+cobertura de methods_of       : 70.8%
+nombres con hermanos en fuente: 89  (methods_of colapsa por nombre)
+  src/orm/domains.py: INVERSE, __and__, __eq__, __hash__, __invert__, __iter__, __new__, __or__, _as_predicate, _negate, _optimize_step, is_false, is_true, iter_conditions, map_conditions
+  src/orm/environments.py: __init__, __repr__, clear, reset
+  src/orm/fields_properties.py: convert_to_cache, convert_to_column, convert_to_read, convert_to_record, convert_to_write
+  src/orm/fields_relational.py: __get__, __init__, __iter__, __reversed__, get_comodel_domain
+  src/orm/fields_textual.py: __init__
+  src/orm/models.py: __contains__, __eq__, __getitem__, __hash__, __init__, __iter__, __len__, __lt__, __repr__
+  src/orm/table_objects.py: __init__, apply_to_database, get_definition
+  src/tools/_vendor/useragents.py: __init__
+  src/tools/cache.py: __init__, determine_key
+  src/tools/facade.py: __init__, __set_name__
+  src/tools/func.py: __get__, __init__
+  src/tools/misc.py: __contains__, __delitem__, __getitem__, __init__, __iter__, __len__, __repr__, __setitem__, add, clear, copy, update
+  src/tools/pdf/__init__.py: __init__
+  src/tools/profiler.py: __enter__, __exit__, __init__, _get_stack_trace, add, hook, post_process, start, stop, summary
+  src/tools/set_expression.py: __and__, __combine, __eq__, __hash__, __init__, __invert__, __le__, __lt__, __or__, invert_intersect, is_empty, is_universal, key, matches
+  src/tools/zeep/client.py: __getitem__, __init__, __setattr__

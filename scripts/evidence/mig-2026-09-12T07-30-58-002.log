@@ -1,0 +1,10 @@
+src/addons/base/models/res_country.py:108:    #: ≙ ``country_group_codes`` (``odoo19c: res_country.py:68``), que allá es
+src/addons/base/models/res_country.py:109:    #: ``fields.Json(compute="_compute_country_group_codes")`` — un computado
+src/addons/base/models/res_country.py:114:    #: ``company_country_group_codes`` de ``SiteConfigSettings``.
+src/addons/base/models/res_country.py:115:    country_group_codes = fields.Json(
+src/addons/base/models/res_country.py:116:        compute='_compute_country_group_codes', store=False)
+src/addons/base/models/res_country.py:176:    def _compute_country_group_codes(self):
+src/addons/base/models/res_country.py:177:        """Los códigos de sus agrupaciones — ≙ ``_compute_country_group_codes``
+src/addons/base/models/res_country.py:182:        associated country groups, assign [''] to country_group_codes"*— porque
+grep: src/addons/base/models/__pycache__/res_country.cpython-312.pyc: binary file matches
+EXIT=0

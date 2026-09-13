@@ -1,0 +1,294 @@
+bringing up nodes...
+bringing up nodes...
+
+................................................................F....... [  0%]
+............................sssssssss.ssssssss.....F....F.Fssssss....... [  1%]
+........................................................................ [  2%]
+........................................................................ [  2%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+......................................................................... [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 15%]
+......................................................................... [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+......................................................................... [ 21%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+...............................................F........................ [ 32%]
+......................................................................... [ 33%]
+.................F...................................................... [ 34%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 45%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 47%]
+......................................................................... [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+......................................................................... [ 65%]
+......................................................................... [ 65%]
+........................................................................ [ 66%]
+......................................................................... [ 67%]
+........................................................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 76%]
+......................................................................... [ 77%]
+........................................................................ [ 78%]
+......................................................................... [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+........................................................................ [ 82%]
+........................................................................ [ 83%]
+.................................................................x...... [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+........................................................................ [ 93%]
+........................................................................ [ 94%]
+...........................s............................................ [ 95%]
+........................................................................ [ 96%]
+...........................Exception ignored in: <function Transport.__del__ at 0x7f6790eec860>
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/zeep/transports.py", line 170, in __del__
+    self.session.close()
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'object' object has no attribute 'close'
+Exception ignored in: <function Transport.__del__ at 0x7f6790eec860>
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/zeep/transports.py", line 170, in __del__
+    self.session.close()
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'object' object has no attribute 'close'
+............................................. [ 96%]
+.....................................................................s.. [ 97%]
+.s...................................................................... [ 98%]
+.............................................................FF..FFF.... [ 98%]
+........................................................................ [ 99%]
+...........................................................              [100%]
+=================================== FAILURES ===================================
+__________ TestSchemaEndpoint.test_schema_titulo_nombra_la_plataforma __________
+[gw0] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/integration/test_schema.py:49: in test_schema_titulo_nombra_la_plataforma
+    assert 'Kaupamex' not in titulo
+E   AssertionError: assert 'Kaupamex' not in 'Kaupamex API'
+E     'Kaupamex' is contained here:
+E       Kaupamex API
+----------------------------- Captured stderr call -----------------------------
+/home/user/kaupamex-api/src/addons/base/controllers/admin_main.py: Error [AdminLogsView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/mass_mailing/controllers/subscribers.py: Error [AdminSubscriberExportCSVView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/authz/controllers/admin_main.py: Error [AdminPermissionCatalogView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/authz/controllers/admin_main.py: Error [AdminRolePermissionsView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/helpdesk/controllers/main.py: Error [AdminSupportTicketExportCSVView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/authz/controllers/main.py: Error [MyCapabilitiesView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/authz/controllers/main.py: Error [MyMenuView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/authz_passkey/controllers/main.py: Warning [PasskeyViewSet]: could not derive type of path parameter "id" because it is untyped and obtaining queryset from the viewset failed. Consider adding a type to the path (e.g. <int:id>) or annotating the parameter type with @extend_schema. Defaulting to "string".
+/home/user/kaupamex-api/addons/authz/controllers/main.py: Error [ReauthSessionView]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/website_mass_mailing/controllers/subscriptions.py: Error [NewsletterSubscriptionsV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/website_mass_mailing/controllers/confirm.py: Error [NewsletterConfirmV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [BuyerOrderShipmentV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/sale_subscription/controllers/serializers.py: Warning [CompanyViewSet > CompanySerializer]: unable to resolve type hint for function "get_active_modules". Consider using a type hint or @extend_schema_field. Defaulting to string.
+/home/user/kaupamex-api/addons/sale_subscription/controllers/serializers.py: Warning [CompanyViewSet > CompanySerializer]: unable to resolve type hint for function "get_user_count". Consider using a type hint or @extend_schema_field. Defaulting to string.
+/home/user/kaupamex-api/addons/sale_subscription/controllers/serializers.py: Warning [CompanyModuleSubscriptionViewSet > CompanyModuleSubscriptionSerializer]: unable to resolve type hint for function "get_is_active". Consider using a type hint or @extend_schema_field. Defaulting to string.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [ShipmentListCreateV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [ShipmentDetailV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [ShipmentCancellationV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [ShipmentDeliveryV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/delivery/controllers/main.py: Error [ShipmentProblemReportV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/helpdesk/controllers/main.py: Error [SupportTicketStatusV2View]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+/home/user/kaupamex-api/addons/web/controllers/binary.py: Warning [upload_attachment]: could not resolve request body for POST /api/v2/web/binary/upload_attachment/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/web/controllers/database.py: Warning [database_backup]: could not resolve request body for POST /api/v2/web/database/backup/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/web/controllers/database.py: Warning [database_create]: could not resolve request body for POST /api/v2/web/database/create/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/web/controllers/database.py: Warning [database_drop]: could not resolve request body for POST /api/v2/web/database/drop/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/web/controllers/database.py: Warning [database_duplicate]: could not resolve request body for POST /api/v2/web/database/duplicate/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/web/controllers/database.py: Warning [database_restore]: could not resolve request body for POST /api/v2/web/database/restore/. Defaulting to generic free-form object. (Maybe annotate a Serializer class?)
+/home/user/kaupamex-api/addons/rpc/controllers/json2.py: Error [json2_rpc]: unable to guess serializer. This is graceful fallback handling for APIViews. Consider using GenericAPIView as view base class, if view is under your control. Either way you may want to add a serializer_class (or method). Ignoring view for now.
+Warning: enum naming encountered a non-optimally resolvable collision for fields named "status". The same name has been used for multiple choice sets in multiple components. The collision was resolved with "StatusE7c". add an entry to ENUM_NAME_OVERRIDES to fix the naming.
+Warning: operationId "notifications_partial_update" has collisions [('/api/v2/notifications/', 'patch'), ('/api/v2/notifications/{id}/', 'patch')]. resolving with numeral suffixes.
+Warning: operationId "shipments_retrieve" has collisions [('/api/v2/shipments/', 'get'), ('/api/v2/shipments/{id}/', 'get')]. resolving with numeral suffixes.
+_ TestCallBetweenTemplates.test_the_call_grafts_the_children_of_the_called_descriptor _
+[gw2] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/integration/base/test_report_engine.py:702: in test_the_call_grafts_the_children_of_the_called_descriptor
+    assert 'Pie compartido ñ' in texto_impreso(contenido)
+E   assert 'Pie compartido ñ' in ''
+E    +  where '' = texto_impreso(b'<html><body>\n<div class="article" data-oe-model="sale.SaleOrder" data-oe-id="481">\n  <div class="field" data-name=...ame="issuer">\n    <div class="field" data-name="name">Pie compartido \xc3\xb1</div>\n  </div>\n</div>\n</body></html>')
+_ TestCallBetweenTemplates.test_the_called_template_arrives_with_its_combined_arch _
+[gw2] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/integration/base/test_report_engine.py:736: in test_the_called_template_arrives_with_its_combined_arch
+    assert 'Tel del pie' in texto_impreso(contenido)
+E   assert 'Tel del pie' in ''
+E    +  where '' = texto_impreso(b'<html><body>\n<div class="article" data-oe-model="sale.SaleOrder" data-oe-id="483">\n  <div class="field" data-name=...ompartido \xc3\xb1</div>\n    <div class="field" data-name="phone">Tel del pie</div>\n  </div>\n</div>\n</body></html>')
+_ TestCallBetweenTemplates.test_priority_breaks_the_tie_as_it_does_in_the_root _
+[gw2] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/integration/base/test_report_engine.py:752: in test_priority_breaks_the_tie_as_it_does_in_the_root
+    assert 'Pie prioritario' in impreso
+E   AssertionError: assert 'Pie prioritario' in ''
+____ TestBusinessKeysL2.test_backup_alert_email_seeded_without_stale_domain ____
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/base/test_system_parameter.py:192: in test_backup_alert_email_seeded_without_stale_domain
+    assert 'kaupamex.com' not in value
+E   AssertionError: assert 'kaupamex.com' not in 'admin@kaupamex.com'
+E     'kaupamex.com' is contained here:
+E       admin@kaupamex.com
+_______ TestBackupFailAlert.test_uses_the_value_seeded_by_the_migration ________
+[gw0] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/integration/auto_backup/test_backups.py:212: in test_uses_the_value_seeded_by_the_migration
+    assert 'kaupamex.com' not in seeded
+E   AssertionError: assert 'kaupamex.com' not in 'admin@kaupamex.com'
+E     'kaupamex.com' is contained here:
+E       admin@kaupamex.com
+________ TestStubResolvesTheProvider.test_it_finds_thyrox_as_a_sibling _________
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_identifier_language_stub.py:37: in test_it_finds_thyrox_as_a_sibling
+    assert gate.parent.name == 'gates'
+E   AssertionError: assert 'verify' == 'gates'
+E     - gates
+E     + verify
+_________ TestStubResolvesTheProvider.test_a_declared_thyrox_root_wins _________
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_identifier_language_stub.py:46: in test_a_declared_thyrox_root_wins
+    assert stub.thyrox_gate() == fake_gate
+E   AssertionError: assert None == PosixPath('/tmp/pytest-of-root/pytest-22/popen-gw3/test_a_declared_thyrox_root_wi0/src/gates/check_identifier_language.py')
+E    +  where None = <function thyrox_gate at 0x7f1437c42340>()
+E    +    where <function thyrox_gate at 0x7f1437c42340> = stub.thyrox_gate
+_____ TestStubPropagatesThisTreesBaseline.test_an_english_only_file_passes _____
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_identifier_language_stub.py:86: in test_an_english_only_file_passes
+    assert done.returncode == 0
+E   assert 2 == 0
+E    +  where 2 = CompletedProcess(args=['/home/user/kaupamex-api/.venv/bin/python', '/home/user/kaupamex-api/tests/scripts/check_identi...open file '/home/user/kaupamex-api/tests/scripts/check_identifier_language.py': [Errno 2] No such file or directory\n").returncode
+__ TestStubPropagatesThisTreesBaseline.test_a_fresh_spanish_identifier_fails ___
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_identifier_language_stub.py:93: in test_a_fresh_spanish_identifier_fails
+    assert done.returncode == 1
+E   assert 2 == 1
+E    +  where 2 = CompletedProcess(args=['/home/user/kaupamex-api/.venv/bin/python', '/home/user/kaupamex-api/tests/scripts/check_identi...open file '/home/user/kaupamex-api/tests/scripts/check_identifier_language.py': [Errno 2] No such file or directory\n").returncode
+_ TestStubPropagatesThisTreesBaseline.test_an_explicit_baseline_override_wins_over_the_default _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_identifier_language_stub.py:105: in test_an_explicit_baseline_override_wins_over_the_default
+    assert done.returncode == 0, done.stdout + done.stderr
+E   AssertionError: /home/user/kaupamex-api/.venv/bin/python: can't open file '/home/user/kaupamex-api/tests/scripts/check_identifier_language.py': [Errno 2] No such file or directory
+E     
+E   assert 2 == 0
+E    +  where 2 = CompletedProcess(args=['/home/user/kaupamex-api/.venv/bin/python', '/home/user/kaupamex-api/tests/scripts/check_identi...open file '/home/user/kaupamex-api/tests/scripts/check_identifier_language.py': [Errno 2] No such file or directory\n").returncode
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+tests/unit/orm/test_fields_related.py::TestResolveDepends::test_it_resolves_a_declared_chain_to_its_fields
+  /home/user/kaupamex-api/src/orm/fields.py:3512: UserWarning: Field base.ResPartner.name should be declared with recursive=True
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_schema.py::TestSchemaEndpoint::test_schema_titulo_nombra_la_plataforma
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_the_call_grafts_the_children_of_the_called_descriptor
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_the_called_template_arrives_with_its_combined_arch
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_priority_breaks_the_tie_as_it_does_in_the_root
+FAILED tests/unit/base/test_system_parameter.py::TestBusinessKeysL2::test_backup_alert_email_seeded_without_stale_domain
+FAILED tests/integration/auto_backup/test_backups.py::TestBackupFailAlert::test_uses_the_value_seeded_by_the_migration
+FAILED tests/unit/scripts/test_check_identifier_language_stub.py::TestStubResolvesTheProvider::test_it_finds_thyrox_as_a_sibling
+FAILED tests/unit/scripts/test_check_identifier_language_stub.py::TestStubResolvesTheProvider::test_a_declared_thyrox_root_wins
+FAILED tests/unit/scripts/test_check_identifier_language_stub.py::TestStubPropagatesThisTreesBaseline::test_an_english_only_file_passes
+FAILED tests/unit/scripts/test_check_identifier_language_stub.py::TestStubPropagatesThisTreesBaseline::test_a_fresh_spanish_identifier_fails
+FAILED tests/unit/scripts/test_check_identifier_language_stub.py::TestStubPropagatesThisTreesBaseline::test_an_explicit_baseline_override_wins_over_the_default
+11 failed, 10471 passed, 27 skipped, 1 xfailed, 6 warnings in 345.91s (0:05:45)
+EXIT=1

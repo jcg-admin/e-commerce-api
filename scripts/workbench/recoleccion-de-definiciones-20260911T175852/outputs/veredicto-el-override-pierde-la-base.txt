@@ -1,0 +1,18 @@
+== lo que la BASE declara ==
+   compute        '_compute_display_name'
+   search         '_search_display_name'
+   verbose_name   'Display Name'
+   tipo           NonStored
+
+== lo que el OVERRIDE deja en el modelo real ==
+   vars(Category)  FieldDescriptor
+   en _meta        CharField
+   compute        None
+   search         None
+   inverse        '_inverse_display_name'
+   recursive      True
+
+== el veredicto de conducta ==
+   ¿es NonStored, como manda la fusión de la fuente? False
+   ¿conserva el compute de la base? False
+   ¿conserva el search de la base?  False

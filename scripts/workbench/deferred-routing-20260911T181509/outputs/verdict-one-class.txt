@@ -1,0 +1,21 @@
+== A. la decision de columna, al contribuir ==
+   ColumnlessChar         local=['id'] private=['label'] migracion=['id']
+   CharField (control)    local=['id', 'label'] private=[] migracion=['id', 'label']
+   saltable por instancia : True   (control llano lleva columna: True)
+
+== B. redeclarar en el hijo: pisa o fusiona ==
+   en el _meta del hijo   : [3]
+   recuperable por __mro__: [('LabelBase', 9)]
+   Django PISA            : True   (el del padre sobrevive en su base: True)
+
+== el veredicto ==
+   el stack admite el orden de la fuente : True
+   mediciones que discriminan            : 2 de 2
+
+   Metrica: donde aterriza cada campo (`local_fields`,
+            `private_fields`, estado de migracion) al construir
+            modelos reales, con un control llano en cada caso.
+   Ciega a: si el descriptor resultante COMPUTA lo correcto —solo
+            mide el registro, no la lectura— y al orden en que
+            `contribute_to_class` ve la MRO cuando la base no es
+            abstracta de Django sino un mixin llano de Python.

@@ -1,0 +1,200 @@
+archivo    : odoo/orm/models.py
+clase      : BaseModel  (lineas 334-7004)
+atributos de clase: 1
+   :362  __slots__ = ['env', '_ids', '_prefetch_ids']
+metodos declarados: 194
+
+_valid_field_parameter	479-481	-	(self, field, name)	Return whether the given parameter name is valid for the field.
+_post_model_setup__	484-486	api.model	(self)	Method called after the model has been setup.
+_table_sql	489-516	property	(self)	Return an :class:`SQL` object that represents SQL table identifier
+_constraint_methods	519-546	property	(self)	Return a list of methods implementing Python constraints.
+_ondelete_methods	549-558	property	(self)	Return a list of methods implementing checks before unlinking.
+_onchange_methods	561-594	property	(self)	Return a dictionary mapping field names to onchange methods.
+_is_an_ordinary_table	596-597	-	(self)	
+__ensure_xml_id	599-676	-	(self, skip=False)	Create missing external ids for records in ``self``, and return an
+_export_rows	678-878	-	(self, fields, *, _is_toplevel_call=True)	Export fields of the records in ``self``.
+export_data	880-892	-	(self, fields_to_export)	Export fields for selected objects
+load	895-1073	api.model	(self, fields, data)	Attempts to load the data matrix, and returns a list of ids (or
+_extract_records	1075-1195	-	(self, field_paths, data, log=lambda a: None, limit=float('inf'))	Generates record dicts from the data sequence.
+_convert_records	1198-1251	api.model	(self, records, *, log=lambda a: None, savepoint)	Converts records from the source iterable (recursive dicts of
+_validate_fields	1253-1268	-	(self, field_names: Iterable[str], excluded_names: Iterable[str]=())	Invoke the constraint methods for which at least one field name is
+default_get	1271-1338	api.model	(self, fields: Sequence[str])	Return default values for the fields in ``fields_list``. Default
+_rec_name_fallback	1341-1343	api.model	(self)	
+search_count	1347-1359	api.model,api.readonly	(self, domain: DomainType, limit: int | None=None)	Return the number of records in the current model matching
+search	1363-1378	api.model,api.readonly	(self, domain: DomainType, offset: int=0, limit: int | None=None, order: str | None=None)	Search for the records that satisfy the given ``domain``
+search_fetch	1383-1418	api.model,api.private,api.readonly	(self, domain: DomainType, field_names: Sequence[str] | None=None, offset: int=0, limit: int | None=None, order: str | None=None)	Search for the records that satisfy the given ``domain``
+_compute_display_name	1425-1439	api.depends(lambda self: (self._rec_name,) if self._rec_name else ())	(self)	Compute the value of the `display_name` field.
+_search_display_name	1442-1490	api.model	(self, operator, value)	Returns a domain that matches records whose display name matches the
+name_create	1493-1510	api.model	(self, name: str)	Create a new record by calling :meth:`~.create` with only one value
+name_search	1514-1543	api.model,api.readonly	(self, name: str='', domain: DomainType | None=None, operator: str='ilike', limit: int=100)	Search for records that have a display name matching the given
+_add_missing_default_values	1546-1597	api.model	(self, values: ValuesType)	
+_read_grouping_sets	1600-1858	api.model	(self, domain: DomainType, grouping_sets: Sequence[Sequence[str]], aggregates: Sequence[str]=(), order: str | None=None)	Performs multiple aggregations with different groupings in a single query if possible.
+_read_group	1861-1951	api.model	(self, domain: DomainType, groupby: Sequence[str]=(), aggregates: Sequence[str]=(), having: DomainType=(), offset: int=0, limit: int | None=None, order: str | None=None)	Get fields aggregations specified by ``aggregates`` grouped by the given ``groupby``
+_read_group_select	1953-2013	-	(self, aggregate_spec: str, query: Query)	Return <SQL expression> corresponding to the given aggregation.
+_read_group_groupby	2015-2119	-	(self, alias: str, groupby_spec: str, query: Query)	Return <SQL expression> corresponding to the given groupby element.
+_read_group_having	2121-2148	-	(self, having_domain: list, query: Query)	Return <SQL expression> corresponding to the having domain.
+_read_group_orderby	2150-2227	-	(self, order: str, groupby_terms: dict[str, SQL], query: Query)	Return (<SQL expression>, <SQL expression>)
+_read_group_empty_value	2230-2246	api.model	(self, spec)	Return the empty value corresponding to the given groupby spec or aggregate spec.
+_read_group_postprocess_groupby	2248-2275	-	(self, groupby_spec, raw_values)	Convert the given values of ``groupby_spec``
+_read_group_postprocess_aggregate	2277-2308	-	(self, aggregate_spec, raw_values)	Convert the given values of ``aggregate_spec``
+_read_group_expand_full	2311-2313	api.model	(self, groups: ModelType, domain: DomainType)	Extend the group to include all target records by default.
+_read_group_fill_results	2316-2385	api.model	(self, domain, groupby, annoted_aggregates, read_group_result, read_group_order=None)	Helper method for filling in empty groups for all possible values of
+_read_group_fill_temporal	2388-2553	api.model	(self, data, groupby, annoted_aggregates, fill_from=False, fill_to=False, min_groups=False)	Helper method for filling date/datetime 'holes' in a result set.
+_read_group_format_result	2556-2636	api.model	(self, rows_dict, lazy_groupby)	Helper method to format the data contained in the dictionary data by
+_read_group_format_result_properties	2638-2744	-	(self, rows_dict, group)	Modify the final read group properties result.
+read_group	2749-2887	api.model,api.readonly,api.deprecated('Since 19.0, read_group is deprecated. Please use _read_group in the backend code or formatted_read_group for a complete formatted result')	(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True)	Deprecated - Get the list of records in list view grouped by the given ``groupby`` fields.
+_traverse_related_sql	2889-2908	-	(self, alias: str, field: Field, query: Query)	Traverse the related `field` and add needed join to the `query`.
+_field_to_sql	2910-2933	-	(self, alias: str, field_expr: str, query: Query | None=None)	Return an :class:`SQL` object that represents the value of the given
+_read_group_groupby_properties	2935-3040	-	(self, alias: str, field: Field, property_name: str, query: Query)	
+get_property_definition	3043-3068	api.model	(self, full_name: str)	Return the definition of the given property.
+_parent_store_compute	3070-3107	-	(self)	Compute parent_path field from scratch.
+_check_removed_columns	3109-3135	-	(self, log=False)	
+_init_column	3137-3160	-	(self, column_name)	Initialize the value of the given column for existing rows.
+_table_has_rows	3163-3168	ormcache()	(self)	Return whether the model's table has rows. This method should only
+_auto_init	3170-3247	-	(self)	Initialize the database schema of ``self``:
+init	3250-3253	api.private	(self)	This method is called after :meth:`~._auto_init`, and may be
+_check_parent_path	3255-3260	-	(self)	
+_add_sql_constraints	3262-3267	-	(self)	Modify this model's database table objects so they match the one
+_sql_error_to_message	3270-3285	api.model	(self, exc: psycopg2.Error)	Convert a database exception to a user error message depending on the model.
+_sql_error_to_message_generic	3288-3340	api.model	(self, exc: psycopg2.Error)	Convert a database exception to a generic user error message.
+fields_get	3343-3366	api.model	(self, allfields: Collection[str] | None=None, attributes: Collection[str] | None=None)	Return the definition of each field.
+_has_field_access	3369-3381	api.model	(self, field: Field, operation: typing.Literal['read', 'write'])	Determine whether the user access rights on the given field for the given operation.
+_check_field_access	3384-3429	api.model	(self, field: Field, operation: typing.Literal['read', 'write'])	Check the user access rights on the given field.
+check_field_access_rights	3436-3466	api.model,api.deprecated('Deprecated since 19.0, use `_check_field_access` on models. To get the list of allowed fields, use `fields_get`.')	(self, operation: str, field_names: list[str] | None)	Check the user access rights on the given fields.
+read	3469-3490	api.readonly	(self, fields: Sequence[str] | None=None, load: str='_classic_read')	Read the requested fields for the records in ``self``, and return their
+update_field_translations	3492-3502	-	(self, field_name: str, translations: dict[str, str | typing.Literal[False] | dict[str, str]], source_lang: str='')	Update the translations for a given field
+_update_field_translations	3504-3662	-	(self, field_name: str, translations: dict[str, str | typing.Literal[False] | dict[str, str]], digest: Callable[[str], str] | None=None, source_lang: str='')	Update the translations for a given field, with support for handling
+get_field_translations	3664-3702	-	(self, field_name: str, langs: Collection[str] | None=None)	Get model/model_term translations for records.
+_get_base_lang	3704-3707	-	(self)	Return the base language of the record.
+_read_format	3709-3752	-	(self, fnames: Sequence[str], load: str='_classic_read')	Return a list of dictionaries mapping field names to their values,
+_fetch_field	3754-3772	-	(self, field: Field)	Read from the database in order to fetch ``field`` (:class:`Field`
+fetch	3775-3818	api.private	(self, field_names: Collection[str] | None=None)	Make sure the given fields are in memory for the records in ``self``,
+_determine_fields_to_fetch	3820-3877	-	(self, field_names: Collection[str] | None=None, ignore_when_in_cache: bool=False)	Return the fields to fetch from database among the given field names,
+_fetch_query	3879-3942	-	(self, query: Query, fields: Sequence[Field])	Fetch the given fields (iterable of :class:`Field` instances) from
+get_metadata	3944-3983	-	(self)	Return some metadata about the given records.
+get_base_url	3985-3995	-	(self)	Return rooturl for a specific record.
+_check_company_domain	3997-4007	-	(self, companies)	Domain to be used for company consistency between records regarding this model.
+_check_company	4009-4097	-	(self, fnames=None)	Check the companies of the values of the given field names.
+check_access	4100-4115	api.private	(self, operation: str)	Verify that the current user is allowed to perform ``operation`` on
+has_access	4117-4122	-	(self, operation: str)	Return whether the current user is allowed to perform ``operation``
+_filtered_access	4124-4133	-	(self, operation: str)	Return the subset of ``self`` for which the current user is allowed
+_check_access	4135-4158	-	(self, operation: str)	Return ``None`` if the current user has permission to perform
+check_access_rights	4162-4173	api.model,api.deprecated('check_access_rights() is deprecated since 18.0; use check_access() instead.')	(self, operation, raise_exception=True)	Verify that the given operation is allowed for the current user accord to ir.model.access.
+check_access_rule	4176-4183	api.deprecated('check_access_rule() is deprecated since 18.0; use check_access() instead.')	(self, operation)	Verify that the given operation is allowed for the current user according to ir.rules.
+_filter_access_rules	4186-4188	api.deprecated('_filter_access_rules() is deprecated since 18.0; use _filtered_access() instead.')	(self, operation)	Return the subset of ``self`` for which ``operation`` is allowed.
+_filter_access_rules_python	4191-4192	api.deprecated('_filter_access_rules_python() is deprecated since 18.0; use _filtered_access() instead.')	(self, operation)	
+unlink	4194-4332	-	(self)	Delete the records in ``self``.
+write	4334-4518	-	(self, vals: ValuesType)	Update all records in ``self`` with the provided values.
+_write	4520-4522	-	(self, vals: ValuesType)	Low-level implementation of write()
+_write_multi	4524-4608	-	(self, vals_list: list[ValuesType])	Low-level implementation of write()
+create	4611-4767	api.model_create_multi	(self, vals_list: list[ValuesType])	Create new records for the model.
+_prepare_create_values	4769-4812	-	(self, vals_list: list[ValuesType])	Clean up and complete the given create values, and return a list of
+_add_precomputed_values	4814-4846	-	(self, vals_list: list[ValuesType])	Add missing precomputed fields to ``vals_list`` values.
+_create	4849-4951	api.model	(self, data_list: list[ValuesType])	Create records from the stored field values in ``data_list``.
+_compute_field_value	4953-4959	-	(self, field: Field)	
+_parent_store_create	4961-4983	-	(self)	Set the parent_path field on ``self`` after its creation.
+_parent_store_update_prepare	4985-5018	-	(self, vals_list: list[ValuesType])	Return the records in ``self`` that must update their parent_path
+_parent_store_update	5020-5052	-	(self)	Update the parent_path field of ``self``.
+_clean_properties	5054-5068	-	(self)	Remove all properties of ``self`` that are no longer in the related definition
+_validate_properties_definition	5070-5071	-	(self, properties_definition, field)	Allow to validate additional properties attributes.
+_additional_allowed_keys_properties_definition	5073-5075	-	(self)	Allow to add more allowed key for properties.
+_convert_to_cache_properties_definition	5077-5079	-	(self, value)	Allow to patch `convert_to_cache` of the properties definition.
+_convert_to_column_properties_definition	5081-5083	-	(self, value)	Allow to patch `convert_to_column` of the properties definition.
+_load_records_write	5085-5100	-	(self, values)	
+_load_records_create	5102-5106	-	(self, vals_list)	
+_load_records	5108-5213	-	(self, data_list, update=False)	Create or update records of this model, and assign XMLIDs.
+_check_qorder	5215-5222	-	(self, word: str)	
+_order_to_sql	5224-5260	-	(self, order: str, query: Query, alias: str | None=None, reverse: bool=False)	Return an :class:`SQL` object that represents the given ORDER BY
+_order_field_to_sql	5262-5321	-	(self, alias: str, field_name: str, direction: SQL, nulls: SQL, query: Query)	Return an :class:`SQL` object that represents the ordering by the
+_search	5324-5394	api.model	(self, domain: DomainType, offset: int=0, limit: int | None=None, order: str | None=None, *, active_test: bool=True, bypass_access: bool=False)	Private implementation of search() method.
+_as_query	5396-5404	-	(self, ordered: bool=True)	Return a :class:`Query` that corresponds to the recordset ``self``.
+copy_data	5406-5463	-	(self, default: ValuesType | None=None)	Copy given record's data with all its fields values
+copy_translations	5465-5528	-	(self, new: Self, excluded: Collection[str]=())	Recursively copy the translations from original to new record
+copy	5530-5542	-	(self, default: ValuesType | None=None)	Duplicate record ``self`` updating it with default values.
+exists	5545-5561	api.private	(self)	The subset of records in ``self`` that exist.
+lock_for_update	5564-5589	api.private	(self, *, allow_referencing: bool=False)	Grab an exclusive write-lock to the rows with the given ids.
+try_lock_for_update	5592-5622	api.private	(self, *, allow_referencing: bool=False, limit: int | None=None)	Grab an exclusive write-lock on some rows with the given ids.
+_has_cycle	5624-5685	-	(self, field_name=None)	Return whether the records in ``self`` are in a loop by following the
+_check_recursion	5688-5689	api.deprecated('Deprecated since 18.0, use _has_cycle() instead')	(self, parent=None)	
+_check_m2m_recursion	5692-5693	api.deprecated('Deprecated since 18.0, use _has_cycle() instead')	(self, field_name)	
+_get_external_ids	5695-5714	-	(self)	Retrieve the External ID(s) of any database record.
+get_external_id	5716-5735	-	(self)	Retrieve the External ID of any database record, if there
+is_transient	5738-5744	classmethod	(cls)	Return whether the model is transient.
+search_read	5748-5787	api.model,api.readonly	(self, domain: DomainType | None=None, fields: Sequence[str] | None=None, offset: int=0, limit: int | None=None, order: str | None=None, **read_kwargs)	Perform a :meth:`search_fetch` followed by a :meth:`_read_format`.
+toggle_active	5790-5795	api.deprecated('Deprecated since 19.0, use action_archive or action_unarchive')	(self)	Inverses the value of :attr:`active` on the records in ``self``.
+action_archive	5797-5806	-	(self)	Set :attr:`active` to ``False`` on a recordset for active records.
+action_unarchive	5808-5817	-	(self)	Set :attr:`active` to ``True`` on a recordset for inactive records.
+_register_hook	5819-5820	-	(self)	stuff to do right after the registry is built
+_unregister_hook	5822-5823	-	(self)	Clean up what `~._register_hook` has done.
+_get_redirect_suggested_company	5825-5839	-	(self)	Return the suggested company to be set on the context
+_can_return_content	5841-5855	-	(self, field_name: str | None=None, access_token: str | None=None)	Determine whether one can export a file or an image from a field of
+__init__	5871-5880	-	(self, env: Environment, ids: tuple[IdType, ...], prefetch_ids: Reversible[IdType])	Create a recordset instance.
+browse	5883-5898	api.private	(self, ids: int | typing.Iterable[IdType]=())	Return a recordset for the ids provided as parameter in the current
+ids	5905-5909	property	(self)	Return the list of actual record ids corresponding to ``self``.
+_cr	5913-5914	property,api.deprecated('Deprecated since 19.0, use self.env.cr directly')	(self)	
+_uid	5918-5919	property,api.deprecated('Deprecated since 19.0, use self.env.uid directly')	(self)	
+_context	5923-5924	property,api.deprecated('Deprecated since 19.0, use self.env.context directly')	(self)	
+ensure_one	5931-5942	api.private	(self)	Verify that the current recordset holds a single record.
+with_env	5945-5951	api.private	(self, env: Environment)	Return a new version of this recordset attached to the provided environment.
+sudo	5954-5978	api.private	(self, flag: bool=True)	Return a new version of this recordset with superuser mode enabled or
+with_user	5981-5988	api.private	(self, user: BaseModel | IdType)	Return a new version of this recordset attached to the given user, in
+with_company	5991-6018	api.private	(self, company: BaseModel | IdType)	Return a new version of this recordset with a modified context, such that::
+with_context	6021-6055	api.private	(self, ctx: dict[str, typing.Any] | None=None, /, **overrides)	Return a new version of this recordset attached to an extended
+with_prefetch	6058-6064	api.private	(self, prefetch_ids: Reversible[IdType] | None=None)	Return a new version of this recordset that uses the given prefetch ids,
+_update_cache	6066-6092	-	(self, values: ValuesType, validate: bool=True)	Update the cache of ``self`` with ``values``.
+_convert_to_record	6094-6101	-	(self, values)	Convert the ``values`` dictionary from the cache format to the
+_convert_to_write	6103-6113	-	(self, values)	Convert the ``values`` dictionary into the format of :meth:`write`.
+mapped	6120-6121	typing.overload	(self, func: str)	
+mapped	6124-6125	typing.overload	(self, func: Callable[[Self], T])	
+mapped	6128-6183	api.private	(self, func: str | Callable[[Self], T])	Apply ``func`` on all records in ``self``, and return the result as a
+filtered	6186-6215	api.private	(self, func: str | Callable[[Self], bool] | Domain)	Return the records in ``self`` satisfying ``func``.
+grouped	6218-6219	typing.overload	(self, key: str)	
+grouped	6222-6223	typing.overload	(self, key: Callable[[Self], T])	
+grouped	6226-6249	api.private	(self, key: str | Callable[[Self], T])	Eagerly groups the records of ``self`` by the ``key``, returning a
+filtered_domain	6252-6260	api.private	(self, domain: DomainType)	Return the records in ``self`` satisfying the domain and keeping the same order.
+sorted	6263-6291	api.private	(self, key: Callable[[Self], typing.Any] | str | None=None, reverse: bool=False)	Return the recordset ``self`` ordered by ``key``.
+_sorted_order_to_function	6294-6344	api.model	(self, order: str)	
+update	6347-6350	api.private	(self, values: ValuesType)	Update the records in ``self`` with ``values``.
+flush_model	6353-6364	api.private	(self, fnames: Collection[str] | None=None)	Process the pending computations and database updates on ``self``'s
+flush_recordset	6367-6385	api.private	(self, fnames: Collection[str] | None=None)	Process the pending computations and database updates on the records
+_flush	6387-6432	-	(self)	
+new	6441-6460	api.model,api.private	(self, values: ValuesType | None=None, origin: Self | None=None, ref: str | None=None)	Return a new record instance attached to the current environment and
+_origin	6463-6469	property	(self)	Return the actual records corresponding to ``self``.
+__bool__	6475-6477	-	(self)	Test whether ``self`` is nonempty.
+__len__	6479-6481	-	(self)	Return the size of ``self``.
+__iter__	6483-6502	-	(self)	Return an iterator over ``self``.
+__reversed__	6504-6523	-	(self)	Return an reversed iterator over ``self``.
+__contains__	6525-6542	-	(self, item: BaseModel | str)	Test whether ``item`` (record or field name) is an element of ``self``.
+__add__	6544-6546	-	(self, other)	Return the concatenation of two recordsets.
+concat	6549-6561	api.private	(self, *args: Self)	Return the concatenation of ``self`` with all the arguments (in
+__sub__	6563-6573	-	(self, other)	Return the recordset of all the records in ``self`` that are not in
+__and__	6575-6585	-	(self, other)	Return the intersection of two recordsets.
+__or__	6587-6591	-	(self, other)	Return the union of two recordsets.
+union	6594-6606	api.private	(self, *args: Self)	Return the union of ``self`` with all the arguments (in linear time
+__eq__	6608-6615	-	(self, other)	Test whether two recordsets are equivalent (up to reordering).
+__lt__	6617-6623	-	(self, other)	
+__le__	6625-6636	-	(self, other)	
+__gt__	6638-6644	-	(self, other)	
+__ge__	6646-6654	-	(self, other)	
+__int__	6656-6657	-	(self)	
+__repr__	6659-6660	-	(self)	
+__hash__	6662-6663	-	(self)	
+__deepcopy__	6665-6666	-	(self, memo)	
+__getitem__	6669-6669	typing.overload	(self, key: int | slice)	
+__getitem__	6672-6672	typing.overload	(self, key: str)	
+__getitem__	6674-6692	-	(self, key)	If ``key`` is an integer or a slice, return the corresponding record
+__setitem__	6694-6697	-	(self, key: str, value: typing.Any)	Assign the field ``key`` to ``value`` in record ``self``.
+_cache	6704-6706	property	(self)	Return the cache of ``self``, mapping field names to values.
+invalidate_model	6709-6721	api.private	(self, fnames: Collection[str] | None=None, flush: bool=True)	Invalidate the cache of all records of ``self``'s model, when the
+invalidate_recordset	6724-6736	api.private	(self, fnames: Collection[str] | None=None, flush: bool=True)	Invalidate the cache of the records in ``self``, when the cached
+_invalidate_cache	6738-6753	-	(self, fnames: Collection[str] | None=None, ids: Sequence[IdType] | None=None)	
+modified	6756-6838	api.private	(self, fnames: Collection[str], create: bool=False, before: bool=False)	Notify that fields will be or have been modified on ``self``. This
+_modified	6840-6860	-	(self, fields: list[Field], create: bool)	Return an iterator traversing a tree of field triggers on ``self``,
+_modified_triggers	6862-6918	-	(self, tree: TriggerTree, create: bool=False)	Return an iterator traversing a tree of field triggers on ``self``,
+_recompute_model	6920-6932	-	(self, fnames: Collection[str] | None=None)	Process the pending computations of the fields of ``self``'s model.
+_recompute_recordset	6934-6946	-	(self, fnames: Collection[str] | None=None)	Process the pending computations of the fields of the records in ``self``.
+_recompute_field	6948-6960	-	(self, field: Field, ids: Sequence[IdType] | None=None)	
+_has_onchange	6966-6973	-	(self, field: Field, other_fields: Collection[Field])	Return whether ``field`` should trigger an onchange event in the
+_apply_onchange_methods	6975-6994	-	(self, field_name: str, result: dict, excluded_methods=())	Apply onchange method(s) (not in ``excluded_methods``) for field ``field_name`` on ``self`
+onchange	6996-6997	-	(self, values: dict, field_names: list[str], fields_spec: dict)	
+_get_placeholder_filename	6999-7004	-	(self, field: str)	Returns the filename of the placeholder to use,

@@ -1,0 +1,50 @@
+archivo                    censo dice  resuelven  ausentes
+domains.py                          3          0         3
+fields.py                          40         29        11
+      _get_attrs -> _field_get_attrs
+      prepare_setup -> _field_prepare_setup
+      setup_nonrelated -> _field_setup_nonrelated
+      _compute_related -> _field_compute_related
+      _process_related -> _field_process_related
+      _inverse_related -> _field_inverse_related
+      column_type -> _field_column_type
+      base_field -> _field_base_field
+      resolve_depends -> _field_resolve_depends
+      get_description -> _field_get_description
+      _description_depends -> _field_description_depends
+      _description_searchable -> _field_description_searchable
+      _description_sortable -> _field_description_sortable
+      _description_groupable -> _field_description_groupable
+      _description_aggregator -> _field_description_aggregator
+      _description_string -> _field_description_string
+      _description_help -> _field_description_help
+      _description_falsy_value_label -> _field_description_falsy_value_label
+      is_editable -> _field_is_editable
+      convert_to_column_insert -> _field_convert_to_column_insert
+      get_column_update -> _field_get_column_update
+      column_order -> _field_column_order
+      update_db_column -> _field_update_db_column
+      _convert_db_column -> _field_convert_db_column
+      update_db_notnull -> _field_update_db_notnull
+      update_db_related -> _field_update_db_related
+      read -> _field_read
+      _to_prefetch -> _field_to_prefetch
+      determine_group_expand -> _field_determine_group_expand
+fields_binary.py                    9          0         9
+fields_misc.py                      2          0         2
+fields_numeric.py                  12          0        12
+fields_properties.py                1          0         1
+fields_reference.py                 2          0         2
+fields_relational.py               29          0        29
+fields_selection.py                 5          0         5
+fields_temporal.py                  8          0         7
+      [desacuerdo de universo] today — declarado, y el censo lo lista ausente
+fields_textual.py                  18          0        18
+model_classes.py                    7          0         7
+models.py                         120          0       119
+      [desacuerdo de universo] ids — declarado, y el censo lo lista ausente
+
+resuelven bajo prefijo declarado: 29 de 256 «ausentes» del censo (11.3 %)
+desacuerdo de universo con el censo: 2 (declarados aqui y listados ausentes alla)
+ausentes tras descontar ambos: 225
+(alcance medido: 13 archivos con lista de ausentes en el censo; prefijos: _field_, _model_, _registry_)

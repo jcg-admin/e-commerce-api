@@ -1,0 +1,687 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___________ test_subcontract_produce_cost_is_components_plus_service ___________
+
+db = None
+
+    def test_subcontract_produce_cost_is_components_plus_service(db):
+        finished = _product()
+        comp = _product()
+        ProductCosting.for_product(finished, cost_method=ProductCosting.COST_AVERAGE)
+        # BoM de subcontratación: 1 terminado consume 2 componentes.
+        bom = _bom(finished, product_qty=Decimal('1'), type=MrpBom.TYPE_SUBCONTRACT)
+        MrpBomLine.objects.create(bom=bom, product=comp, product_qty=Decimal('2'), sequence=1)
+    
+        subc_loc = _internal('WH/Subcontractor')
+        prod_loc = StockLocation.objects.create(
+            name='WH/Production', usage=StockLocation.USAGE_PRODUCTION)
+        dest = _internal('WH/Stock')
+    
+        # Los componentes ya están valuados en la ubicación del subcontratista
+        # (enviados). Se reciben ahí a $10 c/u.
+        ProductCosting.for_product(comp, cost_method=ProductCosting.COST_AVERAGE)
+        vendor = StockLocation.objects.create(name='Vendors', usage=StockLocation.USAGE_SUPPLIER)
+        receive = StockMove.objects.create(
+            product=comp, product_uom_qty=Decimal('2'), quantity=Decimal('2'),
+            location=vendor, location_dest=subc_loc)
+        valuation.value_move(receive, unit_cost=Decimal('10.00'))
+    
+        mo = MrpProduction.objects.create(product=finished, product_qty=Decimal('2'), bom=bom)
+        mo.action_confirm()
+        subc.subcontract_generate_moves(mo, subc_loc, prod_loc, dest)
+        # Servicio del subcontratista: $30 por la tanda.
+>       unit_cost = subc.subcontract_produce(mo, service_cost=Decimal('30.00'))
+
+tests/integration/sale/test_mrp_subcontracting.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+production = <MrpProduction: MO-C9BCEF56>, service_cost = Decimal('30.00')
+
+    def subcontract_produce(production, service_cost):
+        """Produce una orden de subcontratación valuando el flujo de costo.
+    
+        Consume los componentes (salida valuada → costo real de componentes), suma el
+        ``service_cost`` (el servicio pagado al subcontratista), y recibe el terminado
+        con ``unit_cost = (componentes + servicio) / product_qty``. Devuelve ese costo
+        unitario — el **costo real de subcontratación** del producto.
+    
+        Réplica del efecto de ``_cal_price`` de Odoo cuando la producción es de
+        subcontratación: el ``subcontracting cost`` sustituye a la mano de obra.
+        """
+        if production.state not in (production.STATE_CONFIRMED, production.STATE_PROGRESS):
+            raise ValidationError('Solo una orden confirmada/en progreso se produce.')
+    
+        service_cost = Decimal(service_cost)
+        components_cost = Decimal('0.00')
+        for move in production.move_raw_ids():
+            move._action_confirm()
+            move._action_assign()
+>           move._action_done()
+
+addons/mrp_subcontracting/services.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <StockMove: Subc 4.0000 [confirmed]>
+
+    def _action_done(self):
+        """Ejecuta el movimiento (≙ ``_action_done``): aplica los quants."""
+        if self.state == self.STATE_CANCEL:
+            return self
+        done_qty = self.quantity or self.product_uom_qty
+>       StockQuant.apply_move(self.product, self.location, self.location_dest, done_qty)
+
+addons/stock/models/stock_move.py:2997: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+product = <ProductProduct: Subc>
+location_src = <StockLocation: WH/Subcontractor>
+location_dest = <StockLocation: WH/Production>, qty = Decimal('4.0000')
+
+    @classmethod
+    def apply_move(cls, product, location_src, location_dest, qty) -> None:
+        """Aplica un movimiento hecho: resta del origen, suma al destino.
+    
+        Adaptador de firma sobre ``_update_available_quantity``: los llamadores
+        de este árbol pasan instancias sueltas, no un recordset con
+        características. Las ubicaciones no internas no llevan contabilidad de
+        quant (son sumideros/fuentes), igual que en la referencia.
+        """
+        qty = Decimal(qty)
+        if not location_src.should_bypass_reservation():
+>           cls._update_available_quantity(product, location_src, quantity=-qty)
+
+addons/stock/models/stock_quant.py:2262: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+product = <ProductProduct: Subc>, location = <StockLocation: WH/Subcontractor>
+quantity = Decimal('-4.0000'), reserved_quantity = None, lot = None
+package = None, owner = None
+in_date = datetime.datetime(2026, 9, 11, 22, 36, 56, 580372, tzinfo=datetime.timezone.utc)
+
+    @classmethod
+    def _update_available_quantity(cls, product, location, quantity=None,
+                                   reserved_quantity=None, lot=None, package=None,
+                                   owner=None, in_date=None):
+        """≙ ``_update_available_quantity`` (``odoo19c: :1038-1106``).
+    
+        Docstring de la referencia: *"Increase or decrease `quantity` or
+        'reserved quantity' of a set of quants"*. Devuelve la tupla
+        ``(disponible, in_date)``.
+    
+        La ``in_date`` que sobrevive es **la más antigua** de las que
+        concurren: es la clave de orden de FIFO, y tomar la nueva rompería el
+        orden de consumo.
+        """
+        if not (quantity or reserved_quantity):
+            raise ValidationError(
+                _('Se debe indicar la cantidad o la cantidad reservada.'))
+        cero = Decimal('0.00')
+        quants = list(cls._gather(product, location, lot=lot, package=package,
+                                  owner=owner, strict=True))
+        if lot is not None:
+            if Decimal(quantity or cero) > cero:
+                quants = [q for q in quants if q.lot is not None]
+            else:
+                # No se descuenta de un quant negativo sin lote.
+                quants = [q for q in quants if q.quantity > cero or q.lot is not None]
+    
+        if location is not None and location.should_bypass_reservation():
+            fechas = []
+        else:
+            fechas = [q.in_date for q in quants if q.in_date and q.quantity > cero]
+        if in_date is not None:
+            fechas.append(in_date)
+        in_date = min(fechas) if fechas else timezone.now()
+    
+        quant = quants[0] if quants else None
+        if quant is not None:
+            # ≙ ``try_lock_for_update(limit=1)`` (``:1085``): la referencia
+            # bloquea el primer quant disponible para que dos transacciones no
+            # repartan el mismo saldo.
+            quant = (cls.objects.select_for_update()
+                     .filter(pk=quant.pk).first()) or quant
+            quant.in_date = in_date
+            if quantity:
+                quant.quantity = quant.quantity + Decimal(quantity)
+            if reserved_quantity:
+                nueva = quant.reserved_quantity + Decimal(reserved_quantity)
+                quant.reserved_quantity = nueva if nueva > cero else cero
+            quant.save(update_fields=['in_date', 'quantity', 'reserved_quantity',
+                                      'inventory_diff_quantity', 'updated_at'])
+        else:
+            vals = {'product': product, 'location': location, 'lot': lot,
+                    'package': package, 'owner': owner, 'in_date': in_date}
+            if quantity:
+                vals['quantity'] = Decimal(quantity)
+            if reserved_quantity:
+                vals['reserved_quantity'] = Decimal(reserved_quantity)
+>           cls.create([vals])
+
+addons/stock/models/stock_quant.py:1818: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 580372, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Subcontractor>, 'lot': None, ...}]
+args = (), kwargs = {}
+
+    @functools.wraps(inner)
+    def create(self, vals_list, *args, **kwargs):
+        if isinstance(vals_list, collections.abc.Mapping):
+            vals_list = [vals_list]
+>       return inner(self, vals_list, *args, **kwargs)
+
+src/orm/decorators.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 580372, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Subcontractor>, 'lot': None, ...}]
+
+    @api.model_create_multi
+    @classmethod
+    def create(cls, vals_list):
+        """≙ ``create`` (``odoo19c: :252-312``).
+    
+        Docstring de la referencia: *"Override to handle the 'inventory mode'
+        and create a quant as superuser the conditions are met"*.
+    
+        En modo inventario la creación se restringe a los campos permitidos y,
+        si ya existe un quant con las mismas características, **se escribe
+        sobre él** en vez de crear uno nuevo. Es lo que evita que un conteo
+        duplique la existencia. El bucle por ``vals`` y la unión de lo creado
+        con lo reescrito (``quants |= ...``) son los de la referencia.
+    
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
+        """
+        modo_inventario = cls._is_inventory_mode()
+        permitidos = cls._get_inventory_fields_create()
+        quants = []
+        for vals in vals_list:
+            trae_conteo = any(
+                campo in vals
+                for campo in ('inventory_quantity', 'inventory_quantity_auto_apply')
+            )
+            if not (modo_inventario and trae_conteo):
+                if 'inventory_quantity' not in vals:
+                    vals.setdefault('inventory_quantity_set', False)
+>               quant, = super().create([vals])
+
+addons/stock/models/stock_quant.py:784: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 580372, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Subcontractor>, 'lot': None, ...}]
+args = (), kwargs = {}
+
+    @functools.wraps(inner)
+    def create(self, vals_list, *args, **kwargs):
+        if isinstance(vals_list, collections.abc.Mapping):
+            vals_list = [vals_list]
+>       return inner(self, vals_list, *args, **kwargs)
+
+src/orm/decorators.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 580372, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Subcontractor>, 'lot': None, ...}]
+
+    @api.model_create_multi
+    @classmethod
+    def create(cls, vals_list):
+        """Alta de registros — ≙ ``BaseModel.create`` por CONTENIDO.
+    
+        ≙ ``odoo19c: odoo/orm/models.py:4611-4770``. Recibe una **lista de
+        dicts** y devuelve el conjunto de filas creadas, en el orden pedido;
+        ``@api.model_create_multi`` convierte un dict suelto en ``[vals]``,
+        como el decorador de la fuente (``decorators.py:357-371``).
+    
+        Hasta :ref:`h-api-1108` este método recibía ``**values`` y devolvía
+        una instancia, y su docstring lo presentaba como *"se porta el paso,
+        no la firma"*. La firma **es** parte del contrato: los overrides de la
+        referencia llaman ``super().create(vals_list)`` con una lista y los
+        llamadores desempaquetan el recordset. Con la firma cambiada ningún
+        porte de un ``create`` de addon podía ser fiel.
+    
+        Los pasos, en el orden de la fuente y con su receptor aquí:
+    
+        1. ``assert`` lista/tupla; vacía → ``browse()`` vacío.
+        2. ``check_access('create')`` sobre el recordset vacío —
+           ``AccessQuerySet(model=cls).none()``, el mismo receptor que
+           ``_check_access`` usa en ``:1903``.
+        3. Los nombres de campo dados más los ``default_*`` del contexto que
+           el modelo declare; un nombre que el modelo no tiene levanta
+           ``ValueError("Invalid field %r in %r")``; cada uno pasa por
+           ``_check_field_access(field, 'write')`` (``FieldSqlMixin``).
+        4. :meth:`_prepare_create_values` — defaults, campos mágicos fuera.
+        5. Clasificación por registro en ``stored`` / ``inherited`` /
+           ``inversed`` / ``protected``.
+        6. Padres de ``_inherits``: ``write`` sobre el padre dado, o
+           ``create`` en lote de los que faltan, cuyo id cae en ``stored``.
+        7. Inserción de las filas y ``modified(..., create=True)`` bajo
+           ``env.protecting``.
+        8. Los inversos, un grupo por método; luego ``_validate_fields``
+           sobre lo invertido, excluyendo lo almacenado.
+        9. ``_check_company`` si ``_check_company_auto``.
+        10. La rama de importación: ``ir.model.data._update_xmlids`` cuando el
+            contexto trae ``_import_current_module``.
+    
+        **Divergencias de mecanismo, declaradas** (cada una con su razón):
+    
+        - **La fila se inserta una a una por :meth:`_create_row_from_values`
+          y no por un ``INSERT`` por lote de ``INSERT_BATCH_SIZE``**
+          (``_create``, ``:4849-4897``). Medido antes de decidirlo
+          (``probe_bulk_create_returns_ids_and_adopter_mro.py``):
+          ``bulk_create`` devuelve los ids en PostgreSQL pero **salta
+          ``save()``**, y los adopters lo sobreescriben —``ir_cron.py:1373``,
+          ``res_partner.py:1594``, ``ir_sequence.py:282``,
+          ``hr_employee.py:1554``— para hacer lo que la fuente hace en su
+          propio ``create``/``write``. Un lote que los esquive crea filas
+          sin ese trabajo. El precómputo (``_add_precomputed_values``) y
+          ``parent_path`` viven en ``pre_save``/``save()`` de este árbol, así
+          que corren por fila al insertar — es donde la fuente los hace en
+          bloque (``:4808`` y ``_parent_store_create``, ``:4916``).
+        - **Un muchos-a-muchos se asigna después del alta**: Django exige la
+          fila antes de poblar la tabla intermedia. La fuente lo resuelve en
+          ``other_fields`` de ``_create`` (``:4924-4931``), también después
+          del ``INSERT``; el sitio es el mismo, el instrumento es
+          ``manager.set``.
+        - **El check de ``bypass_search_access`` del ``many2one``**
+          (``:4686-4687``) no viaja: ningún campo de este árbol declara ese
+          atributo (``grep -rn bypass_search_access src addons`` → 0), y el
+          registro por nombre lo resolvería ``check_access('read')`` del
+          comodelo. Se declara, no se omite: tarea sucesora en el hallazgo.
+        - **``invalidate_recordset`` sobre los x2many no almacenados tras el
+          inverso** (``:4737-4738``): aquí un x2many sin columna no tiene
+          caché que invalidar — ``NonStored`` recalcula al leer
+          (:ref:`h-api-1106`).
+        - **Las columnas de autoría** (``create_uid``/``write_uid``) no
+          existen: ``LOG_ACCESS_COLUMNS`` de este árbol son las dos fechas de
+          ``TimeStampedModel``, ``auto_now``.
+    
+        **INVENTORY:** ``cpython`` — ``collections.defaultdict``,
+        ``contextlib.ExitStack`` (trae hecho); ``django`` — ``Model.__init__``
+        + ``objects.create`` como INSERT ... RETURNING, ``Case/When`` para el
+        orden en :func:`orm.utils.browse` (trae hecho); ``postgresql`` —
+        ``RETURNING "id"`` es lo que ``objects.create`` emite (trae hecho);
+        la clasificación, el lote de padres y el despacho de inversos se
+        construyen aquí con esas primitivas (tiene con qué construirlo).
+    
+        :param vals_list: valores por registro, ``[{'campo': valor, ...}]``.
+        :returns: las filas creadas, en el orden de ``vals_list``.
+        """
+        assert isinstance(vals_list, (list, tuple))
+        if not vals_list:
+            return browse(cls)
+    
+>       AccessQuerySet(model=cls).none().check_access('create')
+
+src/orm/models.py:773: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AccessQuerySet []>, operation = 'create', user = None
+
+    def check_access(self, operation, user=None):
+        """Levanta ``AccessError`` si no puede — ``check_access``.
+    
+        ``odoo19c: odoo/orm/models.py:4100``. Bajo elevación no comprueba nada:
+        ``if not self.env.su and (result := self._check_access(operation))``.
+        """
+        if is_su():
+            return None
+        result = self._check_access(operation, user=user)
+        if result:
+>           raise result[1]()
+E           django.core.exceptions.PermissionDenied: No tiene permiso para crear registros de «stock.StockQuant» (stock.StockQuant).
+E           
+E           Ningún grupo permite actualmente esta operación.
+E           
+E           Contacte a su administrador para solicitar el acceso si lo necesita.
+
+src/orm/models.py:274: PermissionDenied
+________________ test_produce_values_finished_at_raw_plus_labor ________________
+
+db = None
+
+    def test_produce_values_finished_at_raw_plus_labor(db):
+        finished = _product()
+        leg = _product()
+        top = _product()
+        stock, prod = _stock_and_prod_locations()
+        # Materia prima en stock: 8 patas @ 10 = 80 ; 2 tableros @ 50 = 100 → 180.
+        _receive(leg, '8', '10.00', stock)
+        _receive(top, '2', '50.00', stock)
+        bom = _bom(finished, product_qty=Decimal('1'))
+        MrpBomLine.objects.create(bom=bom, product=leg, product_qty=Decimal('4'), sequence=1)
+        MrpBomLine.objects.create(bom=bom, product=top, product_qty=Decimal('1'), sequence=2)
+        mo = MrpProduction.objects.create(product=finished, product_qty=Decimal('2'), bom=bom)
+        # Mano de obra: 1 workorder de 60 min en centro a 90/h = 90.
+        wc = MrpWorkcenter.objects.create(name='Ensamble', costs_hour=Decimal('90.00'))
+        MrpWorkorder.objects.create(
+            production=mo, workcenter=wc, duration=Decimal('60'),
+        )
+        mrp_services.generate_moves(mo, stock, prod)
+        mo.action_confirm()
+>       unit_cost = mrp_services.produce(mo)
+
+tests/integration/sale/test_mrp_valuation.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+production = <MrpProduction: MO-5A20BF65>
+
+    def produce(production):
+        """Produce la orden valuando el flujo (Odoo _cal_price + button_mark_done).
+    
+        Consume la materia prima (salida valuada → costo real de componentes), suma
+        la mano de obra de las ``workorders``, y recibe el terminado con
+        ``unit_cost = (materia prima + mano de obra) / product_qty``. Devuelve ese
+        costo unitario — el **costo real de fabricación** del producto.
+        """
+        if production.state not in (production.STATE_CONFIRMED, production.STATE_PROGRESS):
+            raise ValidationError('Solo una orden confirmada/en progreso se produce.')
+    
+        raw_cost = Decimal('0.00')
+        for move in production.move_raw_ids():
+            move._action_confirm()
+            move._action_assign()
+>           move._action_done()
+
+addons/mrp/services.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <StockMove: MRP 8.0000 [confirmed]>
+
+    def _action_done(self):
+        """Ejecuta el movimiento (≙ ``_action_done``): aplica los quants."""
+        if self.state == self.STATE_CANCEL:
+            return self
+        done_qty = self.quantity or self.product_uom_qty
+>       StockQuant.apply_move(self.product, self.location, self.location_dest, done_qty)
+
+addons/stock/models/stock_move.py:2997: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+product = <ProductProduct: MRP>, location_src = <StockLocation: WH/Stock>
+location_dest = <StockLocation: WH/Production>, qty = Decimal('8.0000')
+
+    @classmethod
+    def apply_move(cls, product, location_src, location_dest, qty) -> None:
+        """Aplica un movimiento hecho: resta del origen, suma al destino.
+    
+        Adaptador de firma sobre ``_update_available_quantity``: los llamadores
+        de este árbol pasan instancias sueltas, no un recordset con
+        características. Las ubicaciones no internas no llevan contabilidad de
+        quant (son sumideros/fuentes), igual que en la referencia.
+        """
+        qty = Decimal(qty)
+        if not location_src.should_bypass_reservation():
+>           cls._update_available_quantity(product, location_src, quantity=-qty)
+
+addons/stock/models/stock_quant.py:2262: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+product = <ProductProduct: MRP>, location = <StockLocation: WH/Stock>
+quantity = Decimal('-8.0000'), reserved_quantity = None, lot = None
+package = None, owner = None
+in_date = datetime.datetime(2026, 9, 11, 22, 36, 56, 963748, tzinfo=datetime.timezone.utc)
+
+    @classmethod
+    def _update_available_quantity(cls, product, location, quantity=None,
+                                   reserved_quantity=None, lot=None, package=None,
+                                   owner=None, in_date=None):
+        """≙ ``_update_available_quantity`` (``odoo19c: :1038-1106``).
+    
+        Docstring de la referencia: *"Increase or decrease `quantity` or
+        'reserved quantity' of a set of quants"*. Devuelve la tupla
+        ``(disponible, in_date)``.
+    
+        La ``in_date`` que sobrevive es **la más antigua** de las que
+        concurren: es la clave de orden de FIFO, y tomar la nueva rompería el
+        orden de consumo.
+        """
+        if not (quantity or reserved_quantity):
+            raise ValidationError(
+                _('Se debe indicar la cantidad o la cantidad reservada.'))
+        cero = Decimal('0.00')
+        quants = list(cls._gather(product, location, lot=lot, package=package,
+                                  owner=owner, strict=True))
+        if lot is not None:
+            if Decimal(quantity or cero) > cero:
+                quants = [q for q in quants if q.lot is not None]
+            else:
+                # No se descuenta de un quant negativo sin lote.
+                quants = [q for q in quants if q.quantity > cero or q.lot is not None]
+    
+        if location is not None and location.should_bypass_reservation():
+            fechas = []
+        else:
+            fechas = [q.in_date for q in quants if q.in_date and q.quantity > cero]
+        if in_date is not None:
+            fechas.append(in_date)
+        in_date = min(fechas) if fechas else timezone.now()
+    
+        quant = quants[0] if quants else None
+        if quant is not None:
+            # ≙ ``try_lock_for_update(limit=1)`` (``:1085``): la referencia
+            # bloquea el primer quant disponible para que dos transacciones no
+            # repartan el mismo saldo.
+            quant = (cls.objects.select_for_update()
+                     .filter(pk=quant.pk).first()) or quant
+            quant.in_date = in_date
+            if quantity:
+                quant.quantity = quant.quantity + Decimal(quantity)
+            if reserved_quantity:
+                nueva = quant.reserved_quantity + Decimal(reserved_quantity)
+                quant.reserved_quantity = nueva if nueva > cero else cero
+            quant.save(update_fields=['in_date', 'quantity', 'reserved_quantity',
+                                      'inventory_diff_quantity', 'updated_at'])
+        else:
+            vals = {'product': product, 'location': location, 'lot': lot,
+                    'package': package, 'owner': owner, 'in_date': in_date}
+            if quantity:
+                vals['quantity'] = Decimal(quantity)
+            if reserved_quantity:
+                vals['reserved_quantity'] = Decimal(reserved_quantity)
+>           cls.create([vals])
+
+addons/stock/models/stock_quant.py:1818: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 963748, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Stock>, 'lot': None, ...}]
+args = (), kwargs = {}
+
+    @functools.wraps(inner)
+    def create(self, vals_list, *args, **kwargs):
+        if isinstance(vals_list, collections.abc.Mapping):
+            vals_list = [vals_list]
+>       return inner(self, vals_list, *args, **kwargs)
+
+src/orm/decorators.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 963748, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Stock>, 'lot': None, ...}]
+
+    @api.model_create_multi
+    @classmethod
+    def create(cls, vals_list):
+        """≙ ``create`` (``odoo19c: :252-312``).
+    
+        Docstring de la referencia: *"Override to handle the 'inventory mode'
+        and create a quant as superuser the conditions are met"*.
+    
+        En modo inventario la creación se restringe a los campos permitidos y,
+        si ya existe un quant con las mismas características, **se escribe
+        sobre él** en vez de crear uno nuevo. Es lo que evita que un conteo
+        duplique la existencia. El bucle por ``vals`` y la unión de lo creado
+        con lo reescrito (``quants |= ...``) son los de la referencia.
+    
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
+        """
+        modo_inventario = cls._is_inventory_mode()
+        permitidos = cls._get_inventory_fields_create()
+        quants = []
+        for vals in vals_list:
+            trae_conteo = any(
+                campo in vals
+                for campo in ('inventory_quantity', 'inventory_quantity_auto_apply')
+            )
+            if not (modo_inventario and trae_conteo):
+                if 'inventory_quantity' not in vals:
+                    vals.setdefault('inventory_quantity_set', False)
+>               quant, = super().create([vals])
+
+addons/stock/models/stock_quant.py:784: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 963748, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Stock>, 'lot': None, ...}]
+args = (), kwargs = {}
+
+    @functools.wraps(inner)
+    def create(self, vals_list, *args, **kwargs):
+        if isinstance(vals_list, collections.abc.Mapping):
+            vals_list = [vals_list]
+>       return inner(self, vals_list, *args, **kwargs)
+
+src/orm/decorators.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.stock.models.stock_quant.StockQuant'>
+vals_list = [{'in_date': datetime.datetime(2026, 9, 11, 22, 36, 56, 963748, tzinfo=datetime.timezone.utc), 'inventory_quantity_set': False, 'location': <StockLocation: WH/Stock>, 'lot': None, ...}]
+
+    @api.model_create_multi
+    @classmethod
+    def create(cls, vals_list):
+        """Alta de registros — ≙ ``BaseModel.create`` por CONTENIDO.
+    
+        ≙ ``odoo19c: odoo/orm/models.py:4611-4770``. Recibe una **lista de
+        dicts** y devuelve el conjunto de filas creadas, en el orden pedido;
+        ``@api.model_create_multi`` convierte un dict suelto en ``[vals]``,
+        como el decorador de la fuente (``decorators.py:357-371``).
+    
+        Hasta :ref:`h-api-1108` este método recibía ``**values`` y devolvía
+        una instancia, y su docstring lo presentaba como *"se porta el paso,
+        no la firma"*. La firma **es** parte del contrato: los overrides de la
+        referencia llaman ``super().create(vals_list)`` con una lista y los
+        llamadores desempaquetan el recordset. Con la firma cambiada ningún
+        porte de un ``create`` de addon podía ser fiel.
+    
+        Los pasos, en el orden de la fuente y con su receptor aquí:
+    
+        1. ``assert`` lista/tupla; vacía → ``browse()`` vacío.
+        2. ``check_access('create')`` sobre el recordset vacío —
+           ``AccessQuerySet(model=cls).none()``, el mismo receptor que
+           ``_check_access`` usa en ``:1903``.
+        3. Los nombres de campo dados más los ``default_*`` del contexto que
+           el modelo declare; un nombre que el modelo no tiene levanta
+           ``ValueError("Invalid field %r in %r")``; cada uno pasa por
+           ``_check_field_access(field, 'write')`` (``FieldSqlMixin``).
+        4. :meth:`_prepare_create_values` — defaults, campos mágicos fuera.
+        5. Clasificación por registro en ``stored`` / ``inherited`` /
+           ``inversed`` / ``protected``.
+        6. Padres de ``_inherits``: ``write`` sobre el padre dado, o
+           ``create`` en lote de los que faltan, cuyo id cae en ``stored``.
+        7. Inserción de las filas y ``modified(..., create=True)`` bajo
+           ``env.protecting``.
+        8. Los inversos, un grupo por método; luego ``_validate_fields``
+           sobre lo invertido, excluyendo lo almacenado.
+        9. ``_check_company`` si ``_check_company_auto``.
+        10. La rama de importación: ``ir.model.data._update_xmlids`` cuando el
+            contexto trae ``_import_current_module``.
+    
+        **Divergencias de mecanismo, declaradas** (cada una con su razón):
+    
+        - **La fila se inserta una a una por :meth:`_create_row_from_values`
+          y no por un ``INSERT`` por lote de ``INSERT_BATCH_SIZE``**
+          (``_create``, ``:4849-4897``). Medido antes de decidirlo
+          (``probe_bulk_create_returns_ids_and_adopter_mro.py``):
+          ``bulk_create`` devuelve los ids en PostgreSQL pero **salta
+          ``save()``**, y los adopters lo sobreescriben —``ir_cron.py:1373``,
+          ``res_partner.py:1594``, ``ir_sequence.py:282``,
+          ``hr_employee.py:1554``— para hacer lo que la fuente hace en su
+          propio ``create``/``write``. Un lote que los esquive crea filas
+          sin ese trabajo. El precómputo (``_add_precomputed_values``) y
+          ``parent_path`` viven en ``pre_save``/``save()`` de este árbol, así
+          que corren por fila al insertar — es donde la fuente los hace en
+          bloque (``:4808`` y ``_parent_store_create``, ``:4916``).
+        - **Un muchos-a-muchos se asigna después del alta**: Django exige la
+          fila antes de poblar la tabla intermedia. La fuente lo resuelve en
+          ``other_fields`` de ``_create`` (``:4924-4931``), también después
+          del ``INSERT``; el sitio es el mismo, el instrumento es
+          ``manager.set``.
+        - **El check de ``bypass_search_access`` del ``many2one``**
+          (``:4686-4687``) no viaja: ningún campo de este árbol declara ese
+          atributo (``grep -rn bypass_search_access src addons`` → 0), y el
+          registro por nombre lo resolvería ``check_access('read')`` del
+          comodelo. Se declara, no se omite: tarea sucesora en el hallazgo.
+        - **``invalidate_recordset`` sobre los x2many no almacenados tras el
+          inverso** (``:4737-4738``): aquí un x2many sin columna no tiene
+          caché que invalidar — ``NonStored`` recalcula al leer
+          (:ref:`h-api-1106`).
+        - **Las columnas de autoría** (``create_uid``/``write_uid``) no
+          existen: ``LOG_ACCESS_COLUMNS`` de este árbol son las dos fechas de
+          ``TimeStampedModel``, ``auto_now``.
+    
+        **INVENTORY:** ``cpython`` — ``collections.defaultdict``,
+        ``contextlib.ExitStack`` (trae hecho); ``django`` — ``Model.__init__``
+        + ``objects.create`` como INSERT ... RETURNING, ``Case/When`` para el
+        orden en :func:`orm.utils.browse` (trae hecho); ``postgresql`` —
+        ``RETURNING "id"`` es lo que ``objects.create`` emite (trae hecho);
+        la clasificación, el lote de padres y el despacho de inversos se
+        construyen aquí con esas primitivas (tiene con qué construirlo).
+    
+        :param vals_list: valores por registro, ``[{'campo': valor, ...}]``.
+        :returns: las filas creadas, en el orden de ``vals_list``.
+        """
+        assert isinstance(vals_list, (list, tuple))
+        if not vals_list:
+            return browse(cls)
+    
+>       AccessQuerySet(model=cls).none().check_access('create')
+
+src/orm/models.py:773: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <AccessQuerySet []>, operation = 'create', user = None
+
+    def check_access(self, operation, user=None):
+        """Levanta ``AccessError`` si no puede — ``check_access``.
+    
+        ``odoo19c: odoo/orm/models.py:4100``. Bajo elevación no comprueba nada:
+        ``if not self.env.su and (result := self._check_access(operation))``.
+        """
+        if is_su():
+            return None
+        result = self._check_access(operation, user=user)
+        if result:
+>           raise result[1]()
+E           django.core.exceptions.PermissionDenied: No tiene permiso para crear registros de «stock.StockQuant» (stock.StockQuant).
+E           
+E           Ningún grupo permite actualmente esta operación.
+E           
+E           Contacte a su administrador para solicitar el acceso si lo necesita.
+
+src/orm/models.py:274: PermissionDenied
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/sale/test_mrp_subcontracting.py::test_subcontract_produce_cost_is_components_plus_service
+FAILED tests/integration/sale/test_mrp_valuation.py::test_produce_values_finished_at_raw_plus_labor
+2 failed, 1 warning in 5.83s
+EXIT=1

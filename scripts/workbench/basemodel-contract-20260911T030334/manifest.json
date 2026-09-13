@@ -1,0 +1,48 @@
+{
+  "question": "De los 194 métodos que la referencia cuelga de BaseModel, ¿cuáles trae hecho el stack, cuáles cuelga ya nuestro propio árbol, y cuáles hay que construir?",
+  "instrument": [
+    "scripts/workbench/basemodel-contract-20260911T030334/census_reference_basemodel.py",
+    "scripts/workbench/basemodel-contract-20260911T030334/census_ours_models.py",
+    "scripts/workbench/basemodel-contract-20260911T030334/locate_in_our_tree.py",
+    "scripts/workbench/basemodel-contract-20260911T030334/census_class.py",
+    "scripts/workbench/basemodel-contract-20260911T030334/probe_stack_inventory.py"
+  ],
+  "metric": "hasattr() sobre Model, ModelBase, Manager y QuerySet de django 6.0.5, en DOS procesos —uno prístino con PYTHONPATH despojado y DJANGO_SETTINGS_MODULE vacío, otro tras django.setup() con config.settings.testing— para los 194 nombres que el censo extrae por AST del cuerpo de BaseModel (odoo/orm/models.py:334-7004). La diferencia entre los dos procesos es el tercer cubo.",
+  "blind_to": [
+    "el CONTRATO detrás de cada nombre: exists devuelve bool allá y recordset acá; create una instancia contra un recordset de N; update filas afectadas contra escritura en caché; __eq__/__lt__ comparan pk contra conjuntos de ids. El cubo TRAE autoriza a leer el binario, no a llamar",
+    "un símbolo que Django ofrezca bajo OTRO nombre: ningún hasattr por nombre literal puede verlo, y no hay tabla de equivalencia",
+    "lo que un addon de terceros cuelgue sobre models.Model sin pasar por src/orm: el segundo proceso lo contaría como nuestro",
+    "la familia de un símbolo cuyo nombre no la delate — 50 de los 159 quedan en «otros», el 31 % sin clasificar",
+    "el cuerpo de los 14 que nuestro árbol ya colgó: que el nombre esté no dice que haga lo que la referencia hace"
+  ],
+  "destination": [
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/analisis-contrato-de-basemodel-trae-o-construye.rst",
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/hallazgos/hallazgo-H-API-1089-la-sonda-midio-el-stack-mas-nuestros-parches.rst",
+    "src/orm/ — el núcleo del recordset que TASK-API-0397 construye"
+  ],
+  "control": "el positivo real del árbol: _recompute_field, que django 6.0.5 no declara en ninguna parte y src/orm/models.py:3384 cuelga con la marca «≙ BaseModel._recompute_field (:6948-6959)». Prístino da Model=False QuerySet=False; tras django.setup() da Model=True. La sonda contaminada lo contaba como stack, y ése es el fallo que discrimina: sin ese control, 35 y 21 se leen igual.",
+  "corrected_premise": {
+    "decia": "35 de los 194 los trae hecho el stack",
+    "mide": "21 los trae Django prístino; 14 los había colgado nuestro propio src/orm sobre models.Model, y la sonda los contaba como stack porque preguntaba después de django.setup()",
+    "consecuencia": "el criterio de dos niveles del ejecutor necesita TRES cubos, no dos: el tercero —lo que ya portamos— no es ni «el stack lo trae» ni «hay que construirlo»"
+  },
+  "reproducible": "eval \"$(python3 scripts/reference_roots.py --env)\" && python3 scripts/workbench/basemodel-contract-20260911T030334/census_reference_basemodel.py BaseModel && python3 scripts/workbench/basemodel-contract-20260911T030334/probe_stack_inventory.py",
+  "outputs": [
+    "reference_basemodel.tsv",
+    "ours_models.txt",
+    "located_in_ours.txt",
+    "stack_inventory.txt",
+    "stack_inventory.err",
+    "django_base.txt",
+    "django_field.txt",
+    "django_manager.txt",
+    "django_options.txt",
+    "django_query.txt",
+    "django_sqlquery.txt"
+  ],
+  "source": "odoo19c: odoo/orm/models.py:334-7004 (BaseModel, 194 métodos, 1 atributo de clase) — odoo-tools@abe4040ec1; django 6.0.5 en .venv/lib/python3.12/site-packages",
+  "findings": ["H-API-1089"],
+  "tasks": ["#318", "#319"],
+  "measured_at": "2026-09-11T03:19:15",
+  "api_head": "806a2ad2"
+}

@@ -1,0 +1,28 @@
+{
+  "question": "Como fusiona la referencia varias declaraciones del mismo campo a lo largo de la herencia, y por que nuestro arbol pierde los parametros que una subclase declara sobre un campo heredado",
+  "instrument": [
+    "git show origin/main:<ruta> y sed -n sobre odoo/orm/fields.py de odoo19c (solo lectura)",
+    "lectura verbatim de _get_attrs (fields.py:414-465), separando el bucle de merge (:419-429) de los tres bloques de attrs (:443-465)",
+    "grep -rn sobre src/ para censar las declaraciones con NonStored y las asignaciones de _base_fields__",
+    "construccion de modelos desechables bajo django.setup() completo, leyendo el campo construido en proceso — M9",
+    "sonda mixin-abstracto/concreta que compara _meta.get_fields(), vars() por clase del __mro__ y el tipo del atributo resuelto — M10c",
+    "lectura de django/db/models/base.py::ModelBase.__new__ y add_to_class del paquete instalado"
+  ],
+  "metric": "El orden real en que la fuente compone attrs (merge primero, bloques despues); el estado del campo que NUESTRO arbol construye para la unica declaracion del arbol que hereda un compute (store, inverse, recursive, string); la particion de las seis declaraciones sin fachada; y por que via llega un campo heredado a la subclase (_meta contra __mro__)",
+  "blind_to": [
+    "El caso stored-over-stored: una base que declara un campo CON columna si lo copia _meta.local_fields y toma otro camino, que Django ya resuelve por ultimo-gana. Sucesor declarado, no portado a ciegas.",
+    "NonStored-over-NonStored y NonStored-sobre-stored: el primero no se ha medido, el segundo da 0 hoy (M6).",
+    "Un compute que llegue por una via que __mro__ no recorra (inyeccion posterior, contribute_to_class de tercero): medido sobre __mro__[1:], que es la via que Django usa.",
+    "La fachada Char NO acepta string= como parametro nombrado (unico hit es prosa de docstring en :242), asi que una reconstruccion tiene que pasar el string posicionalmente o ensenarselo a la fachada.",
+    "size= se traduce a max_length= dentro de la fachada, asi que un diccionario fusionado que lleve las dos claves no esta medido."
+  ],
+  "destination": [
+    "src/orm/fields.py — donde vive _FIELD_CLASS_ATTRIBUTES y el parche de models.Field.__init__ que escribe _args__",
+    "src/orm/fields_textual.py y las demas fachadas — donde se sellaria _args__ y _facade__ al construir",
+    "scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/mediciones.md"
+  ],
+  "source": "odoo19c (odoo-tools, solo lectura) y el paquete django instalado en .venv",
+  "control": "El positivo REAL es display_name de src/addons/test_orm/models/test_orm.py:36-39, porte byte a byte de odoo19c: odoo/addons/test_orm/models/test_orm.py:28-31 — la unica declaracion del arbol que hereda un compute de su base. Hoy nuestro arbol le construye un CharField CON columna (store=True, inverse=None, recursive=False), con los dos parametros declarados cayendo en el **_ignored de NonStored.__init__. Ese caso tiene que ir de rojo a verde, y M6 tiene que pasar de 'stored sobre NonStored: 1' a 0. Las tres anulaciones, cada una derribando exactamente un caso y limpiando __pycache__ antes de leer: (a) el nombre no aparece entre los campos de _meta de la subclase; (b) el objeto que gana es NonStored con inverse e recursive aplicados; (c) la asignacion corre el inverse declarado.",
+  "reproducible": "eval \"$(python3 scripts/reference_roots.py --env)\" para los sed de la referencia; las sondas con PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python",
+  "tasks": ["#332"]
+}

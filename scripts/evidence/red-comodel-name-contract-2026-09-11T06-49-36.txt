@@ -1,0 +1,37 @@
+# ROJA de H-API-1090 — el contrato de comodel_name
+# fecha: 2026-09-11T06:49:36
+# HEAD: 9d1fd142
+# comando: uv run pytest tests/unit/orm/test_comodel_name_contract.py -q --reuse-db -p no:randomly
+
+FFF..F                                                                   [100%]
+=================================== FAILURES ===================================
+_ TestTheNameIsWritableAsTheSourceDeclaresIt.test_setattr_lands_on_the_instance _
+tests/unit/orm/test_comodel_name_contract.py:53: in test_setattr_lands_on_the_instance
+    setattr(field, 'comodel_name', 'sale.order')
+E   AttributeError: property of 'CharField' object has no setter
+_ TestTheNameIsWritableAsTheSourceDeclaresIt.test_the_class_attribute_is_not_a_data_descriptor _
+tests/unit/orm/test_comodel_name_contract.py:65: in test_the_class_attribute_is_not_a_data_descriptor
+    assert not hasattr(descriptor, '__set__')
+E   AssertionError: assert not True
+E    +  where True = hasattr(<property object at 0x7f8e6ffcf880>, '__set__')
+_ TestTheNameIsWritableAsTheSourceDeclaresIt.test_an_explicit_value_wins_over_the_derivation _
+tests/unit/orm/test_comodel_name_contract.py:73: in test_an_explicit_value_wins_over_the_derivation
+    setattr(field, 'comodel_name', 'res.partner')
+E   AttributeError: property of 'ForeignKey' object has no setter
+_ TestTheCopyLoopOfSetupRelatedCanRun.test_the_related_attrs_table_can_be_written_one_by_one _
+tests/unit/orm/test_comodel_name_contract.py:103: in test_the_related_attrs_table_can_be_written_one_by_one
+    setattr(field, attribute, None)
+E   AttributeError: property of 'CharField' object has no setter
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_setattr_lands_on_the_instance
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_the_class_attribute_is_not_a_data_descriptor
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_an_explicit_value_wins_over_the_derivation
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheCopyLoopOfSetupRelatedCanRun::test_the_related_attrs_table_can_be_written_one_by_one
+4 failed, 2 passed, 1 warning in 5.34s
+EXIT=1

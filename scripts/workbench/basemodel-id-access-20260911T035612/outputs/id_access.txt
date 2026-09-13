@@ -1,0 +1,22 @@
+consumidor    : /home/user/kaupamex-api
+descriptor id : DeferredAttribute
+--- object.__new__ pelado
+    tiene _state : False
+    __dict__     : []
+    .id          : AttributeError: 'NoneType' object has no attribute 'attname'
+    consultas    : 0
+--- object.__new__ + _state
+    tiene _state : True
+    __dict__     : ['_state']
+    .id          : AttributeError: 'NoneType' object has no attribute 'attname'
+    consultas    : 0
+--- object.__new__ + _state + __dict__["id"]
+    tiene _state : True
+    __dict__     : ['_state', 'id']
+    .id          : id = 7
+    consultas    : 0
+--- IdProbe(id=7) — control positivo
+    tiene _state : True
+    __dict__     : ['_explicit_values', '_orm_building', '_state', 'id', 'label']
+    .id          : id = 7
+    consultas    : 0

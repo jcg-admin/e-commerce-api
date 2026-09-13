@@ -1,0 +1,235 @@
+addons/account/models/account_analytic_plan.py:192:        fields.NonStored(
+addons/account_fleet/models/account_move.py:20:``AccountMoveLine.need_vehicle`` (37) campo ``NonStored`` (compute ``_compute_need_vehicle``)
+addons/account_fleet/models/account_move.py:240:        AccountMoveLine.add_to_class('need_vehicle', fields.NonStored(
+addons/account_qr_code_emv/models/res_bank.py:169:    ``NonStored``, se recalcula en cada lectura, no hay caché que invalidar.
+addons/account_qr_code_emv/models/res_bank.py:17:``display_qr_setting`` (13)          campo, ``NonStored``
+addons/account_qr_code_emv/models/res_bank.py:20:``country_proxy_keys`` (16)          campo, ``NonStored`` vía ``fields.Char``
+addons/account_qr_code_emv/models/res_bank.py:456:    ``NonStored`` — no aparecen en ``_meta``, así que ``_add_if_absent`` los
+addons/account_qr_code_emv/models/res_bank.py:460:    # -- los dos campos NonStored (sin columna) --------------------------
+addons/account_qr_code_emv/models/res_bank.py:462:        ResPartnerBank.add_to_class('display_qr_setting', fields.NonStored(
+addons/analytic/models/analytic_line.py:181:    fiscal_year_search = fields.NonStored(
+addons/analytic/models/analytic_line.py:75::class:`orm.fields_nonstored.NonStored` con su parámetro ``search``, en
+addons/base_address_extended/models/res_partner.py:186:class _CityId(fields.NonStored):
+addons/base_address_extended/models/res_partner.py:201:    :class:`~orm.fields_nonstored.NonStored` es el mecanismo que este árbol ya
+addons/base_address_extended/models/res_partner.py:210:    su inverso genérico (:meth:`NonStored.inverse_related`) **no crea** el
+addons/base_install_request/wizard/base_module_install_request.py:211:    user_ids = fields.NonStored(
+addons/base_install_request/wizard/base_module_install_request.py:288:    module_ids = fields.NonStored(
+addons/base_install_request/wizard/base_module_install_request.py:291:    modules_description = fields.NonStored(
+addons/base_install_request/wizard/base_module_install_request.py:91:  ``compute=`` sin ``store``, así que aquí son ``fields.NonStored``: se
+addons/base_setup/models/res_config_settings.py:183:    - **``report_footer``** se declara con :class:`NonStored` en vez de
+addons/base_setup/models/res_config_settings.py:202:      asigna el descriptor :class:`NonStored` al leerlo, así que el cómputo
+addons/base_setup/models/res_config_settings.py:272:    report_footer = fields.NonStored(
+addons/base_sparse_field/models/fields.py:235:    que ``NonStored``: el atributo llega al modelo por dos caminos —el cuerpo
+addons/base_vat/models/res_config_settings.py:36:(``orm.fields_nonstored.NonStored``), y un descriptor colgado del padre se
+addons/product/models/product_attribute_custom_value.py:28:    es un campo sin columna. Aquí se declara con :class:`fields.NonStored`,
+addons/product/models/product_attribute_custom_value.py:84:    # ``fields.NonStored`` es el equivalente construido de ese ``store=False``.
+addons/product/models/product_attribute_custom_value.py:85:    name = fields.NonStored(default=_compute_name)
+addons/sale/models/sale_order.py:126:    ``NonStored.resolve_default`` llama a este invocable con la instancia
+addons/sale/models/sale_order.py:143:# ``fields.NonStored`` toma su valor de un ``default=`` que puede ser un
+addons/sale/models/sale_order.py:144:# invocable; ``NonStored.resolve_default`` le pasa la instancia cuando su firma
+addons/sale/models/sale_order.py:517:    is_expired = fields.NonStored(
+addons/sale/models/sale_order.py:721:    # ``fields.NonStored`` es el equivalente construido de su ``store=False``,
+addons/sale/models/sale_order.py:727:    # ``NonStored`` no la resuelve por sí solo. Su destino son los cuatro campos
+addons/sale/models/sale_order.py:731:    country_code = fields.NonStored(
+addons/sale/models/sale_order.py:740:    company_price_include = fields.NonStored(
+addons/sale/models/sale_order.py:747:    tax_calculation_rounding_method = fields.NonStored(
+addons/sale/models/sale_order.py:754:    terms_type = fields.NonStored(
+addons/sale/models/sale_order.py:765:    show_update_fpos = fields.NonStored(
+addons/sale/models/sale_order.py:771:    show_update_pricelist = fields.NonStored(
+addons/sale/models/sale_order.py:780:    has_archived_products = fields.NonStored(
+addons/sale/models/sale_order.py:785:    has_active_pricelist = fields.NonStored(
+addons/sale/models/sale_order.py:790:    tax_country = fields.NonStored(
+addons/sale/models/sale_order.py:797:    type_name = fields.NonStored(
+addons/sale/models/sale_order.py:803:    duplicated_orders = fields.NonStored(
+addons/stock/models/stock_move_line.py:382:    quant = fields.NonStored(help_text='Existencia de la que se toma (Odoo quant_id).')
+addons/stock/models/stock_move_line.py:93:``quant_id`` (94, store=False)                   ``quant`` (``NonStored``)
+addons/stock/models/stock_rule.py:102:``NonStored`` (≙ el ``compute`` sin ``store=True`` de la fuente), el mecanismo
+addons/stock/models/stock_rule.py:522:    route_company = fields.NonStored(
+addons/stock/models/stock_rule.py:528:    picking_type_code_domain = fields.NonStored(
+addons/stock/models/stock_rule.py:534:    rule_message = fields.NonStored(
+addons/website/models/ir_ui_view.py:123:``NonStored``: ``_compute_first_page_id`` **devuelve** la página en lugar de
+addons/website/models/ir_ui_view.py:777:        'first_page_id': fields.NonStored(
+addons/website/models/ir_ui_view.py:78:     - ``fields.NonStored`` (``compute`` sin ``store``) alimentado por
+addons/website/models/website.py:634:    # ``fields.NonStored`` (``src/orm/fields_nonstored.py``). No son columnas.
+addons/website/models/website.py:636:    # El cómputo va en ``default=``, que es el parámetro que ``NonStored``
+addons/website/models/website.py:644:    domain_punycode = fields.NonStored(
+addons/website/models/website.py:647:    language_count = fields.NonStored(
+addons/website/models/website.py:650:    blocked_third_party_domains = fields.NonStored(
+addons/website/models/website.py:653:    menu = fields.NonStored(default=lambda self: self._compute_menu())
+addons/website/models/website.py:655:    partner = fields.NonStored(
+addons/website/models/website.py:96:   por ``related=``). Aquí van con ``fields.NonStored``, el mecanismo que el
+addons/website/models/website.py:98:   columnas: un ``NonStored`` no aparece en ``_meta.get_fields()``.
+addons/website/models/website_menu.py:387:        este método al mecanismo ``NonStored``.
+addons/website/models/website_page.py:235:    is_in_menu = fields.NonStored(
+addons/website/models/website_page.py:238:    is_homepage = fields.NonStored(
+addons/website/models/website_page.py:241:    is_visible = fields.NonStored(
+addons/website/models/website_page.py:41:3. **Los ``compute`` sin ``store`` van con ``fields.NonStored``** (mismo
+addons/website_sale/migrations/0001_initial.py:17:un ``fields.NonStored``, que por construcción no genera columna.
+addons/website_sale/migrations/0003_websitesalesettings_salesteam_and_more.py:20:website_sale/models/crm_team.py:12-17``) y aquí ``fields.NonStored``, que por
+addons/website_sale/models/crm_team.py:111:juntos (``:32-33``). Aquí cada ``NonStored`` tiene su propio ``default``, así
+addons/website_sale/models/crm_team.py:113:lo encuentra puesto (``NonStored.__get__`` mira ``instance.__dict__`` antes de
+addons/website_sale/models/crm_team.py:228:    """``default`` del ``NonStored`` ``abandoned_carts_count``."""
+addons/website_sale/models/crm_team.py:233:    """``default`` del ``NonStored`` ``abandoned_carts_amount``."""
+addons/website_sale/models/crm_team.py:24:     - ``fields.NonStored`` — es ``compute`` sin ``store`` en la fuente
+addons/website_sale/models/crm_team.py:253:        'abandoned_carts_count': fields.NonStored(
+addons/website_sale/models/crm_team.py:258:        'abandoned_carts_amount': fields.NonStored(
+addons/website_sale/models/crm_team.py:27:     - ``fields.NonStored`` — ídem
+addons/website_sale/models/sale_order.py:264:    del ``NonStored`` ``is_abandoned_cart``.
+addons/website_sale/models/sale_order.py:31:     - ``fields.NonStored`` sobre ``SaleOrder`` — es ``store=False`` allá
+addons/website_sale/models/sale_order.py:458:        'is_abandoned_cart': fields.NonStored(
+addons/website_sale/models/sale_order.py:87:**D-2 — ``is_abandoned_cart`` es un ``NonStored``, no una ``property``.** La
+addons/website_sale/models/sale_order.py:95:pedido y devuelve el booleano, que es lo que el ``default`` del ``NonStored``
+scripts/census_read_paths.py:115:    print(f'    - {NonStored.__name__:<28} orm/fields_nonstored.py')
+scripts/census_read_paths.py:62:    from orm.fields_nonstored import NonStored
+scripts/census_read_paths.py:88:                  if isinstance(v, NonStored)]
+scripts/check_display_name.py:101:                if not isinstance(vars(base)['display_name'], NonStored):
+scripts/check_display_name.py:105:                        f'en {base.__name__}, no el campo NonStored del mixin — '
+scripts/check_display_name.py:34:``NonStored`` del mixin; excluidos los de terceros por su módulo.
+scripts/check_display_name.py:95:    from orm.fields_nonstored import NonStored
+scripts/check_fk_naming.py:200:    ``store``, devuelve un ``NonStored``, que no tiene columna. El lector
+scripts/check_fk_naming.py:93:    ``NonStored`` (``src/orm/fields_nonstored.py``), que no tiene columna, así
+scripts/evidence/ir_profile_part1.py:69:  —``orm.fields_nonstored.NonStored``— resuelve **por fila** al leerla, así
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:1587:    #: > que la versión anterior declaraba abajo —*"ciega al ``NonStored``"*—
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:1599:    #: > —``_field_to_sql``— exige ``concrete``, que un ``NonStored`` no
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:1604:    #: :class:`~orm.fields_nonstored.NonStored` que el MRO de la clase
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:1607:    #: de Django ni como ``NonStored`` — una ``property`` pelada, por ejemplo.
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:2146:        :class:`~orm.fields_nonstored.NonStored`— le levanta
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:2931:    ``display_name`` es un :class:`orm.fields_nonstored.NonStored`, no una
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:2942:    display_name = NonStored(default=_display_name_default,
+scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py:88:from orm.fields_nonstored import NonStored, non_stored_fields
+scripts/workbench/costura-de-fusion-de-campo-20260911T172315/probe_merge_seam.py:30:    NonStored = importlib.import_module('orm.fields_nonstored').NonStored
+scripts/workbench/deferred-routing-20260911T181509/probe_django_supports_one_class.py:9:Aquí la fachada enruta al CONSTRUIR: con ``compute=`` sale un ``NonStored``,
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_args_is_post_translation.py:24:from orm.fields_nonstored import NonStored               # noqa: E402
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_args_is_post_translation.py:52:    show("NonStored(default=None, search='_s')  [declaracion directa]",
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_args_is_post_translation.py:53:         NonStored(default=None, search='_s'))
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_drop_point.py:1:"""Donde EXACTAMENTE se pierde inverse=/recursive= en la rama NonStored."""
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_drop_point.py:32:    tipo = 'NonStored' if isinstance(f, NonStored) else type(f).__name__
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_drop_point.py:38:print('=== y NonStored.__init__ los traga: no estan en __dict__ ===')
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_drop_point.py:39:ns = NonStored(inverse='_x', recursive=True)
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_drop_point.py:6:from orm.fields_nonstored import (NonStored, apply_source_defaults,
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_merge_today.py:43:print('base declara NonStored?', isinstance(vars(BaseProbe).get('label'), NonStored))
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_merge_today.py:8:from orm.fields_nonstored import NonStored, non_stored_fields
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_router.py:24:    es = 'NonStored' if isinstance(f, NonStored) else type(f).__name__
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_router.py:6:from orm.fields_nonstored import NonStored
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:10:el ``__dict__`` de la propia clase que ademas aparecen como ``NonStored`` en
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:28:from orm.fields_nonstored import NonStored               # noqa: E402
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:2:base declara como ``NonStored``.
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:32:    """Nombre -> clase base que lo declara como ``NonStored`` (sin la propia)."""
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:36:            if isinstance(held, NonStored):
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:65:        own_ns = {n for n, h in vars(cls).items() if isinstance(h, NonStored)}
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:77:    print(f'stored sobre NonStored (el defecto de M4): '
+scripts/workbench/fusion-de-declaraciones-de-campo-20260911T122051/probe_tree_redeclarations.py:81:    print(f'NonStored sobre stored: {len(nonstored_over_stored)}')
+scripts/workbench/recoleccion-de-definiciones-20260911T175852/probe_declarations_survive.py:14:Aquí la fachada enruta al construir: con ``compute=`` sale un ``NonStored``,
+scripts/workbench/recoleccion-de-definiciones-20260911T175852/probe_the_override_loses_the_base.py:28:    NonStored = importlib.import_module('orm.fields_nonstored').NonStored
+scripts/workbench/recoleccion-de-definiciones-20260911T175852/probe_the_override_loses_the_base.py:50:    print('   ¿es NonStored, como manda la fusión de la fuente?',
+scripts/workbench/recoleccion-de-definiciones-20260911T175852/probe_the_override_loses_the_base.py:51:          isinstance(campo, NonStored) if campo is not None else 'sin campo')
+src/addons/base/models/ir_actions.py:1065:    # Los siete se declaran con ``fields.NonStored`` —el mecanismo que este
+src/addons/base/models/ir_actions.py:1070:    # un ``NonStored`` con ``default`` invocable resuelve.
+src/addons/base/models/ir_actions.py:1077:    allowed_states = fields.NonStored(
+src/addons/base/models/ir_actions.py:1086:    available_model_ids = fields.NonStored(
+src/addons/base/models/ir_actions.py:1092:    show_code_history = fields.NonStored(
+src/addons/base/models/ir_actions.py:1099:    crud_model_name = fields.NonStored(
+src/addons/base/models/ir_actions.py:1106:    update_field_type = fields.NonStored(
+src/addons/base/models/ir_actions.py:1115:    value_field_to_show = fields.NonStored(
+src/addons/base/models/ir_actions.py:1122:    webhook_sample_payload = fields.NonStored(
+src/addons/base/models/ir_actions.py:1286:    #: columna. El mecanismo es ``orm.fields_nonstored.NonStored``, que este
+src/addons/base/models/ir_actions.py:1288:    #: con ``fields.NonStored`` y no con ``fields.Text(store=False, …)``
+src/addons/base/models/ir_actions.py:1291:    warning = fields.NonStored(
+src/addons/base/models/ir_actions.py:663:    #: ``NonStored`` computa al leer y no añade columna.
+src/addons/base/models/ir_actions.py:664:    current_code = fields.NonStored(
+src/addons/base/models/ir_actions.py:691:    code_diff = fields.NonStored(
+src/addons/base/models/ir_module.py:111:    #: mecanismo es ``orm.fields_nonstored.NonStored``, el mismo con que
+src/addons/base/models/ir_module.py:113:    xml_id = fields.NonStored(
+src/addons/base/models/ir_module.py:558:        almacenado necesita ``fields.NonStored``, y ése resuelve **por
+src/addons/base/models/ir_profile.py:375:    speedscope = fields.NonStored(
+src/addons/base/models/ir_profile.py:381:    speedscope_url = fields.NonStored(
+src/addons/base/models/ir_profile.py:388:    config_url = fields.NonStored(
+src/addons/base/models/ir_profile.py:69:  —``orm.fields_nonstored.NonStored``— resuelve **por fila** al leerla, así
+src/addons/base/models/res_company.py:284:    #: (``NonStored.inverse_related``). Que el extremo sea un manager y no un
+src/addons/base/models/res_partner.py:574:    # consultarse. Aqui eso es ``fields.NonStored``
+src/addons/base/models/res_partner.py:587:    active_lang_count = fields.NonStored(
+src/addons/base/models/res_partner.py:590:    tz_offset = fields.NonStored(
+src/addons/base/models/res_partner.py:594:    vat_label = fields.NonStored(
+src/addons/base/models/res_partner.py:598:    company_registry_label = fields.NonStored(
+src/addons/base/models/res_partner.py:602:    company_registry_placeholder = fields.NonStored(
+src/addons/base/models/res_partner.py:606:    type_address_label = fields.NonStored(
+src/addons/base/models/res_partner.py:609:    email_formatted = fields.NonStored(
+src/addons/base/models/res_partner.py:613:    company_type = fields.NonStored(
+src/addons/base/models/res_partner.py:618:    is_public = fields.NonStored(
+src/addons/base/models/res_partner.py:623:    self = fields.NonStored(
+src/addons/base/models/res_partner.py:629:    same_vat_partner_id = fields.NonStored(
+src/addons/base/models/res_partner.py:635:    same_company_registry_partner_id = fields.NonStored(
+src/addons/base/models/res_partner.py:640:    main_user = fields.NonStored(
+src/fields/__init__.py:90:# ``NonStored`` es campo NUESTRO —la referencia no lo tiene— pero es **un
+src/fields/__init__.py:93:# NonStored``, cruzando la frontera que esta fachada existe para sostener.
+src/fields/__init__.py:94:from orm.fields_nonstored import NonStored
+src/orm/domains.py:106:from orm.fields_nonstored import NonStored
+src/orm/domains.py:225:    los que no —los :class:`orm.fields_nonstored.NonStored`— son atributos de
+src/orm/domains.py:234:    return descriptor if isinstance(descriptor, NonStored) else None
+src/orm/domains.py:2663:# sobre ``NonStored`` desde el módulo que sí ve a los dos.
+src/orm/fields.py:1701:    exactamente cuando ``TASK-API-0418`` retire :class:`NonStored`, que es una
+src/orm/fields.py:2201:#: El mismo contrato sobre :class:`~orm.fields_nonstored.NonStored`, con UNA
+src/orm/fields.py:2207:#: del stack los separa —``NonStored`` no desciende de ``models.Field``, y no
+src/orm/fields.py:2219:    if not hasattr(NonStored, _name_attr):
+src/orm/fields.py:2220:        setattr(NonStored, _name_attr,
+src/orm/fields.py:2481:NonStored._description_searchable = _field_description_searchable
+src/orm/fields.py:2885:#    a todo campo de la fuente. Aquí :class:`~orm.fields_nonstored.NonStored`
+src/orm/fields.py:3249:NonStored.column_type = _field_column_type
+src/orm/fields.py:3280:NonStored.column_order = _field_column_order
+src/orm/fields.py:3284:#: ``column_type`` alla, ``concrete``/``column`` aqui"*. Un ``NonStored`` no la
+src/orm/fields.py:3288:NonStored.concrete = False
+src/orm/fields.py:3610:#: ``NonStored``. :func:`_field_setup_related` lo referencia por ``self``, así
+src/orm/fields.py:3915:# - ``NonStored`` — los campos sin columna, que son quienes lo necesitan hoy
+src/orm/fields.py:4113:NonStored.determine_domain = determine_domain
+src/orm/fields.py:4115:NonStored.determine_inverse = determine_inverse
+src/orm/fields.py:4145:    y por tanto sólo aplica a un campo CON columna. Un :class:`NonStored` no
+src/orm/fields.py:4161:#: :class:`NonStored`: el campo con columna ya tiene la ceremonia completa en
+src/orm/fields.py:4163:NonStored.determine_compute = determine_compute
+src/orm/fields.py:4593:#: ``Field`` en ``models.Field`` (Django) y :class:`NonStored` (descriptor) es
+src/orm/fields.py:4601:#: intermedia, y un ``NonStored`` no declara ninguna de las tres. Por eso la
+src/orm/fields.py:4609:#: que ``NonStored`` no declara— así que colgarlos hoy entregaría media
+src/orm/fields.py:4615:    setattr(NonStored, _cache_method.__name__, _cache_method)
+src/orm/fields.py:687:    relaciones inversas y los ``ManyToMany`` no la tienen—. El ``NonStored``
+src/orm/fields.py:84:    NonStored,
+src/orm/fields_company_dependent.py:141:    NonStored,
+src/orm/fields_company_dependent.py:462:        #: quien elige entre el campo con columna y :class:`NonStored` tiene
+src/orm/fields_company_dependent.py:482:            field = NonStored(*args, related=related, **kwargs)
+src/orm/fields_misc.py:22:    NonStored,
+src/orm/fields_misc.py:54:        field = NonStored(*args, **kwargs)
+src/orm/fields_nonstored.py:164:        origen— no se portan **porque no se alcanzan**: un :class:`NonStored`
+src/orm/fields_nonstored.py:190:        ``models.Field``** (``orm/fields.py:1809``). Un :class:`NonStored` no
+src/orm/fields_nonstored.py:224:        if isinstance(held, NonStored):
+src/orm/fields_nonstored.py:279:        :meth:`inverse_related`: :class:`NonStored` **no desciende de
+src/orm/fields_nonstored.py:557:    #:   un ``related`` sin ``store`` explícito sale ``NonStored``, que no
+src/orm/fields_nonstored.py:65:__all__ = ['NonStored', 'non_stored_fields', 'projection_or_none']
+src/orm/fields_nonstored.py:68:class NonStored:
+src/orm/fields_nonstored.py:695:    diseño, porque un :class:`NonStored` no se registra en ``_meta``
+src/orm/fields_nonstored.py:696:    (:meth:`NonStored.contribute_to_class` lo dice explícitamente). Sin este
+src/orm/fields_nonstored.py:708:    invoca ``NonStored.__get__``, que devuelve el descriptor sólo por
+src/orm/fields_nonstored.py:718:            if isinstance(held, NonStored):
+src/orm/fields_nonstored.py:734:      que la referencia declara— devuelve el :class:`NonStored` **ya anotado**,
+src/orm/fields_nonstored.py:776:        return annotate_related(NonStored(**kwargs), related,
+src/orm/fields_numeric.py:10::class:`~orm.fields_nonstored.NonStored` — la traducción fijada del campo
+src/orm/fields_numeric.py:18:``NonStored`` en cuanto el ``store`` resuelto es falso — con ``related=``
+src/orm/fields_numeric.py:46:    NonStored,
+src/orm/fields_numeric.py:73:        field = NonStored(*args, **kwargs)
+src/orm/fields_relational.py:128:    registrarse en ``_meta``, igual que :class:`~orm.fields_nonstored.NonStored`:
+src/orm/fields_relational.py:25:``store=False`` devuelve un :class:`~orm.fields_nonstored.NonStored`. El sitio
+src/orm/fields_relational.py:77:    NonStored,
+src/orm/fields_relational.py:820:    que ``NonStored`` descarta el resto de la firma de Django.
+src/orm/fields_relational.py:890:        field = _mark_check_company(NonStored(*args, **kwargs), check_company)
+src/orm/fields_textual.py:16:devuelve un :class:`~orm.fields_nonstored.NonStored`. El sitio de declaración
+src/orm/fields_textual.py:233:        campo = NonStored(*args, **kwargs)
+src/orm/fields_textual.py:62:    NonStored,
+src/orm/model_classes.py:137:    :class:`orm.fields_nonstored.NonStored`. Sin este reconocimiento, portar el
+src/orm/models.py:1588:    #: > que la versión anterior declaraba abajo —*"ciega al ``NonStored``"*—
+src/orm/models.py:1600:    #: > —``_field_to_sql``— exige ``concrete``, que un ``NonStored`` no
+src/orm/models.py:1605:    #: :class:`~orm.fields_nonstored.NonStored` que el MRO de la clase
+src/orm/models.py:1608:    #: de Django ni como ``NonStored`` — una ``property`` pelada, por ejemplo.
+src/orm/models.py:2147:        :class:`~orm.fields_nonstored.NonStored`— le levanta
+src/orm/models.py:2927:    ``display_name`` es un :class:`orm.fields_nonstored.NonStored`, no una
+src/orm/models.py:2946:    #: enrutador devuelve un :class:`~orm.fields_nonstored.NonStored` y el
+src/orm/models.py:89:from orm.fields_nonstored import NonStored, non_stored_fields
+src/orm/registry.py:896:    (``orm.fields_nonstored.NonStored`` calcula su default consultando el
+src/orm/utils.py:414:    **mas estrecho**: un :class:`~orm.fields_nonstored.NonStored` no tiene
+EXIT=0

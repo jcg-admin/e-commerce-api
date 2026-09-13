@@ -260,6 +260,7 @@ from collections import namedtuple
 from decimal import Decimal
 
 import fields
+import api
 import models
 from django.apps import apps
 from django.db.models import Q
@@ -533,6 +534,7 @@ class StockWarehouse(TimeStampedModel):
     # CRUD (≙ :115-315)                                                    #
     # ------------------------------------------------------------------ #
 
+    @api.model_create_multi
     @classmethod
     def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :115-163``).
@@ -555,8 +557,6 @@ class StockWarehouse(TimeStampedModel):
         """
         location_model = apps.get_model('stock', 'StockLocation')
         company_model = apps.get_model('base', 'ResCompany')
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
 
         for vals in vals_list:
             if vals.get('company_id'):

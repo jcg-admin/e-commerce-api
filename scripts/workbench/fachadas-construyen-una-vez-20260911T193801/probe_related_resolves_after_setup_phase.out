@@ -1,0 +1,9 @@
+apps.ready=True
+fase OwnerA4Base.partner_name: setup_done=True compute=None inverse=None search=None related_field=None store=False column=None
+fase OwnerA4Base.country_code: setup_done=True compute=None inverse=None search=None related_field=None store=False column=None
+fase OwnerA4Plain.partner_name: setup_done=True compute=None inverse=None search=None related_field=None store=False column=None
+base_un_salto: OK esperado='Ada' leido='Ada'
+base_dos_saltos: OK esperado='MX' leido='MX'
+plain_un_salto: OK esperado='Ada' leido='Ada'
+fk_nula: OK esperado='' leido=''
+EXIT=0

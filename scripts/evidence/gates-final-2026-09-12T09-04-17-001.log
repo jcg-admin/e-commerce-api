@@ -1,0 +1,4 @@
+OK: sin lazy imports (2606 archivos medidos).
+OK: todo silencio de excepción está justificado (2606 archivos medidos).
+OK: identificadores en inglés (5 archivos medidos, 3531 en deuda heredada).
+EXIT=0

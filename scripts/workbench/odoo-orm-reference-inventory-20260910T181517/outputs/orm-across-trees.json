@@ -1,0 +1,38 @@
+{
+ "odoo18c": {
+  "root": "/home/user/odoo-tools/18.x/odoo-18",
+  "root_exists": true,
+  "odoo_dir": true,
+  "orm_package": false,
+  "orm_files": 0,
+  "flat_orm_files": {
+   "models.py": 7637,
+   "fields.py": 5443,
+   "api.py": 1581
+  }
+ },
+ "odoo18e": {
+  "root": "/home/user/odoo-tools/18.x/odoo.enterprise",
+  "root_exists": true,
+  "odoo_dir": false,
+  "orm_package": false,
+  "orm_files": 0,
+  "flat_orm_files": {}
+ },
+ "odoo19c": {
+  "root": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0",
+  "root_exists": true,
+  "odoo_dir": true,
+  "orm_package": true,
+  "orm_files": 23,
+  "flat_orm_files": {}
+ },
+ "odoo19e": {
+  "root": "/home/user/odoo-tools/19.x/odoo19-enterprise-main/odoo19-enterprise-main/odoo19-enterprise-main",
+  "root_exists": true,
+  "odoo_dir": false,
+  "orm_package": false,
+  "orm_files": 0,
+  "flat_orm_files": {}
+ }
+}

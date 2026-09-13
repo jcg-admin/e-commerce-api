@@ -1,0 +1,6 @@
+mapping_becomes_list: OK
+list_passes_through: OK
+kwargs_pass_through: OK
+api_model_flag: OK
+wrapped_keeps_name: OK
+VEREDICTO model_create_multi: OK

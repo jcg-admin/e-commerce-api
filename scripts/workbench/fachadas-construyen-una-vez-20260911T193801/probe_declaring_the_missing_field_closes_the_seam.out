@@ -1,0 +1,11 @@
+field_contributes: OK
+store_is_false: OK
+readonly_is_false: OK
+seam_closes: OK
+both_chains_resolve: OK
+setup_count: 5674
+setup_error: None
+country en concrete_fields: False
+estado de las cadenas: {'company_country_code': {'related': 'company_id.country.code', 'compute': True, 'setup_done': None}, 'company_country_group_codes': {'related': 'company_id.country.country_group_codes', 'compute': True, 'setup_done': None}}
+VEREDICTO declarar_el_campo_cierra_la_costura: OK
+EXIT=0

@@ -1,0 +1,32 @@
+{
+  "question": "¿El reparto en dos clases de campo (CharField con columna / NonStored sin ella) es una restricción del stack, o el stack admite el orden de la fuente — capturar la declaración, recolectar por la MRO, fusionar, derivar store y enrutar UNA vez al final?",
+  "instrument": "scripts/workbench/deferred-routing-20260911T181509/probe_django_supports_one_class.py — construye modelos Django reales y mide a dónde aterriza cada campo (local_fields, private_fields, ModelState.from_model), con un control llano en cada medición.",
+  "metric": "Dos veredictos por conducta: (A) una clase de campo que al contribuir se registra con private=True queda fuera de local_fields y fuera del estado de migración, mientras su control llano sí lleva columna; (B) al redeclarar un campo de una base abstracta, el _meta del hijo conserva SOLO el suyo y el del padre sigue vivo en el _meta de la base, recuperable por reversed(__mro__).",
+  "blind_to": "Si el descriptor resultante COMPUTA el valor correcto — sólo mide el registro, no la lectura. Y al orden en que contribute_to_class ve la MRO cuando la base no es una abstracta de Django sino un mixin llano de Python (la Forma 2 de este árbol, p. ej. DisplayNameMixin), que no tiene _meta.",
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/ — insumo de TASK-API-0416 (#346) y del hallazgo H-API-1105.",
+  "reproducible": "PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python scripts/workbench/deferred-routing-20260911T181509/probe_django_supports_one_class.py",
+  "outputs": ["outputs/verdict-one-class.txt"],
+  "source": [
+    "odoo19c: odoo/orm/fields.py:278 — store es un ATRIBUTO de Field (store: bool = True), no una clase",
+    "odoo19c: odoo/orm/fields.py:314-317 — Field.__init__ son tres líneas: guarda kwargs crudos en _args__ y no enruta",
+    "odoo19c: odoo/orm/fields.py:443-450 — store se DERIVA al fusionar, dentro de _get_attrs, de attrs que pueden venir de otra clase",
+    "odoo19c: odoo/orm/model_classes.py:411-415 — la entrada de la fusión se construye una vez: Field = type(fields_[-1]); Field(_base_fields__=tuple(fields_))",
+    "odoo19c: odoo/orm/models.py:473-476 — BaseModel.display_name = Char(compute=, search=)",
+    "odoo19c: addons/test_orm/models/test_orm.py:28-29 — TestOrmCategory.display_name = fields.Char(inverse=, recursive=True); MISMA clase Char que su base"
+  ],
+  "stack": [
+    "django/db/models/base.py:116-122 — ModelBase.__new__ separa contributable_attrs y pasa sólo new_attrs a type.__new__, así que __set_name__ nunca corre sobre un campo",
+    "django/db/models/base.py:212-213 — new_class.add_to_class(obj_name, obj) por cada atributo contribuible, en orden de declaración",
+    "django/db/models/base.py:332-339 — un campo de la base abstracta se copia SOLO si el hijo no lo redeclara: la herencia de Django PISA, no fusiona",
+    "django/db/models/base.py:391-395 — add_to_class es despacho llano a value.contribute_to_class(cls, name)",
+    "django/db/models/fields/__init__.py:944 — Field.contribute_to_class llama cls._meta.add_field(self, private=private_only) como sentencia explícita en un método sobreescribible (dos overrides en el propio Django: :1516, :2824)",
+    "django/db/models/options.py:333-344 — add_field(private=True) mete el campo en private_fields y nunca en local_fields",
+    "django/db/migrations/state.py:802,863 — ModelState.from_model recorre local_fields; los privados se ignoran ('Private fields are ignored')"
+  ],
+  "control": "Las dos mediciones discriminan y su control positivo es real, no fabricado: (A) el CharField llano del mismo modelo DEBE llevar columna — si los dos aterrizaran igual el instrumento no mediría la decisión sino el inodo; (B) el del padre DEBE seguir recuperable por __mro__ — si tampoco estuviera ahí, la conclusión sería 'se pierde' y no 'se pisa y se recupera'. Medido: 2 de 2.",
+  "finding": "El reparto en dos clases NO es una restricción del stack. El orden de la fuente es portable: una sola clase de campo puede decidir en contribute_to_class si se registra con columna (local_fields) o sin ella (private_fields), y la MRO está disponible en ese momento. Lo que Django NO hace por sí solo es fusionar: al redeclarar, pisa. Ésa es exactamente la costura que TASK-API-0416 tiene que construir.",
+  "tasks": ["TASK-API-0416"],
+  "measured_at": "2026-09-11T18:16:44",
+  "api_head": "7b8940dd",
+  "odoo_tools_head": "abe4040ec1"
+}

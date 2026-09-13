@@ -1,0 +1,41 @@
+src/orm/fields_binary.py:132:        projection, _attributes = projection_or_none(related, kwargs)
+src/orm/fields_binary.py:45:from orm.fields_nonstored import projection_or_none
+src/orm/fields_binary.py:74:        projection, _attributes = projection_or_none(related, kwargs)
+src/orm/fields_company_dependent.py:148:           'make_dispatcher']
+src/orm/fields_company_dependent.py:416:def make_dispatcher(name, base_type, plain, extra_doc=''):
+src/orm/fields_misc.py:19:from orm.fields_company_dependent import make_dispatcher
+src/orm/fields_misc.py:24:    projection_or_none,
+src/orm/fields_misc.py:29:Boolean = make_dispatcher('Boolean', 'boolean', models.BooleanField)
+src/orm/fields_misc.py:30:def Json(*args, store=_UNSET, related=None, **kwargs):
+src/orm/fields_misc.py:38:    **No usa** :func:`~orm.fields_company_dependent.make_dispatcher`, que es
+src/orm/fields_misc.py:50:    projection, related_attrs = projection_or_none(related, kwargs)
+src/orm/fields_nonstored.py:110:        #: de los siete tipos que enruta :func:`projection_or_none` llevan
+src/orm/fields_nonstored.py:65:__all__ = ['NonStored', 'non_stored_fields', 'projection_or_none']
+src/orm/fields_nonstored.py:727:def projection_or_none(related, kwargs, company_dependent=False, many_to_many=False):
+src/orm/fields_numeric.py:17::func:`~orm.fields_company_dependent.make_dispatcher`, que devuelve un
+src/orm/fields_numeric.py:31::func:`~orm.fields_company_dependent.make_dispatcher`.
+src/orm/fields_numeric.py:43:from orm.fields_company_dependent import make_dispatcher
+src/orm/fields_numeric.py:48:    projection_or_none,
+src/orm/fields_numeric.py:53:Integer = make_dispatcher('Integer', 'integer', models.IntegerField)
+src/orm/fields_numeric.py:54:Float = make_dispatcher('Float', 'float', models.FloatField)
+src/orm/fields_numeric.py:57:def Monetary(*args, store=_UNSET, help=None, related=None, **kwargs):
+src/orm/fields_numeric.py:69:    projection, related_attrs = projection_or_none(related, kwargs)
+src/orm/fields_properties.py:1180:        projection, _attributes = projection_or_none(related, kwargs)
+src/orm/fields_properties.py:154:        projection, _attributes = projection_or_none(related, kwargs)
+src/orm/fields_properties.py:50:from orm.fields_nonstored import projection_or_none
+src/orm/fields_relational.py:220:        projection, _attributes = projection_or_none(related, kwargs)
+src/orm/fields_relational.py:517:    projection, related_attrs = projection_or_none(related, kwargs,
+src/orm/fields_relational.py:79:    projection_or_none,
+src/orm/fields_relational.py:855:    projection, related_attrs = projection_or_none(related, kwargs,
+src/orm/fields_selection.py:21:from orm.fields_company_dependent import make_dispatcher
+src/orm/fields_selection.py:26:Selection = make_dispatcher('Selection', 'selection', models.CharField)
+src/orm/fields_temporal.py:458:Date = make_dispatcher('Date', 'date', models.DateField)
+src/orm/fields_temporal.py:459:Datetime = make_dispatcher('Datetime', 'datetime', models.DateTimeField)
+src/orm/fields_temporal.py:67:from orm.fields_company_dependent import make_dispatcher
+src/orm/fields_textual.py:123:def Char(*args, store=_UNSET, required=None, translate=None, help=None,
+src/orm/fields_textual.py:30:``translate``), ``Text`` con :func:`~orm.fields_company_dependent.make_dispatcher`
+src/orm/fields_textual.py:59:from orm.fields_company_dependent import CompanyDependent, make_dispatcher
+src/orm/fields_textual.py:65:    projection_or_none,
+src/orm/fields_textual.py:71:Text = make_dispatcher('Text', 'text', models.TextField)
+src/orm/fields_textual.py:94:        projection, _attributes = projection_or_none(related, kwargs,
+EXIT=0

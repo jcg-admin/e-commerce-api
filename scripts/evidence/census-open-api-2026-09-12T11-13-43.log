@@ -1,0 +1,79 @@
+universo: 284 tareas con submodule='api' y status != 'completed'
+  de ellas con cita TASK-API-: 252
+  alcance: 6 raiz(ces) — kaupamex-api, kaupamex-db, kaupamex-docs, kaupamex-server, kaupamex-ui, thyrox
+
+closed_in_tree: 35 de 284
+owned_but_open: 25 de 284
+orphan: 224 de 284
+
+closed_in_tree — la cita aparece en el mensaje de un commit:
+  TASK-API-0047  pending      kaupamex-docs@1c45183e, kaupamex-docs@dcb7d2ae  | Gate para la afirmación de procedencia y la cifra sin comand
+  TASK-API-0049  pending      kaupamex-docs@1c45183e  | Decidir DEC-TASK-03: etapas 5-6 del subsistema de tareas (ho
+  TASK-API-0056  pending      kaupamex-docs@090d65ee, kaupamex-docs@1f3d62fe, kaupamex-docs@2a08cde9  | Desbloquear el volcado del tablero: 878 ordinales llevan cit
+  TASK-API-0057  pending      kaupamex-docs@96130bd6  | Decide el corte del tablero de tareas y repara la cita de ca
+  TASK-API-0060  pending      kaupamex-docs@9fee31ad  | Cablear el gate de capacidad a la superficie de service.db
+  TASK-API-0083  pending      kaupamex-docs@6e44278b  | Barrido de idioma: identificadores en inglés en src/ y tests
+  TASK-API-0093  pending      kaupamex-docs@ad004865  | Reconciliar la migración pendiente de product (drift preexis
+  TASK-API-0108  pending      thyrox@a5518ab7  | Sembrar las 21 etiquetas de impuesto que el plan fiscal mexi
+  TASK-API-0150  in_progress  thyrox@114f3777  | Gate: filas del list-table vs entradas del toctree en cada h
+  TASK-API-0205  pending      kaupamex-docs@2a1a1a3d  | Cerrar el grifo: prohibir la validación RST con docutils pel
+  TASK-API-0389  pending      kaupamex-docs@20c91c69  | Fijar el separador de ámbito para el esquema de ID de slug l
+  TASK-API-0390  pending      kaupamex-docs@82cca0f2  | Contar las impuestas fuera del denominador en check_symbol_h
+  TASK-API-0396  pending      kaupamex-api@a222f852, kaupamex-api@f63d8320, kaupamex-db@5f0a66a4  | Barrer los 1265 identificadores en español de kaupamex-api
+  TASK-API-0397  in_progress  kaupamex-api@08908b86, kaupamex-api@a872f4ae, kaupamex-api@c5e47bc4  | Construir BaseModel propio desde el contrato medido de la re
+  TASK-API-0398  in_progress  kaupamex-api@c5e47bc4, kaupamex-docs@5321de0e  | Verificar contrato por contrato los 21 del cubo TRAE de Base
+  TASK-API-0401  pending      kaupamex-api@45c1af99, kaupamex-docs@67a98a1b  | Extender la guarda de tamaño al acceso llano rs.label
+  TASK-API-0402  pending      kaupamex-api@5e0891aa, kaupamex-docs@02c84e8d, kaupamex-docs@54493c35  | Hacer que las filas que Django construye lleven la terna del
+  TASK-API-0403  pending      kaupamex-docs@67a98a1b  | Decidir si la protección de Id.__set__ se recupera por otra 
+  TASK-API-0404  pending      kaupamex-api@33d6d69f  | La guarda :289 de ondelete es ciega al segundo vocabulario
+  TASK-API-0406  pending      kaupamex-docs@ceb4a03c  | Censar las aserciones negativas que el barrido invirtió en l
+  TASK-API-0410  pending      kaupamex-api@93ca4625, kaupamex-docs@e2a53643  | One2many resuelve con apps.get_model y falla igual ante 2+ p
+  TASK-API-0411  pending      kaupamex-api@93ca4625, kaupamex-docs@e2a53643  | Portar la asercion de comodelo de setup_nonrelated como syst
+  TASK-API-0413  pending      kaupamex-docs@75190294  | El fixture de tabla de sonda no sobrevive a una corrida inte
+  TASK-API-0414  pending      kaupamex-api@a5966121, kaupamex-docs@75190294  | Un NonStored no tiene atributo editable, y su hermano con co
+  TASK-API-0417  in_progress  kaupamex-api@16d5c475, kaupamex-api@20dc122b, kaupamex-api@2437373d  | Retirar el enrutado de las fachadas: la costura decide, no e
+  TASK-API-0418  pending      kaupamex-api@67252948, kaupamex-api@7bb9a601, kaupamex-docs@2394a5c5  | Retirar NonStored como clase: el eje es store, no el tipo
+  TASK-API-0419  pending      kaupamex-api@16d5c475, kaupamex-api@67252948, kaupamex-docs@dff5c5d0  | Reconstruir un campo relacional desde _args__: to y on_delet
+  TASK-API-0420  pending      kaupamex-docs@dff5c5d0  | El default literal de fields.Json dispara E010: la fuente lo
+  TASK-API-0422  pending      kaupamex-api@c1161377, kaupamex-docs@54493c35  | Portar bypass_search_access al create: la fuente lo propaga 
+  TASK-API-0424  pending      kaupamex-api@16d5c475, kaupamex-docs@bbfac02f  | El campo sin columna de una cadena related no es buscable: e
+  TASK-API-0425  pending      kaupamex-api@f4b5cd88, kaupamex-api@f58c8a5d  | Un M2M sin columna apuntando a ResPartner revienta el recole
+  TASK-API-0427  pending      kaupamex-api@45f44dbc, thyrox@b230d8cf  | La suite completa de api se cuelga en espera de lock: una co
+  TASK-GEN-0245  pending      kaupamex-api@9d1fd142  | Barrer los tests que parchan constantes de módulo para insta
+  TASK-GEN-0633  pending      kaupamex-api@4c290620, kaupamex-api@775c674e, kaupamex-docs@d84ac6ac  | Triar los 64 rojos de tests/unit/orm que TASK-API-0412 volvi
+  TASK-GEN-0634  pending      kaupamex-api@775c674e, kaupamex-docs@d84ac6ac  | Portar como campo los ocho @property de ResCompany que deleg
+
+owned_but_open — citada en prosa/codigo, ningun commit la nombra:
+  TASK-API-0007  pending      estado_hallazgo=-  archivos=5  | Detectar el patrón general que precede al específico en
+  TASK-API-0023  pending      estado_hallazgo=-  archivos=4  | Barrer las citas en prosa a guiones mudados por d566c18
+  TASK-API-0024  pending      estado_hallazgo=-  archivos=4  | Bajar el coste de censar_scripts.py --verificar (68 s p
+  TASK-API-0030  pending      estado_hallazgo=resuelto  archivos=5  | Migrar los skills clase-a al sustrato, declarando su de
+  TASK-API-0031  pending      estado_hallazgo=-  archivos=4  | Normalizar los 12 coordinadores contra el catálogo flow
+  TASK-API-0032  pending      estado_hallazgo=-  archivos=5  | Adoptar plantillas de temp-holding que llenan huecos de
+  TASK-API-0038  pending      estado_hallazgo=-  archivos=5  | Decidir el prefijo de política y, si se adopta, el gate
+  TASK-API-0041  pending      estado_hallazgo=-  archivos=4  | Portar los tres gates de estilo con sujeto medido al ha
+  TASK-API-0042  pending      estado_hallazgo=-  archivos=4  | Barrer los identificadores en español del harness, con 
+  TASK-API-0043  pending      estado_hallazgo=-  archivos=4  | Gate del paso 7: un puerto no cierra sin su PROVEN pers
+  TASK-API-0051  pending      estado_hallazgo=-  archivos=4  | Probar el filtro por extensión de un evento de transfor
+  TASK-API-0062  pending      estado_hallazgo=-  archivos=1  | Reevaluar descubrimiento de comandos si un addon vive f
+  TASK-API-0090  pending      estado_hallazgo=resuelto  archivos=1  | Portar el año fiscal escalonado (fiscalyear_last_day/mo
+  TASK-API-0099  pending      estado_hallazgo=-  archivos=1  | Ejercitar el mapeador de etiquetas contra un CSV real d
+  TASK-API-0115  pending      estado_hallazgo=resuelto  archivos=3  | DECISIÓN de arquitectura: construir el motor de @api.de
+  TASK-API-0192  pending      estado_hallazgo=-  archivos=1  | Gate: los compute_* almacenados vs los que save() invoc
+  TASK-API-0301  pending      estado_hallazgo=-  archivos=1  | Fallback de avatar al usuario: _compute_avatar de dos p
+  TASK-API-0385  pending      estado_hallazgo=-  archivos=1  | Clasificar vendor contra aplicación en el payload — hoy
+  TASK-API-0387  pending      estado_hallazgo=-  archivos=1  | Aplicar el sustrato a los skills que citan el hogar ine
+  TASK-API-0399  pending      estado_hallazgo=-  archivos=1  | Portar BaseModel.fetch — mapped por ruta de campo sobre
+  TASK-API-0407  pending      estado_hallazgo=resuelto  archivos=2  | Resolutor de raíz por marcador y su gate: el índice cor
+  TASK-API-0408  pending      estado_hallazgo=resuelto  archivos=2  | Censar las citas a src/gates en los cinco clones tras l
+  TASK-API-0409  pending      estado_hallazgo=resuelto  archivos=2  | Barrer los 5 bancos de api que resuelven la raíz por pa
+  TASK-GEN-0012  pending      estado_hallazgo=-  archivos=4  | Aplicar el sustrato a los skills que citan el hogar ine
+  TASK-GEN-0036  pending      estado_hallazgo=-  archivos=5  | Fijar el separador de ámbito para el esquema de ID de s
+
+orphan: 224 — solo en el render del tablero
+detalle: /home/user/kaupamex-api/scripts/evidence/census_open_api_tasks.json
+
+real	0m1.007s
+user	0m0.534s
+sys	0m0.521s
+EXIT=0

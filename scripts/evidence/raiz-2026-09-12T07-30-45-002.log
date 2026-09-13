@@ -1,0 +1,25 @@
+30:``country_id``) son ``compute`` **con inverse**: se leen del partner y al
+65:- ``_onchange_country_id`` fija la moneda desde el país. Se porta como método
+141:from addons.base.models.res_country import ResCountry, ResCountryState
+269:        'street', 'street2', 'city', 'zip', 'state', 'country',
+489:            c.country = mexico; c.save()
+490:            c.country                        -> Mexico     (en memoria)
+491:            ResCompany.objects.get(pk=c.pk).country -> None (releído)
+554:    def country(self):
+555:        return self._address_get('country')
+557:    @country.setter
+558:    def country(self, value):
+559:        """≙ ``_inverse_country`` (``odoo19c: base/models/res_company.py``)."""
+560:        self._address_set('country', value)
+563:    def country_code(self):
+564:        """``related='country_id.code'``."""
+565:        country = self.country
+566:        return getattr(country, 'code', '') if country else ''
+724:        if state is not None and getattr(state, 'country_id', None):
+725:            self.country = state.country
+727:    def onchange_country(self):
+728:        """Fijar el país fija la moneda — ``_onchange_country_id``."""
+729:        country = self.country
+730:        if country is not None and getattr(country, 'currency_id', None):
+731:            self.currency = country.currency
+EXIT=0

@@ -99,6 +99,7 @@ en tiempo de EJECUCIÓN, sólo alcanzable con ``multi_warehouse=False``, rama
 que ningún test previo ejercitaba. Corregido en el mismo pase.
 """
 import fields
+import api
 import models
 from django.apps import apps
 
@@ -166,7 +167,7 @@ class ProductRemoval(TimeStampedModel):
         return self.name
 
 
-class StockPutawayRule(TimeStampedModel):
+class StockPutawayRule(models.DefaultGetMixin, TimeStampedModel):
     """``stock.putaway.rule`` — dónde se guarda lo que entra."""
 
     # Atributos de clase de modelo — los cuatro que la referencia declara
@@ -339,18 +340,26 @@ class StockPutawayRule(TimeStampedModel):
 
     # -- create / write --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :102-105``).
 
         La referencia sólo delega en ``super()``; el punto de extensión existe
         para que los addons de almacén lo reescriban, y aquí se conserva por
         la misma razón.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        regla = cls.objects.create(**vals)
-        regla.compute_storage_category()
-        regla.save(update_fields=['storage_category'])
-        return regla
+        rules = super().create(vals_list)
+        for rule in rules:
+            rule.compute_storage_category()
+            rule.save(update_fields=['storage_category'])
+        return rules
 
     def write(self, **vals):
         """≙ ``write`` (``odoo19c: :107-112``).

@@ -59,6 +59,7 @@ from collections.abc import Callable, Collection, Iterator, Mapping
 from django.apps import apps
 from django.db import DatabaseError, connections, transaction
 from django.db.models.signals import class_prepared
+from django.db.models.utils import make_model_tuple
 from django.dispatch import receiver
 from psycopg import sql as pg_sql
 
@@ -231,6 +232,32 @@ def reset_invalidation_record():
 #: lookup ``SqlILike`` y el predicado en memoria— decidan lo mismo.
 UNACCENT_ENABLED = True
 
+#: Los siete modelos del registro que un ``Many2one`` NO puede proteger.
+#:
+#: ≙ ``IR_MODELS`` (``odoo19c: odoo/orm/fields.py:37``). Su unico consumidor
+#: alla es ``fields_relational.py:289``:
+#: ``if self.ondelete == 'restrict' and self.comodel_name in IR_MODELS``, que
+#: degrada esa politica a ``'cascade'``. La razon es que el propio registro se
+#: desmonta al desinstalar un modulo, y una FK que lo proteja convierte esa
+#: operacion en un error.
+#:
+#: **Vive aqui y no en ``orm/fields.py``, que es donde la fuente lo declara.**
+#: Es la misma divergencia de SITIO que :data:`UNACCENT_ENABLED`, por la misma
+#: causa medida: nuestro ``orm/fields.py`` es a la vez el nucleo de
+#: :class:`Field` **y** una fachada que re-exporta diez modulos hermanos, entre
+#: ellos ``orm.fields_relational`` (``fields.py:92``). La fuente no tiene esa
+#: arista —su ``odoo/orm/fields.py`` no importa ``fields_relational``— asi que
+#: alla la constante y su consumidor conviven sin ciclo. Aqui importarla desde
+#: ``fields_relational`` cierra un 2-ciclo ``fields <-> fields_relational``.
+#:
+#: El registro es quien nombra a sus propios modelos, asi que este es su hogar
+#: natural. ``orm/fields.py`` la re-exporta para que la superficie publica siga
+#: siendo la de la fuente.
+IR_MODELS = (
+    'ir.model', 'ir.model.data', 'ir.model.fields', 'ir.model.fields.selection',
+    'ir.model.relation', 'ir.model.constraint', 'ir.module.module',
+)
+
 
 def _unaccent(x):
     """Envuelve ``x`` en la llamada SQL ``unaccent(...)``, repartiendo por tipo.
@@ -340,6 +367,88 @@ def _register(model):
     MODELS_BY_NAME[name] = model
 
 
+#: El ``app_label`` bajo el que viaja el asa opaca que sustituye a un ``_name``
+#: punteado. Medido antes de elegirlo: ninguno de los 137 ``app_label``
+#: instalados se llama ``orm``, y ninguno de los 224 ``_name`` del árbol
+#: colisiona con otro al colapsar sus puntos en guiones bajos.
+SENTINEL_APP_LABEL = 'orm'
+
+
+def sentinel_label(name):
+    """La etiqueta legal de Django que sustituye al ``_name`` punteado.
+
+    La fuente **no deriva ninguna clave**: ``comodel_name`` es una cadena
+    (``odoo19c: odoo/orm/fields_relational.py:36``) y la existencia del
+    destinatario se afirma contra un registro cuya clave *es* el nombre
+    punteado (``odoo/orm/registry.py:84``, ``__getitem__`` en ``:317``).
+
+    Django hace lo contrario: ``make_model_tuple``
+    (``django/db/models/utils.py:5-25``) parte la cadena por el punto, y con
+    dos o más puntos levanta ``ValueError`` **en el cuerpo de la clase**, antes
+    de que exista entrada pendiente que arreglar. Por eso el porte no le
+    entrega el nombre: le entrega esta etiqueta, y el nombre de la fuente
+    sobrevive en ``field.comodel_name``, que es el atributo que la fuente
+    declara.
+    """
+    return f'{SENTINEL_APP_LABEL}.{name.replace(".", "_").lower()}'
+
+
+def sentinel_key(name):
+    """La clave con que Django indexa la etiqueta de :func:`sentinel_label`.
+
+    Coincide por construcción con lo que ``make_model_tuple`` derivaría de esa
+    etiqueta; el test del puerto lo afirma contra el símbolo real de Django en
+    vez de replicar su aritmética aquí.
+    """
+    return (SENTINEL_APP_LABEL, name.replace('.', '_').lower())
+
+
+def _flush_sentinels(model):
+    """Vacía las claves centinela a las que el modelo responde. Son **dos**.
+
+    El árbol usa los dos vocabularios: el ``_name`` de la fuente
+    (``'report.paperformat'``) y la etiqueta de Django en minúsculas
+    (``'base.reportpaperformat'``), que es como una **migración** tiene que
+    nombrarlo — el estado de una migración rechaza la referencia a la clase
+    (*"Model fields in ModelState.fields cannot refer to a model class"*), así
+    que ahí la cadena en minúsculas no es un descuido sino el único camino. Un
+    modelo sin ``_name`` sólo responde a la segunda.
+    """
+    name = model.__dict__.get('_name')
+    if name:
+        flush_sentinel(name, model)
+    flush_sentinel(model._meta.label_lower, model)
+
+
+def flush_sentinel(name, model):
+    """Aplica las operaciones que Django dejó pendientes bajo la clave centinela.
+
+    Es el porte mínimo de ``Apps.do_pending_operations``
+    (``django/apps/registry.py:428-435``), que sólo sabe vaciar la clave real
+    del modelo. Cada función pendiente es el ``partial`` que
+    ``lazy_related_operation`` encoló (``related.py:80-86``) y que termina en
+    ``resolve_related_class`` (``:392-394``), donde se fija
+    ``remote_field.model`` y se llama a ``do_related_class``.
+
+    Corre desde ``class_prepared``, que ``ModelBase.__new__`` emite **antes**
+    de ``register_model`` (``base.py:387`` contra ``:388``): el modelo ya tiene
+    su ``_meta`` poblado, que es todo lo que la función pendiente necesita.
+
+    **El registro es el del modelo, no el global.** Django encola el pendiente
+    en ``model._meta.apps`` —``lazy_related_operation`` lo fija verbatim en
+    ``related.py:85``— y lo vacía en ese mismo, porque ``ModelBase.__new__``
+    llama a ``new_class._meta.apps.register_model`` (``base.py:388``) y
+    ``do_pending_operations`` recorre su propio ``_pending_operations``
+    (``apps/registry.py:433``). Un modelo bajo ``isolate_apps`` o renderizado
+    por el ``StateApps`` de una migración tiene OTRO ``Apps``: apuntar al
+    global deja la entrada sin vaciar para siempre, y los system checks la
+    reportan como referencia perezosa colgada (``models.E022``).
+    """
+    for function in model._meta.apps._pending_operations.pop(
+            sentinel_key(name), []):
+        function(model)
+
+
 def register_abstract(cls):
     """Anota bajo su ``_name`` una clase que **no** es modelo de Django.
 
@@ -365,8 +474,34 @@ def _register_name(sender, **kwargs):
     ``class_prepared`` dispara al final de ``ModelBase.__new__``, así que el
     modelo ya tiene ``_meta`` poblado. Un modelo sin ``_name`` no se registra —
     no es un error: los 290 del árbol están así hasta que se toquen.
+
+    Y vacía las claves centinela a las que este modelo responde. Son **dos**
+    vocabularios, no uno, y el árbol usa los dos: su ``_name`` de la fuente
+    (``'report.paperformat'``) y su etiqueta de Django en minúsculas
+    (``'base.reportpaperformat'``), que es como una **migración** tiene que
+    nombrarlo — el estado de una migración rechaza la referencia a la clase
+    (*"Model fields in ModelState.fields cannot refer to a model class"*), así
+    que ahí la cadena en minúsculas no es un descuido sino el único camino.
+    Un modelo sin ``_name`` sólo responde a la segunda.
     """
     _register(sender)
+    # El vaciado NO puede correr aqui, y el orden lo dice ``ModelBase.__new__``:
+    # ``_prepare()`` emite esta senal en ``base.py:387`` y ``register_model``
+    # ocurre en ``:388``. Django encadena el pendiente —``lazy_related_operation``
+    # espera PRIMERO al modelo que declara el campo y solo despues encola la
+    # clave del destino (``apps/registry.py:400-426``)—, asi que al llegar aqui
+    # la clave centinela todavia no existe: medido, quedaba viva tras el pase.
+    # Se difiere con la misma primitiva de Django, encolando detras de la suya.
+    #
+    # Y se encola en el registro DEL MODELO, no en el global: es el que Django
+    # usa para encolar (``related.py:85``) y para vaciar (``base.py:388`` ->
+    # ``apps/registry.py:433``). Con el global, un modelo desechable bajo
+    # ``isolate_apps`` o uno del ``StateApps`` de una migracion registra en
+    # otro ``Apps`` y la entrada queda colgada: medido, dos ``models.E022``
+    # —``migrations.migration`` y un modelo de prueba de ``stock``— que el
+    # arbol no tenia antes de este porte.
+    sender._meta.apps.lazy_model_operation(
+        _flush_sentinels, make_model_tuple(sender))
 
 
 def _ensure_seeded():

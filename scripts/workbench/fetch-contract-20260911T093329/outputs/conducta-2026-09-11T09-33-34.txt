@@ -1,0 +1,15 @@
+# Conducta de las piezas que fetch() consume — 2026-09-11T09:33:34
+# guion: scripts/workbench/fetch-contract-20260911T093329/probes/probe_fetch_dependencies.py
+
+pregunta de la fuenteid                created_at        updated_at        image_1920        category_ids      
+column_type         bigint            timestamp with t  timestamp with t  varchar(100)      None              
+store               True              True              True              True              (ausente)         
+prefetch            False             True              True              True              (ausente)         
+translate           False             False             False             False             (ausente)         
+read                method            method            method            method            NoneType          
+copy                True              True              True              True              (ausente)         
+inherited           False             False             False             False             (ausente)         
+_insert_cache       True              True              True              True              False             
+_cache_missing_ids  True              True              True              True              False             
+
+preguntas que NINGUN campo concreto sabe responder: 0 de 9 (alcance medido: 4 campos concretos de base.ResPartner + 1 relacion inversa de control)

@@ -1,0 +1,2340 @@
+==============================================================================
+NOMBRE: __and__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__and__ (lineas 6575-6585) ---
+    def __and__(self, other) -> Self:
+        """ Return the intersection of two recordsets.
+            Note that first occurrence order is preserved.
+        """
+        try:
+            if self._name != other._name:
+                raise TypeError(f"inconsistent models in: {self} & {other}")
+            other_ids = set(other._ids)
+            return self.browse(OrderedSet(id_ for id_ in self._ids if id_ in other_ids))
+        except AttributeError:
+            raise TypeError(f"unsupported operand types in: {self} & {other!r}")
+
+--- DJANGO db/models/query.py :: QuerySet.__and__ (lineas 447-457) ---
+    def __and__(self, other):
+        self._check_operator_queryset(other, "&")
+        self._merge_sanity_check(other)
+        if isinstance(other, EmptyQuerySet):
+            return other
+        if isinstance(self, EmptyQuerySet):
+            return self
+        combined = self._chain()
+        combined._merge_known_related_objects(other)
+        combined.query.combine(other.query, sql.AND)
+        return combined
+
+--- DRF permissions.py :: OperationHolderMixin.__and__ (lineas 12-13) ---
+    def __and__(self, other):
+        return OperandHolder(AND, self, other)
+
+==============================================================================
+NOMBRE: __bool__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__bool__ (lineas 6475-6477) ---
+    def __bool__(self) -> bool:
+        """ Test whether ``self`` is nonempty. """
+        return True if self._ids else False  # fast version of bool(self._ids)
+
+--- DJANGO db/models/query.py :: QuerySet.__bool__ (lineas 403-405) ---
+    def __bool__(self):
+        self._fetch_all()
+        return bool(self._result_cache)
+
+--- DJANGO db/models/query.py :: RawQuerySet.__bool__ (lineas 2198-2200) ---
+    def __bool__(self):
+        self._fetch_all()
+        return bool(self._result_cache)
+
+==============================================================================
+NOMBRE: __deepcopy__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__deepcopy__ (lineas 6665-6666) ---
+    def __deepcopy__(self, memo):
+        return self
+
+--- DJANGO db/models/query.py :: QuerySet.__deepcopy__ (lineas 331-339) ---
+    def __deepcopy__(self, memo):
+        """Don't populate the QuerySet's cache."""
+        obj = self.__class__()
+        for k, v in self.__dict__.items():
+            if k == "_result_cache":
+                obj.__dict__[k] = None
+            else:
+                obj.__dict__[k] = copy.deepcopy(v, memo)
+        return obj
+
+--- DRF fields.py :: Field.__deepcopy__ (lineas 630-646) ---
+    def __deepcopy__(self, memo):
+        """
+        When cloning fields we instantiate using the arguments it was
+        originally created with, rather than copying the complete state.
+        """
+        # Treat regexes and validators as immutable.
+        # See https://github.com/encode/django-rest-framework/issues/1954
+        # and https://github.com/encode/django-rest-framework/pull/4489
+        args = [
+            copy.deepcopy(item) if not isinstance(item, REGEX_TYPE) else item
+            for item in self._args
+        ]
+        kwargs = {
+            key: (copy.deepcopy(value, memo) if (key not in ('validators', 'regex')) else value)
+            for key, value in self._kwargs.items()
+        }
+        return self.__class__(*args, **kwargs)
+
+==============================================================================
+NOMBRE: __eq__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__eq__ (lineas 6608-6615) ---
+    def __eq__(self, other):
+        """ Test whether two recordsets are equivalent (up to reordering). """
+        try:
+            return self._name == other._name and set(self._ids) == set(other._ids)
+        except AttributeError:
+            if other:
+                warnings.warn(f"unsupported operand type(s) for \"==\": '{self._name}()' == '{other!r}'", stacklevel=2)
+        return NotImplemented
+
+--- REFERENCIA odoo/orm/models.py :: ReversibleComparator.__eq__ (lineas 7087-7088) ---
+    def __eq__(self, other: ReversibleComparator) -> bool:
+        return self.__item == other.__item
+
+--- DJANGO db/models/base.py :: Model.__eq__ (lineas 616-624) ---
+    def __eq__(self, other):
+        if not isinstance(other, Model):
+            return NotImplemented
+        if self._meta.concrete_model != other._meta.concrete_model:
+            return False
+        my_pk = self.pk
+        if my_pk is None:
+            return self is other
+        return my_pk == other.pk
+
+--- DJANGO db/models/query.py :: Prefetch.__eq__ (lineas 2327-2330) ---
+    def __eq__(self, other):
+        if not isinstance(other, Prefetch):
+            return NotImplemented
+        return self.prefetch_to == other.prefetch_to
+
+--- DJANGO db/models/manager.py :: BaseManager.__eq__ (lineas 166-170) ---
+    def __eq__(self, other):
+        return (
+            isinstance(other, self.__class__)
+            and self._constructor_args == other._constructor_args
+        )
+
+--- DRF exceptions.py :: ErrorDetail.__eq__ (lineas 74-81) ---
+    def __eq__(self, other):
+        result = super().__eq__(other)
+        if result is NotImplemented:
+            return NotImplemented
+        try:
+            return result and self.code == other.code
+        except AttributeError:
+            return result
+
+--- DRF permissions.py :: OperandHolder.__eq__ (lineas 49-55) ---
+    def __eq__(self, other):
+        return (
+            isinstance(other, OperandHolder) and
+            self.operator_class == other.operator_class and
+            self.op1_class == other.op1_class and
+            self.op2_class == other.op2_class
+        )
+
+--- DRF validators.py :: UniqueValidator.__eq__ (lineas 95-102) ---
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.message == other.message
+                and self.requires_context == other.requires_context
+                and self.queryset == other.queryset
+                and self.lookup == other.lookup
+                )
+
+--- DRF validators.py :: UniqueTogetherValidator.__eq__ (lineas 207-215) ---
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.message == other.message
+                and self.requires_context == other.requires_context
+                and self.missing_message == other.missing_message
+                and self.queryset == other.queryset
+                and self.fields == other.fields
+                )
+
+--- DRF validators.py :: ProhibitSurrogateCharactersValidator.__eq__ (lineas 228-233) ---
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.message == other.message
+                and self.code == other.code
+                )
+
+--- DRF validators.py :: BaseUniqueForValidator.__eq__ (lineas 288-297) ---
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return NotImplemented
+        return (self.message == other.message
+                and self.missing_message == other.missing_message
+                and self.requires_context == other.requires_context
+                and self.queryset == other.queryset
+                and self.field == other.field
+                and self.date_field == other.date_field
+                )
+
+==============================================================================
+NOMBRE: __ge__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__ge__ (lineas 6646-6654) ---
+    def __ge__(self, other):
+        try:
+            if self._name == other._name:
+                if not other or other in self:
+                    return True
+                return set(self._ids) >= set(other._ids)
+        except AttributeError:
+            pass
+        return NotImplemented
+
+==============================================================================
+NOMBRE: __getitem__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__getitem__ (lineas 6668-6669) ---
+    @typing.overload
+    def __getitem__(self, key: int | slice) -> Self: ...
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__getitem__ (lineas 6671-6672) ---
+    @typing.overload
+    def __getitem__(self, key: str) -> typing.Any: ...
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__getitem__ (lineas 6674-6692) ---
+    def __getitem__(self, key):
+        """ If ``key`` is an integer or a slice, return the corresponding record
+            selection as an instance (attached to ``self.env``).
+            Otherwise read the field ``key`` of the first record in ``self``.
+
+            Examples::
+
+                inst = model.search(dom)    # inst is a recordset
+                r4 = inst[3]                # fourth record in inst
+                rs = inst[10:20]            # subset of inst
+                nm = rs['name']             # name of first record in inst
+        """
+        if isinstance(key, str):
+            # important: one must call the field's getter
+            return self._fields[key].__get__(self)
+        elif isinstance(key, slice):
+            return self.browse(self._ids[key])
+        else:
+            return self.browse((self._ids[key],))
+
+--- REFERENCIA odoo/orm/models.py :: RecordCache.__getitem__ (lineas 7026-7030) ---
+    def __getitem__(self, name):
+        """ Return the cached value of field ``name`` for `record`. """
+        record = self._record
+        field = record._fields[name]
+        return field._get_cache(record.env)[record.id]
+
+--- DJANGO db/models/query.py :: QuerySet.__getitem__ (lineas 407-442) ---
+    def __getitem__(self, k):
+        """Retrieve an item or slice from the set of results."""
+        if not isinstance(k, (int, slice)):
+            raise TypeError(
+                "QuerySet indices must be integers or slices, not %s."
+                % type(k).__name__
+            )
+        if (isinstance(k, int) and k < 0) or (
+            isinstance(k, slice)
+            and (
+                (k.start is not None and k.start < 0)
+                or (k.stop is not None and k.stop < 0)
+            )
+        ):
+            raise ValueError("Negative indexing is not supported.")
+
+        if self._result_cache is not None:
+            return self._result_cache[k]
+
+        if isinstance(k, slice):
+            qs = self._chain()
+            if k.start is not None:
+                start = int(k.start)
+            else:
+                start = None
+            if k.stop is not None:
+                stop = int(k.stop)
+            else:
+                stop = None
+            qs.query.set_limits(start, stop)
+            return list(qs)[:: k.step] if k.step else qs
+
+        qs = self._chain()
+        qs.query.set_limits(k, k + 1)
+        qs._fetch_all()
+        return qs._result_cache[0]
+
+--- DJANGO db/models/query.py :: RawQuerySet.__getitem__ (lineas 2222-2223) ---
+    def __getitem__(self, k):
+        return list(self)[k]
+
+--- DRF serializers.py :: Serializer.__getitem__ (lineas 558-566) ---
+    def __getitem__(self, key):
+        field = self.fields[key]
+        value = self.data.get(key)
+        error = self.errors.get(key) if hasattr(self, '_errors') else None
+        if isinstance(field, Serializer):
+            return NestedBoundField(field, value, error)
+        if isinstance(field, JSONField):
+            return JSONBoundField(field, value, error)
+        return BoundField(field, value, error)
+
+==============================================================================
+NOMBRE: __gt__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__gt__ (lineas 6638-6644) ---
+    def __gt__(self, other):
+        try:
+            if self._name == other._name:
+                return set(self._ids) > set(other._ids)
+        except AttributeError:
+            pass
+        return NotImplemented
+
+==============================================================================
+NOMBRE: __hash__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__hash__ (lineas 6662-6663) ---
+    def __hash__(self):
+        return hash((self._name, frozenset(self._ids)))
+
+--- REFERENCIA odoo/orm/models.py :: ReversibleComparator.__hash__ (lineas 7090-7091) ---
+    def __hash__(self):
+        return hash(self.__item)
+
+--- DJANGO db/models/base.py :: Model.__hash__ (lineas 626-629) ---
+    def __hash__(self):
+        if not self._is_pk_set():
+            raise TypeError("Model instances without primary key value are unhashable")
+        return hash(self.pk)
+
+--- DJANGO db/models/query.py :: Prefetch.__hash__ (lineas 2332-2333) ---
+    def __hash__(self):
+        return hash((self.__class__, self.prefetch_to))
+
+--- DJANGO db/models/manager.py :: BaseManager.__hash__ (lineas 172-173) ---
+    def __hash__(self):
+        return id(self)
+
+--- DRF exceptions.py :: ErrorDetail.__hash__ (lineas 95-96) ---
+    def __hash__(self):
+        return hash(str(self))
+
+--- DRF permissions.py :: OperandHolder.__hash__ (lineas 57-58) ---
+    def __hash__(self):
+        return hash((self.operator_class, self.op1_class, self.op2_class))
+
+==============================================================================
+NOMBRE: __init__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: MetaModel.__init__ (lineas 255-292) ---
+    def __init__(self, name, bases, attrs):
+        super().__init__(name, bases, attrs)
+
+        if '__init__' in attrs and len(inspect.signature(attrs['__init__']).parameters) != 4:
+            _logger.warning("The method %s.__init__ doesn't match the new signature in module %s", name, attrs.get('__module__'))
+
+        if not attrs.get('_register', True):
+            return
+
+        # Remember which models to instantiate for this module.
+        if self._module:
+            self._module_to_models__[self._module].append(self)
+
+        if not self._abstract and self._name not in self._inherit:
+            # this class defines a model: add magic fields
+            def add(name, field):
+                setattr(self, name, field)
+                field.__set_name__(self, name)
+
+            def add_default(name, field):
+                if name not in attrs:
+                    setattr(self, name, field)
+                    field.__set_name__(self, name)
+
+            # make sure `id` field is still a `fields.Id`
+            if not isinstance(self.id, Id):
+                raise TypeError(f"Field {self.id} is not an instance of fields.Id")
+
+            if attrs.get('_log_access', self._auto):
+                from .fields_relational import Many2one  # noqa: PLC0415
+                add_default('create_uid', Many2one(
+                    'res.users', string='Created by', readonly=True))
+                add_default('create_date', Datetime(
+                    string='Created on', readonly=True))
+                add_default('write_uid', Many2one(
+                    'res.users', string='Last Updated by', readonly=True))
+                add_default('write_date', Datetime(
+                    string='Last Updated on', readonly=True))
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__init__ (lineas 5871-5880) ---
+    def __init__(self, env: Environment, ids: tuple[IdType, ...], prefetch_ids: Reversible[IdType]):
+        """ Create a recordset instance.
+
+        :param env: an environment
+        :param ids: a tuple of record ids
+        :param prefetch_ids: a reversible iterable of record ids (for prefetching)
+        """
+        self.env = env
+        self._ids = ids
+        self._prefetch_ids = prefetch_ids
+
+--- REFERENCIA odoo/orm/models.py :: RecordCache.__init__ (lineas 7016-7018) ---
+    def __init__(self, record: BaseModel):
+        assert len(record) == 1, "Unexpected RecordCache(%s)" % record
+        self._record = record
+
+--- REFERENCIA odoo/orm/models.py :: ReversibleComparator.__init__ (lineas 7069-7072) ---
+    def __init__(self, item, reverse: bool, none_first: bool):
+        self.__item = item
+        self.__reverse = reverse
+        self.__none_first = none_first
+
+--- DJANGO db/models/base.py :: Model.__init__ (lineas 482-595) ---
+    def __init__(self, *args, **kwargs):
+        # Alias some things as locals to avoid repeat global lookups
+        cls = self.__class__
+        opts = self._meta
+        _setattr = setattr
+        _DEFERRED = DEFERRED
+        if opts.abstract:
+            raise TypeError("Abstract models cannot be instantiated.")
+
+        pre_init.send(sender=cls, args=args, kwargs=kwargs)
+
+        # Set up the storage for instance state
+        self._state = ModelState()
+
+        # There is a rather weird disparity here; if kwargs, it's set, then
+        # args overrides it. It should be one or the other; don't duplicate the
+        # work The reason for the kwargs check is that standard iterator passes
+        # in by args, and instantiation for iteration is 33% faster.
+        if len(args) > len(opts.concrete_fields):
+            # Daft, but matches old exception sans the err msg.
+            raise IndexError("Number of args exceeds number of fields")
+
+        if not kwargs:
+            fields_iter = iter(opts.concrete_fields)
+            # The ordering of the zip calls matter - zip throws StopIteration
+            # when an iter throws it. So if the first iter throws it, the
+            # second is *not* consumed. We rely on this, so don't change the
+            # order without changing the logic.
+            for val, field in zip(args, fields_iter):
+                if val is _DEFERRED:
+                    continue
+                _setattr(self, field.attname, val)
+        else:
+            # Slower, kwargs-ready version.
+            fields_iter = iter(opts.fields)
+            for val, field in zip(args, fields_iter):
+                if val is _DEFERRED:
+                    continue
+                _setattr(self, field.attname, val)
+                if kwargs.pop(field.name, NOT_PROVIDED) is not NOT_PROVIDED:
+                    raise TypeError(
+                        f"{cls.__qualname__}() got both positional and "
+                        f"keyword arguments for field '{field.name}'."
+                    )
+
+        # Now we're left with the unprocessed fields that *must* come from
+        # keywords, or default.
+
+        for field in fields_iter:
+            is_related_object = False
+            # Virtual field
+            if field.column is None or field.generated:
+                continue
+            if kwargs:
+                if isinstance(field.remote_field, ForeignObjectRel):
+                    try:
+                        # Assume object instance was passed in.
+                        rel_obj = kwargs.pop(field.name)
+                        is_related_object = True
+                    except KeyError:
+                        try:
+                            # Object instance wasn't passed in -- must be an
+                            # ID.
+                            val = kwargs.pop(field.attname)
+                        except KeyError:
+                            val = field.get_default()
+                else:
+                    try:
+                        val = kwargs.pop(field.attname)
+                    except KeyError:
+                        # This is done with an exception rather than the
+                        # default argument on pop because we don't want
+                        # get_default() to be evaluated, and then not used.
+                        # Refs #12057.
+                        val = field.get_default()
+            else:
+                val = field.get_default()
+
+            if is_related_object:
+                # If we are passed a related instance, set it using the
+                # field.name instead of field.attname (e.g. "user" instead of
+                # "user_id") so that the object gets properly cached (and type
+                # checked) by the RelatedObjectDescriptor.
+                if rel_obj is not _DEFERRED:
+                    _setattr(self, field.name, rel_obj)
+            else:
+                if val is not _DEFERRED:
+                    _setattr(self, field.attname, val)
+
+        if kwargs:
+            property_names = opts._property_names
+            unexpected = ()
+            for prop, value in kwargs.items():
+                # Any remaining kwargs must correspond to properties or virtual
+                # fields.
+                if prop in property_names:
+                    if value is not _DEFERRED:
+                        _setattr(self, prop, value)
+                else:
+                    try:
+                        opts.get_field(prop)
+                    except FieldDoesNotExist:
+                        unexpected += (prop,)
+                    else:
+                        if value is not _DEFERRED:
+                            _setattr(self, prop, value)
+            if unexpected:
+                unexpected_names = ", ".join(repr(n) for n in unexpected)
+                raise TypeError(
+                    f"{cls.__name__}() got unexpected keyword arguments: "
+                    f"{unexpected_names}"
+                )
+        super().__init__()
+        post_init.send(sender=cls, instance=self)
+
+--- DJANGO db/models/query.py :: BaseIterable.__init__ (lineas 51-56) ---
+    def __init__(
+        self, queryset, chunked_fetch=False, chunk_size=GET_ITERATOR_CHUNK_SIZE
+    ):
+        self.queryset = queryset
+        self.chunked_fetch = chunked_fetch
+        self.chunk_size = chunk_size
+
+--- DJANGO db/models/query.py :: QuerySet.__init__ (lineas 286-300) ---
+    def __init__(self, model=None, query=None, using=None, hints=None):
+        self.model = model
+        self._db = using
+        self._hints = hints or {}
+        self._query = query or sql.Query(self.model)
+        self._result_cache = None
+        self._sticky_filter = False
+        self._for_write = False
+        self._prefetch_related_lookups = ()
+        self._prefetch_done = False
+        self._known_related_objects = {}  # {rel_field: {pk: rel_obj}}
+        self._iterable_class = ModelIterable
+        self._fields = None
+        self._defer_next_filter = False
+        self._deferred_filter = None
+
+--- DJANGO db/models/query.py :: EmptyQuerySet.__init__ (lineas 2111-2112) ---
+    def __init__(self, *args, **kwargs):
+        raise TypeError("EmptyQuerySet can't be instantiated")
+
+--- DJANGO db/models/query.py :: RawQuerySet.__init__ (lineas 2121-2140) ---
+    def __init__(
+        self,
+        raw_query,
+        model=None,
+        query=None,
+        params=(),
+        translations=None,
+        using=None,
+        hints=None,
+    ):
+        self.raw_query = raw_query
+        self.model = model
+        self._db = using
+        self._hints = hints or {}
+        self.query = query or sql.RawQuery(sql=raw_query, using=self.db, params=params)
+        self.params = params
+        self.translations = translations or {}
+        self._result_cache = None
+        self._prefetch_related_lookups = ()
+        self._prefetch_done = False
+
+--- DJANGO db/models/query.py :: Prefetch.__init__ (lineas 2273-2294) ---
+    def __init__(self, lookup, queryset=None, to_attr=None):
+        # `prefetch_through` is the path we traverse to perform the prefetch.
+        self.prefetch_through = lookup
+        # `prefetch_to` is the path to the attribute that stores the result.
+        self.prefetch_to = lookup
+        if queryset is not None and (
+            isinstance(queryset, RawQuerySet)
+            or (
+                hasattr(queryset, "_iterable_class")
+                and not issubclass(queryset._iterable_class, ModelIterable)
+            )
+        ):
+            raise ValueError(
+                "Prefetch querysets cannot use raw(), values(), and values_list()."
+            )
+        if to_attr:
+            self.prefetch_to = LOOKUP_SEP.join(
+                lookup.split(LOOKUP_SEP)[:-1] + [to_attr]
+            )
+
+        self.queryset = queryset
+        self.to_attr = to_attr
+
+--- DJANGO db/models/query.py :: RelatedPopulator.__init__ (lineas 2702-2758) ---
+    def __init__(self, klass_info, select, db):
+        self.db = db
+        # Pre-compute needed attributes. The attributes are:
+        #  - model_cls: the possibly deferred model class to instantiate
+        #  - either:
+        #    - cols_start, cols_end: usually the columns in the row are
+        #      in the same order model_cls.__init__ expects them, so we
+        #      can instantiate by model_cls(*row[cols_start:cols_end])
+        #    - reorder_for_init: When select_related descends to a child
+        #      class, then we want to reuse the already selected parent
+        #      data. However, in this case the parent data isn't necessarily
+        #      in the same order that Model.__init__ expects it to be, so
+        #      we have to reorder the parent data. The reorder_for_init
+        #      attribute contains a function used to reorder the field data
+        #      in the order __init__ expects it.
+        #  - pk_idx: the index of the primary key field in the reordered
+        #    model data. Used to check if a related object exists at all.
+        #  - init_list: the field attnames fetched from the database. For
+        #    deferred models this isn't the same as all attnames of the
+        #    model's fields.
+        #  - related_populators: a list of RelatedPopulator instances if
+        #    select_related() descends to related models from this model.
+        #  - local_setter, remote_setter: Methods to set cached values on
+        #    the object being populated and on the remote object. Usually
+        #    these are Field.set_cached_value() methods.
+        select_fields = klass_info["select_fields"]
+        from_parent = klass_info["from_parent"]
+        if not from_parent:
+            self.cols_start = select_fields[0]
+            self.cols_end = select_fields[-1] + 1
+            self.init_list = [
+                f[0].target.attname for f in select[self.cols_start : self.cols_end]
+            ]
+            self.reorder_for_init = None
+        else:
+            attname_indexes = {
+                select[idx][0].target.attname: idx for idx in select_fields
+            }
+            model_init_attnames = (
+                f.attname for f in klass_info["model"]._meta.concrete_fields
+            )
+            self.init_list = [
+                attname for attname in model_init_attnames if attname in attname_indexes
+            ]
+            self.reorder_for_init = operator.itemgetter(
+                *[attname_indexes[attname] for attname in self.init_list]
+            )
+
+        self.model_cls = klass_info["model"]
+        # A primary key must have all of its constituents not-NULL as
+        # NULL != NULL and thus NULL cannot be referenced through a foreign
+        # relationship. Therefore checking for a single member of the primary
+        # key is enough to determine if the referenced object exists or not.
+        self.pk_idx = self.init_list.index(self.model_cls._meta.pk_fields[0].attname)
+        self.related_populators = get_related_populators(klass_info, select, self.db)
+        self.local_setter = klass_info["local_setter"]
+        self.remote_setter = klass_info["remote_setter"]
+
+--- DJANGO db/models/manager.py :: BaseManager.__init__ (lineas 27-33) ---
+    def __init__(self):
+        super().__init__()
+        self._set_creation_counter()
+        self.model = None
+        self.name = None
+        self._db = None
+        self._hints = {}
+
+--- DJANGO db/models/manager.py :: ManagerDescriptor.__init__ (lineas 181-182) ---
+    def __init__(self, manager):
+        self.manager = manager
+
+--- DJANGO db/models/manager.py :: EmptyManager.__init__ (lineas 208-210) ---
+    def __init__(self, model):
+        super().__init__()
+        self.model = model
+
+--- DRF decorators.py :: MethodMapper.__init__ (lineas 195-198) ---
+    def __init__(self, action, methods):
+        self.action = action
+        for method in methods:
+            self[method] = self.action.__name__
+
+--- DRF exceptions.py :: APIException.__init__ (lineas 108-114) ---
+    def __init__(self, detail=None, code=None):
+        if detail is None:
+            detail = self.default_detail
+        if code is None:
+            code = self.default_code
+
+        self.detail = _get_error_details(detail, code)
+
+--- DRF exceptions.py :: ValidationError.__init__ (lineas 148-161) ---
+    def __init__(self, detail=None, code=None):
+        if detail is None:
+            detail = self.default_detail
+        if code is None:
+            code = self.default_code
+
+        # For validation failures, we may collect many errors together,
+        # so the details should always be coerced to a list if not already.
+        if isinstance(detail, tuple):
+            detail = list(detail)
+        elif not isinstance(detail, dict) and not isinstance(detail, list):
+            detail = [detail]
+
+        self.detail = _get_error_details(detail, code)
+
+--- DRF exceptions.py :: MethodNotAllowed.__init__ (lineas 199-202) ---
+    def __init__(self, method, detail=None, code=None):
+        if detail is None:
+            detail = force_str(self.default_detail).format(method=method)
+        super().__init__(detail, code)
+
+--- DRF exceptions.py :: NotAcceptable.__init__ (lineas 210-212) ---
+    def __init__(self, detail=None, code=None, available_renderers=None):
+        self.available_renderers = available_renderers
+        super().__init__(detail, code)
+
+--- DRF exceptions.py :: UnsupportedMediaType.__init__ (lineas 220-223) ---
+    def __init__(self, media_type, detail=None, code=None):
+        if detail is None:
+            detail = force_str(self.default_detail).format(media_type=media_type)
+        super().__init__(detail, code)
+
+--- DRF exceptions.py :: Throttled.__init__ (lineas 233-244) ---
+    def __init__(self, wait=None, detail=None, code=None):
+        if detail is None:
+            detail = force_str(self.default_detail)
+        if wait is not None:
+            wait = math.ceil(wait)
+            detail = ' '.join((
+                detail,
+                force_str(ngettext(self.extra_detail_singular.format(wait=wait),
+                                   self.extra_detail_plural.format(wait=wait),
+                                   wait))))
+        self.wait = wait
+        super().__init__(detail, code)
+
+--- DRF fields.py :: CreateOnlyDefault.__init__ (lineas 244-245) ---
+    def __init__(self, default):
+        self.default = default
+
+--- DRF fields.py :: Field.__init__ (lineas 299-343) ---
+    def __init__(self, *, read_only=False, write_only=False,
+                 required=None, default=empty, initial=empty, source=None,
+                 label=None, help_text=None, style=None,
+                 error_messages=None, validators=None, allow_null=False):
+        self._creation_counter = Field._creation_counter
+        Field._creation_counter += 1
+
+        # If `required` is unset, then use `True` unless a default is provided.
+        if required is None:
+            required = default is empty and not read_only
+
+        # Some combinations of keyword arguments do not make sense.
+        assert not (read_only and write_only), NOT_READ_ONLY_WRITE_ONLY
+        assert not (read_only and required), NOT_READ_ONLY_REQUIRED
+        assert not (required and default is not empty), NOT_REQUIRED_DEFAULT
+        assert not (read_only and self.__class__ == Field), USE_READONLYFIELD
+
+        self.read_only = read_only
+        self.write_only = write_only
+        self.required = required
+        self.default = default
+        self.source = source
+        self.initial = self.initial if (initial is empty) else initial
+        self.label = label
+        self.help_text = help_text
+        self.style = {} if style is None else style
+        self.allow_null = allow_null
+
+        if self.default_empty_html is not empty:
+            if default is not empty:
+                self.default_empty_html = default
+
+        if validators is not None:
+            self.validators = list(validators)
+
+        # These are set up by `.bind()` when the field is added to a serializer.
+        self.field_name = None
+        self.parent = None
+
+        # Collect default error message from self and parent classes
+        messages = {}
+        for cls in reversed(self.__class__.__mro__):
+            messages.update(getattr(cls, 'default_error_messages', {}))
+        messages.update(error_messages or {})
+        self.error_messages = messages
+
+--- DRF fields.py :: BooleanField.__init__ (lineas 688-692) ---
+    def __init__(self, **kwargs):
+        if kwargs.get('allow_null', False):
+            self.default_empty_html = None
+            self.initial = None
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: CharField.__init__ (lineas 731-747) ---
+    def __init__(self, **kwargs):
+        self.allow_blank = kwargs.pop('allow_blank', False)
+        self.trim_whitespace = kwargs.pop('trim_whitespace', True)
+        self.max_length = kwargs.pop('max_length', None)
+        self.min_length = kwargs.pop('min_length', None)
+        super().__init__(**kwargs)
+        if self.max_length is not None:
+            message = lazy_format(self.error_messages['max_length'], max_length=self.max_length)
+            self.validators.append(
+                MaxLengthValidator(self.max_length, message=message))
+        if self.min_length is not None:
+            message = lazy_format(self.error_messages['min_length'], min_length=self.min_length)
+            self.validators.append(
+                MinLengthValidator(self.min_length, message=message))
+
+        self.validators.append(ProhibitNullCharactersValidator())
+        self.validators.append(ProhibitSurrogateCharactersValidator())
+
+--- DRF fields.py :: EmailField.__init__ (lineas 777-780) ---
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        validator = EmailValidator(message=self.error_messages['invalid'])
+        self.validators.append(validator)
+
+--- DRF fields.py :: RegexField.__init__ (lineas 788-791) ---
+    def __init__(self, regex, **kwargs):
+        super().__init__(**kwargs)
+        validator = RegexValidator(regex, message=self.error_messages['invalid'])
+        self.validators.append(validator)
+
+--- DRF fields.py :: SlugField.__init__ (lineas 800-807) ---
+    def __init__(self, allow_unicode=False, **kwargs):
+        super().__init__(**kwargs)
+        self.allow_unicode = allow_unicode
+        if self.allow_unicode:
+            validator = RegexValidator(re.compile(r'^[-\w]+\Z', re.UNICODE), message=self.error_messages['invalid_unicode'])
+        else:
+            validator = RegexValidator(re.compile(r'^[-a-zA-Z0-9_]+$'), message=self.error_messages['invalid'])
+        self.validators.append(validator)
+
+--- DRF fields.py :: URLField.__init__ (lineas 815-818) ---
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        validator = URLValidator(message=self.error_messages['invalid'])
+        self.validators.append(validator)
+
+--- DRF fields.py :: UUIDField.__init__ (lineas 828-835) ---
+    def __init__(self, **kwargs):
+        self.uuid_format = kwargs.pop('format', 'hex_verbose')
+        if self.uuid_format not in self.valid_formats:
+            raise ValueError(
+                'Invalid format for uuid representation. '
+                'Must be one of "{}"'.format('", "'.join(self.valid_formats))
+            )
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: IPAddressField.__init__ (lineas 864-869) ---
+    def __init__(self, protocol='both', **kwargs):
+        self.protocol = protocol.lower()
+        self.unpack_ipv4 = (self.protocol == 'both')
+        super().__init__(**kwargs)
+        validators = ip_address_validators(protocol, self.unpack_ipv4)
+        self.validators.extend(validators)
+
+--- DRF fields.py :: IntegerField.__init__ (lineas 897-908) ---
+    def __init__(self, **kwargs):
+        self.max_value = kwargs.pop('max_value', None)
+        self.min_value = kwargs.pop('min_value', None)
+        super().__init__(**kwargs)
+        if self.max_value is not None:
+            message = lazy_format(self.error_messages['max_value'], max_value=self.max_value)
+            self.validators.append(
+                MaxValueValidator(self.max_value, message=message))
+        if self.min_value is not None:
+            message = lazy_format(self.error_messages['min_value'], min_value=self.min_value)
+            self.validators.append(
+                MinValueValidator(self.min_value, message=message))
+
+--- DRF fields.py :: FloatField.__init__ (lineas 934-945) ---
+    def __init__(self, **kwargs):
+        self.max_value = kwargs.pop('max_value', None)
+        self.min_value = kwargs.pop('min_value', None)
+        super().__init__(**kwargs)
+        if self.max_value is not None:
+            message = lazy_format(self.error_messages['max_value'], max_value=self.max_value)
+            self.validators.append(
+                MaxValueValidator(self.max_value, message=message))
+        if self.min_value is not None:
+            message = lazy_format(self.error_messages['min_value'], min_value=self.min_value)
+            self.validators.append(
+                MinValueValidator(self.min_value, message=message))
+
+--- DRF fields.py :: DecimalField.__init__ (lineas 975-1014) ---
+    def __init__(self, max_digits, decimal_places, coerce_to_string=None, max_value=None, min_value=None,
+                 localize=False, rounding=None, normalize_output=False, **kwargs):
+        self.max_digits = max_digits
+        self.decimal_places = decimal_places
+        self.localize = localize
+        self.normalize_output = normalize_output
+        if coerce_to_string is not None:
+            self.coerce_to_string = coerce_to_string
+        if self.localize:
+            self.coerce_to_string = True
+
+        self.max_value = max_value
+        self.min_value = min_value
+
+        if self.max_value is not None and not isinstance(self.max_value, (int, decimal.Decimal)):
+            warnings.warn("max_value should be an integer or Decimal instance.")
+        if self.min_value is not None and not isinstance(self.min_value, (int, decimal.Decimal)):
+            warnings.warn("min_value should be an integer or Decimal instance.")
+
+        if self.max_digits is not None and self.decimal_places is not None:
+            self.max_whole_digits = self.max_digits - self.decimal_places
+        else:
+            self.max_whole_digits = None
+
+        super().__init__(**kwargs)
+
+        if self.max_value is not None:
+            message = lazy_format(self.error_messages['max_value'], max_value=self.max_value)
+            self.validators.append(
+                MaxValueValidator(self.max_value, message=message))
+        if self.min_value is not None:
+            message = lazy_format(self.error_messages['min_value'], min_value=self.min_value)
+            self.validators.append(
+                MinValueValidator(self.min_value, message=message))
+
+        if rounding is not None:
+            valid_roundings = [v for k, v in vars(decimal).items() if k.startswith('ROUND_')]
+            assert rounding in valid_roundings, (
+                'Invalid rounding option %s. Valid values for rounding are: %s' % (rounding, valid_roundings))
+        self.rounding = rounding
+
+--- DRF fields.py :: DateTimeField.__init__ (lineas 1136-1143) ---
+    def __init__(self, format=empty, input_formats=None, default_timezone=None, **kwargs):
+        if format is not empty:
+            self.format = format
+        if input_formats is not None:
+            self.input_formats = input_formats
+        if default_timezone is not None:
+            self.timezone = default_timezone
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: DateField.__init__ (lineas 1224-1229) ---
+    def __init__(self, format=empty, input_formats=None, **kwargs):
+        if format is not empty:
+            self.format = format
+        if input_formats is not None:
+            self.input_formats = input_formats
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: TimeField.__init__ (lineas 1290-1295) ---
+    def __init__(self, format=empty, input_formats=None, **kwargs):
+        if format is not empty:
+            self.format = format
+        if input_formats is not None:
+            self.input_formats = input_formats
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: DurationField.__init__ (lineas 1354-1365) ---
+    def __init__(self, **kwargs):
+        self.max_value = kwargs.pop('max_value', None)
+        self.min_value = kwargs.pop('min_value', None)
+        super().__init__(**kwargs)
+        if self.max_value is not None:
+            message = lazy_format(self.error_messages['max_value'], max_value=self.max_value)
+            self.validators.append(
+                MaxValueValidator(self.max_value, message=message))
+        if self.min_value is not None:
+            message = lazy_format(self.error_messages['min_value'], min_value=self.min_value)
+            self.validators.append(
+                MinValueValidator(self.min_value, message=message))
+
+--- DRF fields.py :: ChoiceField.__init__ (lineas 1391-1398) ---
+    def __init__(self, choices, **kwargs):
+        self.choices = choices
+        self.html_cutoff = kwargs.pop('html_cutoff', self.html_cutoff)
+        self.html_cutoff_text = kwargs.pop('html_cutoff_text', self.html_cutoff_text)
+
+        self.allow_blank = kwargs.pop('allow_blank', False)
+
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: MultipleChoiceField.__init__ (lineas 1452-1454) ---
+    def __init__(self, **kwargs):
+        self.allow_empty = kwargs.pop('allow_empty', True)
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: FilePathField.__init__ (lineas 1490-1500) ---
+    def __init__(self, path, match=None, recursive=False, allow_files=True,
+                 allow_folders=False, required=None, **kwargs):
+        # Defer to Django's FilePathField implementation to get the
+        # valid set of choices.
+        field = DjangoFilePathField(
+            path, match=match, recursive=recursive, allow_files=allow_files,
+            allow_folders=allow_folders, required=required
+        )
+        kwargs['choices'] = field.choices
+        kwargs['required'] = required
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: FileField.__init__ (lineas 1514-1519) ---
+    def __init__(self, **kwargs):
+        self.max_length = kwargs.pop('max_length', None)
+        self.allow_empty_file = kwargs.pop('allow_empty_file', False)
+        if 'use_url' in kwargs:
+            self.use_url = kwargs.pop('use_url')
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: ImageField.__init__ (lineas 1563-1565) ---
+    def __init__(self, **kwargs):
+        self._DjangoImageField = kwargs.pop('_DjangoImageField', DjangoImageField)
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: _UnvalidatedField.__init__ (lineas 1580-1583) ---
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.allow_blank = True
+        self.allow_null = True
+
+--- DRF fields.py :: ListField.__init__ (lineas 1602-1621) ---
+    def __init__(self, **kwargs):
+        self.child = kwargs.pop('child', copy.deepcopy(self.child))
+        self.allow_empty = kwargs.pop('allow_empty', True)
+        self.max_length = kwargs.pop('max_length', None)
+        self.min_length = kwargs.pop('min_length', None)
+
+        assert not inspect.isclass(self.child), '`child` has not been instantiated.'
+        assert self.child.source is None, (
+            "The `source` argument is not meaningful when applied to a `child=` field. "
+            "Remove `source=` from the field declaration."
+        )
+
+        super().__init__(**kwargs)
+        self.child.bind(field_name='', parent=self)
+        if self.max_length is not None:
+            message = lazy_format(self.error_messages['max_length'], max_length=self.max_length)
+            self.validators.append(MaxLengthValidator(self.max_length, message=message))
+        if self.min_length is not None:
+            message = lazy_format(self.error_messages['min_length'], min_length=self.min_length)
+            self.validators.append(MinLengthValidator(self.min_length, message=message))
+
+--- DRF fields.py :: DictField.__init__ (lineas 1681-1692) ---
+    def __init__(self, **kwargs):
+        self.child = kwargs.pop('child', copy.deepcopy(self.child))
+        self.allow_empty = kwargs.pop('allow_empty', True)
+
+        assert not inspect.isclass(self.child), '`child` has not been instantiated.'
+        assert self.child.source is None, (
+            "The `source` argument is not meaningful when applied to a `child=` field. "
+            "Remove `source=` from the field declaration."
+        )
+
+        super().__init__(**kwargs)
+        self.child.bind(field_name='', parent=self)
+
+--- DRF fields.py :: HStoreField.__init__ (lineas 1740-1745) ---
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        assert isinstance(self.child, CharField), (
+            "The `child` argument must be an instance of `CharField`, "
+            "as the hstore extension stores values as strings."
+        )
+
+--- DRF fields.py :: JSONField.__init__ (lineas 1756-1760) ---
+    def __init__(self, **kwargs):
+        self.binary = kwargs.pop('binary', False)
+        self.encoder = kwargs.pop('encoder', None)
+        self.decoder = kwargs.pop('decoder', None)
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: ReadOnlyField.__init__ (lineas 1808-1810) ---
+    def __init__(self, **kwargs):
+        kwargs['read_only'] = True
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: HiddenField.__init__ (lineas 1825-1828) ---
+    def __init__(self, **kwargs):
+        assert 'default' in kwargs, 'default is a required argument.'
+        kwargs['write_only'] = True
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: SerializerMethodField.__init__ (lineas 1855-1859) ---
+    def __init__(self, method_name=None, **kwargs):
+        self.method_name = method_name
+        kwargs['source'] = '*'
+        kwargs['read_only'] = True
+        super().__init__(**kwargs)
+
+--- DRF fields.py :: ModelField.__init__ (lineas 1884-1893) ---
+    def __init__(self, model_field, **kwargs):
+        self.model_field = model_field
+        # The `max_length` option is supported by Django's base `Field` class,
+        # so we'd better support it here.
+        self.max_length = kwargs.pop('max_length', None)
+        super().__init__(**kwargs)
+        if self.max_length is not None:
+            message = lazy_format(self.error_messages['max_length'], max_length=self.max_length)
+            self.validators.append(
+                MaxLengthValidator(self.max_length, message=message))
+
+--- DRF fields.py :: StartOptionGroup.__init__ (lineas 174-175) ---
+        def __init__(self, label):
+            self.label = label
+
+--- DRF fields.py :: Option.__init__ (lineas 185-188) ---
+        def __init__(self, value, display_text, disabled=False):
+            self.value = value
+            self.display_text = display_text
+            self.disabled = disabled
+
+--- DRF parsers.py :: DataAndFiles.__init__ (lineas 27-29) ---
+    def __init__(self, data, files):
+        self.data = data
+        self.files = files
+
+--- DRF permissions.py :: SingleOperandHolder.__init__ (lineas 29-31) ---
+    def __init__(self, operator_class, op1_class):
+        self.operator_class = operator_class
+        self.op1_class = op1_class
+
+--- DRF permissions.py :: OperandHolder.__init__ (lineas 39-42) ---
+    def __init__(self, operator_class, op1_class, op2_class):
+        self.operator_class = operator_class
+        self.op1_class = op1_class
+        self.op2_class = op2_class
+
+--- DRF permissions.py :: AND.__init__ (lineas 62-64) ---
+    def __init__(self, op1, op2):
+        self.op1 = op1
+        self.op2 = op2
+
+--- DRF permissions.py :: OR.__init__ (lineas 80-82) ---
+    def __init__(self, op1, op2):
+        self.op1 = op1
+        self.op2 = op2
+
+--- DRF permissions.py :: NOT.__init__ (lineas 101-102) ---
+    def __init__(self, op1):
+        self.op1 = op1
+
+--- DRF relations.py :: PKOnlyObject.__init__ (lineas 75-76) ---
+    def __init__(self, pk):
+        self.pk = pk
+
+--- DRF relations.py :: RelatedField.__init__ (lineas 96-119) ---
+    def __init__(self, **kwargs):
+        self.queryset = kwargs.pop('queryset', self.queryset)
+
+        cutoff_from_settings = api_settings.HTML_SELECT_CUTOFF
+        if cutoff_from_settings is not None:
+            cutoff_from_settings = int(cutoff_from_settings)
+        self.html_cutoff = kwargs.pop('html_cutoff', cutoff_from_settings)
+
+        self.html_cutoff_text = kwargs.pop(
+            'html_cutoff_text',
+            self.html_cutoff_text or _(api_settings.HTML_SELECT_CUTOFF_TEXT)
+        )
+        if not method_overridden('get_queryset', RelatedField, self):
+            assert self.queryset is not None or kwargs.get('read_only'), (
+                'Relational field must provide a `queryset` argument, '
+                'override `get_queryset`, or set read_only=`True`.'
+            )
+        assert not (self.queryset is not None and kwargs.get('read_only')), (
+            'Relational fields should not provide a `queryset` argument, '
+            'when setting read_only=`True`.'
+        )
+        kwargs.pop('many', None)
+        kwargs.pop('allow_empty', None)
+        super().__init__(**kwargs)
+
+--- DRF relations.py :: StringRelatedField.__init__ (lineas 230-232) ---
+    def __init__(self, **kwargs):
+        kwargs['read_only'] = True
+        super().__init__(**kwargs)
+
+--- DRF relations.py :: PrimaryKeyRelatedField.__init__ (lineas 245-247) ---
+    def __init__(self, **kwargs):
+        self.pk_field = kwargs.pop('pk_field', None)
+        super().__init__(**kwargs)
+
+--- DRF relations.py :: HyperlinkedRelatedField.__init__ (lineas 283-296) ---
+    def __init__(self, view_name=None, **kwargs):
+        if view_name is not None:
+            self.view_name = view_name
+        assert self.view_name is not None, 'The `view_name` argument is required.'
+        self.lookup_field = kwargs.pop('lookup_field', self.lookup_field)
+        self.lookup_url_kwarg = kwargs.pop('lookup_url_kwarg', self.lookup_field)
+        self.format = kwargs.pop('format', None)
+
+        # We include this simply for dependency injection in tests.
+        # We can't add it as a class attributes or it would expect an
+        # implicit `self` argument to be passed.
+        self.reverse = reverse
+
+        super().__init__(**kwargs)
+
+--- DRF relations.py :: HyperlinkedIdentityField.__init__ (lineas 427-431) ---
+    def __init__(self, view_name=None, **kwargs):
+        assert view_name is not None, 'The `view_name` argument is required.'
+        kwargs['read_only'] = True
+        kwargs['source'] = '*'
+        super().__init__(view_name, **kwargs)
+
+--- DRF relations.py :: SlugRelatedField.__init__ (lineas 449-452) ---
+    def __init__(self, slug_field=None, **kwargs):
+        assert slug_field is not None, 'The `slug_field` argument is required.'
+        self.slug_field = slug_field
+        super().__init__(**kwargs)
+
+--- DRF relations.py :: ManyRelatedField.__init__ (lineas 492-507) ---
+    def __init__(self, child_relation=None, *args, **kwargs):
+        self.child_relation = child_relation
+        self.allow_empty = kwargs.pop('allow_empty', True)
+
+        cutoff_from_settings = api_settings.HTML_SELECT_CUTOFF
+        if cutoff_from_settings is not None:
+            cutoff_from_settings = int(cutoff_from_settings)
+        self.html_cutoff = kwargs.pop('html_cutoff', cutoff_from_settings)
+
+        self.html_cutoff_text = kwargs.pop(
+            'html_cutoff_text',
+            self.html_cutoff_text or _(api_settings.HTML_SELECT_CUTOFF_TEXT)
+        )
+        assert child_relation is not None, '`child_relation` is a required argument.'
+        super().__init__(*args, **kwargs)
+        self.child_relation.bind(field_name='', parent=self)
+
+--- DRF renderers.py :: CoreJSONRenderer.__init__ (lineas 929-930) ---
+    def __init__(self):
+        assert coreapi, 'Using CoreJSONRenderer, but `coreapi` is not installed.'
+
+--- DRF renderers.py :: CoreAPIOpenAPIRenderer.__init__ (lineas 1032-1034) ---
+    def __init__(self):
+        assert coreapi, 'Using CoreAPIOpenAPIRenderer, but `coreapi` is not installed.'
+        assert yaml, 'Using CoreAPIOpenAPIRenderer, but `pyyaml` is not installed.'
+
+--- DRF renderers.py :: CoreAPIJSONOpenAPIRenderer.__init__ (lineas 1047-1048) ---
+    def __init__(self):
+        assert coreapi, 'Using CoreAPIJSONOpenAPIRenderer, but `coreapi` is not installed.'
+
+--- DRF renderers.py :: OpenAPIRenderer.__init__ (lineas 1062-1063) ---
+    def __init__(self):
+        assert yaml, 'Using OpenAPIRenderer, but `pyyaml` is not installed.'
+
+--- DRF request.py :: override_method.__init__ (lineas 45-49) ---
+    def __init__(self, view, request, method):
+        self.view = view
+        self.request = request
+        self.method = method
+        self.action = getattr(view, 'action', None)
+
+--- DRF request.py :: ForcedAuthentication.__init__ (lineas 132-134) ---
+    def __init__(self, force_user, force_token):
+        self.force_user = force_user
+        self.force_token = force_token
+
+--- DRF request.py :: Request.__init__ (lineas 152-180) ---
+    def __init__(self, request, parsers=None, authenticators=None,
+                 negotiator=None, parser_context=None):
+        assert isinstance(request, HttpRequest), (
+            'The `request` argument must be an instance of '
+            '`django.http.HttpRequest`, not `{}.{}`.'
+            .format(request.__class__.__module__, request.__class__.__name__)
+        )
+
+        self._request = request
+        self.parsers = parsers or ()
+        self.authenticators = authenticators or ()
+        self.negotiator = negotiator or self._default_negotiator()
+        self.parser_context = parser_context
+        self._data = Empty
+        self._files = Empty
+        self._full_data = Empty
+        self._content_type = Empty
+        self._stream = Empty
+
+        if self.parser_context is None:
+            self.parser_context = {}
+        self.parser_context['request'] = self
+        self.parser_context['encoding'] = request.encoding or settings.DEFAULT_CHARSET
+
+        force_user = getattr(request, '_force_auth_user', None)
+        force_token = getattr(request, '_force_auth_token', None)
+        if force_user is not None or force_token is not None:
+            forced_auth = ForcedAuthentication(force_user, force_token)
+            self.authenticators = (forced_auth,)
+
+--- DRF response.py :: Response.__init__ (lineas 20-47) ---
+    def __init__(self, data=None, status=None,
+                 template_name=None, headers=None,
+                 exception=False, content_type=None):
+        """
+        Alters the init arguments slightly.
+        For example, drop 'template_name', and instead use 'data'.
+
+        Setting 'renderer' and 'media_type' will typically be deferred,
+        For example being set automatically by the `APIView`.
+        """
+        super().__init__(None, status=status)
+
+        if isinstance(data, Serializer):
+            msg = (
+                'You passed a Serializer instance as data, but '
+                'probably meant to pass serialized `.data` or '
+                '`.error`. representation.'
+            )
+            raise AssertionError(msg)
+
+        self.data = data
+        self.template_name = template_name
+        self.exception = exception
+        self.content_type = content_type
+
+        if headers:
+            for name, value in headers.items():
+                self[name] = value
+
+--- DRF routers.py :: BaseRouter.__init__ (lineas 49-50) ---
+    def __init__(self):
+        self.registry = []
+
+--- DRF routers.py :: SimpleRouter.__init__ (lineas 138-161) ---
+    def __init__(self, trailing_slash=True, use_regex_path=True):
+        self.trailing_slash = '/' if trailing_slash else ''
+        self._use_regex = use_regex_path
+        if use_regex_path:
+            self._base_pattern = '(?P<{lookup_prefix}{lookup_url_kwarg}>{lookup_value})'
+            self._default_value_pattern = '[^/.]+'
+            self._url_conf = re_path
+        else:
+            self._base_pattern = '<{lookup_value}:{lookup_prefix}{lookup_url_kwarg}>'
+            self._default_value_pattern = 'str'
+            self._url_conf = path
+            # remove regex characters from routes
+            _routes = []
+            for route in self.routes:
+                url_param = route.url
+                if url_param[0] == '^':
+                    url_param = url_param[1:]
+                if url_param[-1] == '$':
+                    url_param = url_param[:-1]
+
+                _routes.append(route._replace(url=url_param))
+            self.routes = _routes
+
+        super().__init__()
+
+--- DRF routers.py :: DefaultRouter.__init__ (lineas 357-362) ---
+    def __init__(self, *args, **kwargs):
+        if 'root_renderers' in kwargs:
+            self.root_renderers = kwargs.pop('root_renderers')
+        else:
+            self.root_renderers = list(api_settings.DEFAULT_RENDERER_CLASSES)
+        super().__init__(*args, **kwargs)
+
+--- DRF serializers.py :: BaseSerializer.__init__ (lineas 114-121) ---
+    def __init__(self, instance=None, data=empty, **kwargs):
+        self.instance = instance
+        if data is not empty:
+            self.initial_data = data
+        self.partial = kwargs.pop('partial', False)
+        self._context = kwargs.pop('context', {})
+        kwargs.pop('many', None)
+        super().__init__(**kwargs)
+
+--- DRF serializers.py :: ListSerializer.__init__ (lineas 601-609) ---
+    def __init__(self, *args, **kwargs):
+        self.child = kwargs.pop('child', copy.deepcopy(self.child))
+        self.allow_empty = kwargs.pop('allow_empty', True)
+        self.max_length = kwargs.pop('max_length', None)
+        self.min_length = kwargs.pop('min_length', None)
+        assert self.child is not None, '`child` is a required argument.'
+        assert not inspect.isclass(self.child), '`child` has not been instantiated.'
+        super().__init__(*args, **kwargs)
+        self.child.bind(field_name='', parent=self)
+
+--- DRF settings.py :: APISettings.__init__ (lineas 201-206) ---
+    def __init__(self, user_settings=None, defaults=None, import_strings=None):
+        if user_settings:
+            self._user_settings = self.__check_user_settings(user_settings)
+        self.defaults = defaults or DEFAULTS
+        self.import_strings = import_strings or IMPORT_STRINGS
+        self._cached_attrs = set()
+
+--- DRF test.py :: APIRequestFactory.__init__ (lineas 142-147) ---
+    def __init__(self, enforce_csrf_checks=False, **defaults):
+        self.enforce_csrf_checks = enforce_csrf_checks
+        self.renderer_classes = {}
+        for cls in self.renderer_classes_list:
+            self.renderer_classes[cls.format] = cls
+        super().__init__(**defaults)
+
+--- DRF test.py :: ForceAuthClientHandler.__init__ (lineas 252-255) ---
+    def __init__(self, *args, **kwargs):
+        self._force_user = None
+        self._force_token = None
+        super().__init__(*args, **kwargs)
+
+--- DRF test.py :: APIClient.__init__ (lineas 265-268) ---
+    def __init__(self, enforce_csrf_checks=False, **defaults):
+        super().__init__(**defaults)
+        self.handler = ForceAuthClientHandler(enforce_csrf_checks)
+        self._credentials = {}
+
+--- DRF test.py :: MockOriginalResponse.__init__ (lineas 31-33) ---
+        def __init__(self, headers):
+            self.msg = HeaderDict(headers)
+            self.closed = False
+
+--- DRF test.py :: DjangoTestAdapter.__init__ (lineas 46-48) ---
+        def __init__(self):
+            self.app = WSGIHandler()
+            self.factory = DjangoRequestFactory()
+
+--- DRF test.py :: RequestsClient.__init__ (lineas 106-110) ---
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            adapter = DjangoTestAdapter()
+            self.mount('http://', adapter)
+            self.mount('https://', adapter)
+
+--- DRF test.py :: CoreAPIClient.__init__ (lineas 124-127) ---
+        def __init__(self, *args, **kwargs):
+            self._session = RequestsClient()
+            kwargs['transports'] = [coreapi.transports.HTTPTransport(session=self.session)]
+            super().__init__(*args, **kwargs)
+
+--- DRF throttling.py :: SimpleRateThrottle.__init__ (lineas 68-71) ---
+    def __init__(self):
+        if not getattr(self, 'rate', None):
+            self.rate = self.get_rate()
+        self.num_requests, self.duration = self.parse_rate(self.rate)
+
+--- DRF throttling.py :: ScopedRateThrottle.__init__ (lineas 214-217) ---
+    def __init__(self):
+        # Override the usual SimpleRateThrottle, because we can't determine
+        # the rate until called by the view.
+        pass
+
+--- DRF validators.py :: UniqueValidator.__init__ (lineas 55-58) ---
+    def __init__(self, queryset, message=None, lookup='exact'):
+        self.queryset = queryset
+        self.message = message or self.message
+        self.lookup = lookup
+
+--- DRF validators.py :: UniqueTogetherValidator.__init__ (lineas 115-120) ---
+    def __init__(self, queryset, fields, message=None, condition_fields=None, condition=None):
+        self.queryset = queryset
+        self.fields = fields
+        self.message = message or self.message
+        self.condition_fields = [] if condition_fields is None else condition_fields
+        self.condition = condition
+
+--- DRF validators.py :: BaseUniqueForValidator.__init__ (lineas 241-245) ---
+    def __init__(self, queryset, field, date_field, message=None):
+        self.queryset = queryset
+        self.field = field
+        self.date_field = date_field
+        self.message = message or self.message
+
+==============================================================================
+NOMBRE: __iter__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__iter__ (lineas 6483-6502) ---
+    def __iter__(self) -> Iterator[Self]:
+        """ Return an iterator over ``self``. """
+        ids = self._ids
+        size = len(ids)
+        if size <= 1:
+            # detect and handle small recordsets (single `1f`)
+            # early return if no records and avoid allocation if we have a one
+            if size == 1:
+                yield self
+            return
+        cls = self.__class__
+        env = self.env
+        prefetch_ids = self._prefetch_ids
+        if size > PREFETCH_MAX and prefetch_ids is ids:
+            for sub_ids in split_every(PREFETCH_MAX, ids):
+                for id_ in sub_ids:
+                    yield cls(env, (id_,), sub_ids)
+        else:
+            for id_ in ids:
+                yield cls(env, (id_,), prefetch_ids)
+
+--- REFERENCIA odoo/orm/models.py :: RecordCache.__iter__ (lineas 7032-7039) ---
+    def __iter__(self):
+        """ Iterate over the field names with a cached value. """
+        record = self._record
+        id_ = record.id
+        env = record.env
+        for name, field in record._fields.items():
+            if id_ in field._get_cache(env):
+                yield name
+
+--- DJANGO db/models/query.py :: ModelIterable.__iter__ (lineas 89-150) ---
+    def __iter__(self):
+        queryset = self.queryset
+        db = queryset.db
+        compiler = queryset.query.get_compiler(using=db)
+        # Execute the query. This will also fill compiler.select, klass_info,
+        # and annotations.
+        results = compiler.execute_sql(
+            chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+        )
+        select, klass_info, annotation_col_map = (
+            compiler.select,
+            compiler.klass_info,
+            compiler.annotation_col_map,
+        )
+        model_cls = klass_info["model"]
+        select_fields = klass_info["select_fields"]
+        model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1
+        init_list = [
+            f[0].target.attname for f in select[model_fields_start:model_fields_end]
+        ]
+        related_populators = get_related_populators(klass_info, select, db)
+        known_related_objects = [
+            (
+                field,
+                related_objs,
+                operator.attrgetter(
+                    *[
+                        (
+                            field.attname
+                            if from_field == "self"
+                            else queryset.model._meta.get_field(from_field).attname
+                        )
+                        for from_field in field.from_fields
+                    ]
+                ),
+            )
+            for field, related_objs in queryset._known_related_objects.items()
+        ]
+        for row in compiler.results_iter(results):
+            obj = model_cls.from_db(
+                db, init_list, row[model_fields_start:model_fields_end]
+            )
+            for rel_populator in related_populators:
+                rel_populator.populate(row, obj)
+            if annotation_col_map:
+                for attr_name, col_pos in annotation_col_map.items():
+                    setattr(obj, attr_name, row[col_pos])
+
+            # Add the known related objects to the model.
+            for field, rel_objs, rel_getter in known_related_objects:
+                # Avoid overwriting objects loaded by, e.g., select_related().
+                if field.is_cached(obj):
+                    continue
+                rel_obj_id = rel_getter(obj)
+                try:
+                    rel_obj = rel_objs[rel_obj_id]
+                except KeyError:
+                    pass  # May happen in qs1 | qs2 scenarios.
+                else:
+                    setattr(obj, field.name, rel_obj)
+
+            yield obj
+
+--- DJANGO db/models/query.py :: RawModelIterable.__iter__ (lineas 158-199) ---
+    def __iter__(self):
+        # Cache some things for performance reasons outside the loop.
+        db = self.queryset.db
+        query = self.queryset.query
+        connection = connections[db]
+        compiler = connection.ops.compiler("SQLCompiler")(query, connection, db)
+        query_iterator = iter(query)
+
+        try:
+            (
+                model_init_names,
+                model_init_pos,
+                annotation_fields,
+            ) = self.queryset.resolve_model_init_order()
+            model_cls = self.queryset.model
+            if any(
+                f.attname not in model_init_names for f in model_cls._meta.pk_fields
+            ):
+                raise exceptions.FieldDoesNotExist(
+                    "Raw query must include the primary key"
+                )
+            fields = [self.queryset.model_fields.get(c) for c in self.queryset.columns]
+            cols = [f.get_col(f.model._meta.db_table) if f else None for f in fields]
+            converters = compiler.get_converters(cols)
+            if converters:
+                query_iterator = compiler.apply_converters(query_iterator, converters)
+            if compiler.has_composite_fields(cols):
+                query_iterator = compiler.composite_fields_to_tuples(
+                    query_iterator, cols
+                )
+            for values in query_iterator:
+                # Associate fields to values
+                model_init_values = [values[pos] for pos in model_init_pos]
+                instance = model_cls.from_db(db, model_init_names, model_init_values)
+                if annotation_fields:
+                    for column, pos in annotation_fields:
+                        setattr(instance, column, values[pos])
+                yield instance
+        finally:
+            # Done iterating the Query. If it has its own cursor, close it.
+            if hasattr(query, "cursor") and query.cursor:
+                query.cursor.close()
+
+--- DJANGO db/models/query.py :: ValuesIterable.__iter__ (lineas 207-225) ---
+    def __iter__(self):
+        queryset = self.queryset
+        query = queryset.query
+        compiler = query.get_compiler(queryset.db)
+
+        if query.selected:
+            names = list(query.selected)
+        else:
+            # extra(select=...) cols are always at the start of the row.
+            names = [
+                *query.extra_select,
+                *query.values_select,
+                *query.annotation_select,
+            ]
+        indexes = range(len(names))
+        for row in compiler.results_iter(
+            chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+        ):
+            yield {names[i]: row[i] for i in indexes}
+
+--- DJANGO db/models/query.py :: ValuesListIterable.__iter__ (lineas 234-242) ---
+    def __iter__(self):
+        queryset = self.queryset
+        query = queryset.query
+        compiler = query.get_compiler(queryset.db)
+        return compiler.results_iter(
+            tuple_expected=True,
+            chunked_fetch=self.chunked_fetch,
+            chunk_size=self.chunk_size,
+        )
+
+--- DJANGO db/models/query.py :: NamedValuesListIterable.__iter__ (lineas 251-265) ---
+    def __iter__(self):
+        queryset = self.queryset
+        if queryset._fields:
+            names = queryset._fields
+        else:
+            query = queryset.query
+            names = [
+                *query.extra_select,
+                *query.values_select,
+                *query.annotation_select,
+            ]
+        tuple_class = create_namedtuple_class(*names)
+        new = tuple.__new__
+        for row in super().__iter__():
+            yield new(tuple_class, row)
+
+--- DJANGO db/models/query.py :: FlatValuesListIterable.__iter__ (lineas 274-280) ---
+    def __iter__(self):
+        queryset = self.queryset
+        compiler = queryset.query.get_compiler(queryset.db)
+        for row in compiler.results_iter(
+            chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+        ):
+            yield row[0]
+
+--- DJANGO db/models/query.py :: QuerySet.__iter__ (lineas 375-391) ---
+    def __iter__(self):
+        """
+        The queryset iterator protocol uses three nested iterators in the
+        default case:
+            1. sql.compiler.execute_sql()
+               - Returns 100 rows at time (constants.GET_ITERATOR_CHUNK_SIZE)
+                 using cursor.fetchmany(). This part is responsible for
+                 doing some column masking, and returning the rows in chunks.
+            2. sql.compiler.results_iter()
+               - Returns one row at time. At this point the rows are still just
+                 tuples. In some cases the return values are converted to
+                 Python values at this location.
+            3. self.iterator()
+               - Responsible for turning the rows into model objects.
+        """
+        self._fetch_all()
+        return iter(self._result_cache)
+
+--- DJANGO db/models/query.py :: RawQuerySet.__iter__ (lineas 2202-2204) ---
+    def __iter__(self):
+        self._fetch_all()
+        return iter(self._result_cache)
+
+--- DRF serializers.py :: Serializer.__iter__ (lineas 554-556) ---
+    def __iter__(self):
+        for field in self.fields.values():
+            yield self[field.field_name]
+
+==============================================================================
+NOMBRE: __le__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__le__ (lineas 6625-6636) ---
+    def __le__(self, other):
+        try:
+            if self._name == other._name:
+                # these are much cheaper checks than a proper subset check, so
+                # optimise for checking if a null or singleton are subsets of a
+                # recordset
+                if not self or self in other:
+                    return True
+                return set(self._ids) <= set(other._ids)
+        except AttributeError:
+            pass
+        return NotImplemented
+
+==============================================================================
+NOMBRE: __len__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__len__ (lineas 6479-6481) ---
+    def __len__(self) -> int:
+        """ Return the size of ``self``. """
+        return len(self._ids)
+
+--- REFERENCIA odoo/orm/models.py :: RecordCache.__len__ (lineas 7041-7043) ---
+    def __len__(self):
+        """ Return the number of fields with a cached value. """
+        return sum(1 for name in self)
+
+--- DJANGO db/models/query.py :: QuerySet.__len__ (lineas 371-373) ---
+    def __len__(self):
+        self._fetch_all()
+        return len(self._result_cache)
+
+--- DJANGO db/models/query.py :: RawQuerySet.__len__ (lineas 2194-2196) ---
+    def __len__(self):
+        self._fetch_all()
+        return len(self._result_cache)
+
+==============================================================================
+NOMBRE: __lt__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__lt__ (lineas 6617-6623) ---
+    def __lt__(self, other):
+        try:
+            if self._name == other._name:
+                return set(self._ids) < set(other._ids)
+        except AttributeError:
+            pass
+        return NotImplemented
+
+--- REFERENCIA odoo/orm/models.py :: ReversibleComparator.__lt__ (lineas 7074-7085) ---
+    def __lt__(self, other: ReversibleComparator) -> bool:
+        item = self.__item
+        item_cmp = other.__item
+        if item == item_cmp:
+            return False
+        if item is None:
+            return self.__none_first
+        if item_cmp is None:
+            return not self.__none_first
+        if self.__reverse:
+            item, item_cmp = item_cmp, item
+        return item < item_cmp
+
+==============================================================================
+NOMBRE: __or__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__or__ (lineas 6587-6591) ---
+    def __or__(self, other) -> Self:
+        """ Return the union of two recordsets.
+            Note that first occurrence order is preserved.
+        """
+        return self.union(other)
+
+--- DJANGO db/models/query.py :: QuerySet.__or__ (lineas 459-476) ---
+    def __or__(self, other):
+        self._check_operator_queryset(other, "|")
+        self._merge_sanity_check(other)
+        if isinstance(self, EmptyQuerySet):
+            return other
+        if isinstance(other, EmptyQuerySet):
+            return self
+        query = (
+            self
+            if self.query.can_filter()
+            else self.model._base_manager.filter(pk__in=self.values("pk"))
+        )
+        combined = query._chain()
+        combined._merge_known_related_objects(other)
+        if not other.query.can_filter():
+            other = other.model._base_manager.filter(pk__in=other.values("pk"))
+        combined.query.combine(other.query, sql.OR)
+        return combined
+
+--- DRF permissions.py :: OperationHolderMixin.__or__ (lineas 15-16) ---
+    def __or__(self, other):
+        return OperandHolder(OR, self, other)
+
+==============================================================================
+NOMBRE: __repr__
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.__repr__ (lineas 6659-6660) ---
+    def __repr__(self):
+        return f"{self._name}{self._ids!r}"
+
+--- REFERENCIA odoo/orm/models.py :: ReversibleComparator.__repr__ (lineas 7093-7094) ---
+    def __repr__(self):
+        return f"<ReversibleComparator {self.__item!r}{' reverse' if self.__reverse else ''}>"
+
+--- DJANGO db/models/base.py :: Deferred.__repr__ (lineas 61-62) ---
+    def __repr__(self):
+        return "<Deferred field>"
+
+--- DJANGO db/models/base.py :: Model.__repr__ (lineas 610-611) ---
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self)
+
+--- DJANGO db/models/query.py :: QuerySet.__repr__ (lineas 365-369) ---
+    def __repr__(self):
+        data = list(self[: REPR_OUTPUT_SIZE + 1])
+        if len(data) > REPR_OUTPUT_SIZE:
+            data[-1] = "...(remaining elements truncated)..."
+        return "<%s %r>" % (self.__class__.__name__, data)
+
+--- DJANGO db/models/query.py :: RawQuerySet.__repr__ (lineas 2219-2220) ---
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self.query)
+
+--- DRF exceptions.py :: ErrorDetail.__repr__ (lineas 89-93) ---
+    def __repr__(self):
+        return 'ErrorDetail(string=%r, code=%r)' % (
+            str(self),
+            self.code,
+        )
+
+--- DRF fields.py :: CreateOnlyDefault.__repr__ (lineas 258-259) ---
+    def __repr__(self):
+        return '%s(%s)' % (self.__class__.__name__, repr(self.default))
+
+--- DRF fields.py :: CurrentUserDefault.__repr__ (lineas 268-269) ---
+    def __repr__(self):
+        return '%s()' % self.__class__.__name__
+
+--- DRF fields.py :: Field.__repr__ (lineas 648-654) ---
+    def __repr__(self):
+        """
+        Fields are represented using their initial calling arguments.
+        This allows us to create descriptive representations for serializer
+        instances that show all the declared fields on the serializer.
+        """
+        return representation.field_repr(self)
+
+--- DRF request.py :: Request.__repr__ (lineas 182-187) ---
+    def __repr__(self):
+        return '<%s.%s: %s %r>' % (
+            self.__class__.__module__,
+            self.__class__.__name__,
+            self.method,
+            self.get_full_path())
+
+--- DRF serializers.py :: Serializer.__repr__ (lineas 547-548) ---
+    def __repr__(self):
+        return representation.serializer_repr(self, indent=1)
+
+--- DRF serializers.py :: ListSerializer.__repr__ (lineas 789-790) ---
+    def __repr__(self):
+        return representation.list_repr(self, indent=1)
+
+--- DRF validators.py :: UniqueValidator.__repr__ (lineas 89-93) ---
+    def __repr__(self):
+        return '<%s(queryset=%s)>' % (
+            self.__class__.__name__,
+            smart_repr(self.queryset)
+        )
+
+--- DRF validators.py :: UniqueTogetherValidator.__repr__ (lineas 198-205) ---
+    def __repr__(self):
+        return '<{}({})>'.format(
+            self.__class__.__name__,
+            ', '.join(
+                f'{attr}={smart_repr(getattr(self, attr))}'
+                for attr in ('queryset', 'fields', 'condition')
+                if getattr(self, attr) is not None)
+        )
+
+--- DRF validators.py :: BaseUniqueForValidator.__repr__ (lineas 299-305) ---
+    def __repr__(self):
+        return '<%s(queryset=%s, field=%s, date_field=%s)>' % (
+            self.__class__.__name__,
+            smart_repr(self.queryset),
+            smart_repr(self.field),
+            smart_repr(self.date_field)
+        )
+
+==============================================================================
+NOMBRE: create
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.create (lineas 4610-4767) ---
+    @api.model_create_multi
+    def create(self, vals_list: list[ValuesType]) -> Self:
+        """Create new records for the model.
+
+        The new records are initialized using the values from the list of dicts
+        ``vals_list``, and if necessary those from :meth:`~.default_get`.
+
+        :param vals_list:
+            values for the model's fields, as a list of dictionaries::
+
+                [{'field_name': field_value, ...}, ...]
+
+            For backward compatibility, ``vals_list`` may be a dictionary.
+            It is treated as a singleton list ``[vals]``, and a single record
+            is returned.
+
+            see :meth:`~.write` for details
+
+        :return: the created records
+        :raise AccessError: if the current user is not allowed to create records of the specified model
+        :raise ValidationError: if user tries to enter invalid value for a selection field
+        :raise ValueError: if a field name specified in the create values does not exist.
+        :raise UserError: if a loop would be created in a hierarchy of objects a result of the operation
+          (such as setting an object as its own parent)
+        """
+        assert isinstance(vals_list, (list, tuple))
+        if not vals_list:
+            return self.browse()
+
+        self = self.browse()
+        self.check_access('create')
+
+        # check access to all user-provided fields
+        field_names = OrderedSet(fname for vals in vals_list for fname in vals)
+        field_names.update(
+            field_name
+            for context_key in self.env.context
+            if context_key.startswith('default_')
+            and (field_name := context_key[8:])
+            and field_name in self._fields
+        )
+        for field_name in field_names:
+            field = self._fields.get(field_name)
+            if field is None:
+                raise ValueError(f"Invalid field {field_name!r} in {self._name!r}")
+            self._check_field_access(field, 'write')
+
+        new_vals_list = self._prepare_create_values(vals_list)
+
+        # classify fields for each record
+        data_list = []
+        determine_inverses = defaultdict(OrderedSet)       # {inverse: fields}
+
+        for vals in new_vals_list:
+            precomputed = vals.pop('__precomputed__', ())
+
+            # distribute fields into sets for various purposes
+            data = {}
+            data['stored'] = stored = {}
+            data['inversed'] = inversed = {}
+            data['inherited'] = inherited = defaultdict(dict)
+            data['protected'] = protected = set()
+            for key, val in vals.items():
+                field = self._fields.get(key)
+                if not field:
+                    raise ValueError("Invalid field %r on model %r" % (key, self._name))
+                if field.store:
+                    stored[key] = val
+                if field.inherited:
+                    inherited[field.related_field.model_name][key] = val
+                elif field.inverse and field not in precomputed:
+                    inversed[key] = val
+                    determine_inverses[field.inverse].add(field)
+                # protect editable computed fields and precomputed fields
+                # against (re)computation
+                if field.compute and (not field.readonly or field.precompute):
+                    protected.update(self.pool.field_computed.get(field, [field]))
+                if field.type == 'many2one' and field.bypass_search_access and not self.env.su:
+                    self.env[field.comodel_name].browse(field.convert_to_cache(val, self)).check_access('read')
+
+            data_list.append(data)
+
+        # create or update parent records
+        for model_name, parent_name in self._inherits.items():
+            parent_data_list = []
+            for data in data_list:
+                if not data['stored'].get(parent_name):
+                    parent_data_list.append(data)
+                elif data['inherited'][model_name]:
+                    parent = self.env[model_name].browse(data['stored'][parent_name])
+                    parent.write(data['inherited'][model_name])
+
+            if parent_data_list:
+                parents = self.env[model_name].create([
+                    data['inherited'][model_name]
+                    for data in parent_data_list
+                ])
+                for parent, data in zip(parents, parent_data_list):
+                    data['stored'][parent_name] = parent.id
+
+        # create records with stored fields
+        records = self._create(data_list)
+
+        # protect fields being written against recomputation
+        protected_fields = [(data['protected'], data['record']) for data in data_list]
+        with self.env.protecting(protected_fields):
+            # call inverse method for each group of fields
+            for fields in determine_inverses.values():
+                # determine which records to inverse for those fields
+                inv_names = {field.name for field in fields}
+                inv_rec_ids = []
+                for data in data_list:
+                    if inv_names.isdisjoint(data['inversed']):
+                        continue
+                    record = data['record']
+                    record._update_cache({
+                        fname: value
+                        for fname, value in data['inversed'].items()
+                        if fname in inv_names and fname not in data['stored']
+                    })
+                    inv_rec_ids.append(record.id)
+
+                inv_records = self.browse(inv_rec_ids)
+                next(iter(fields)).determine_inverse(inv_records)
+                # Values of non-stored fields were cached before running inverse methods. In case of x2many create
+                # commands, the cache may therefore hold NewId records. We must now invalidate those values.
+                inv_relational_fnames = [field.name for field in fields if field.type in ('one2many', 'many2many') and not field.store]
+                inv_records.invalidate_recordset(fnames=inv_relational_fnames)
+
+        # check Python constraints for non-stored inversed fields
+        for data in data_list:
+            data['record']._validate_fields(data['inversed'], data['stored'])
+
+        if self._check_company_auto:
+            records._check_company()
+
+        import_module = self.env.context.get('_import_current_module')
+        if not import_module: # not an import -> bail
+            return records
+
+        # It is to support setting xids directly in create by
+        # providing an "id" key (otherwise stripped by create) during an import
+        # (which should strip 'id' from the input data anyway)
+        noupdate = self.env.context.get('noupdate', False)
+
+        xids = (v.get('id') for v in vals_list)
+        self.env['ir.model.data']._update_xmlids([
+            {
+                'xml_id': xid if '.' in xid else ('%s.%s' % (import_module, xid)),
+                'record': rec,
+                # note: this is not used when updating o2ms above...
+                'noupdate': noupdate,
+            }
+            for rec, xid in zip(records, xids)
+            if xid and isinstance(xid, str)
+        ])
+
+        return records
+
+--- DJANGO db/models/query.py :: QuerySet.create (lineas 653-670) ---
+    def create(self, **kwargs):
+        """
+        Create a new object with the given kwargs, saving it to the database
+        and returning the created object.
+        """
+        reverse_one_to_one_fields = frozenset(kwargs).intersection(
+            self.model._meta._reverse_one_to_one_field_names
+        )
+        if reverse_one_to_one_fields:
+            raise ValueError(
+                "The following fields do not exist in this model: %s"
+                % ", ".join(reverse_one_to_one_fields)
+            )
+
+        obj = self.model(**kwargs)
+        self._for_write = True
+        obj.save(force_insert=True, using=self.db)
+        return obj
+
+--- DRF mixins.py :: CreateModelMixin.create (lineas 16-21) ---
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+--- DRF serializers.py :: BaseSerializer.create (lineas 174-175) ---
+    def create(self, validated_data):
+        raise NotImplementedError('`create()` must be implemented.')
+
+--- DRF serializers.py :: ListSerializer.create (lineas 731-734) ---
+    def create(self, validated_data):
+        return [
+            self.child.create(attrs) for attrs in validated_data
+        ]
+
+--- DRF serializers.py :: ModelSerializer.create (lineas 956-1018) ---
+    def create(self, validated_data):
+        """
+        We have a bit of extra checking around this in order to provide
+        descriptive messages when something goes wrong, but this method is
+        essentially just:
+
+            return ExampleModel.objects.create(**validated_data)
+
+        If there are many to many fields present on the instance then they
+        cannot be set until the model is instantiated, in which case the
+        implementation is like so:
+
+            example_relationship = validated_data.pop('example_relationship')
+            instance = ExampleModel.objects.create(**validated_data)
+            instance.example_relationship = example_relationship
+            return instance
+
+        The default implementation also does not handle nested relationships.
+        If you want to support writable nested relationships you'll need
+        to write an explicit `.create()` method.
+        """
+        raise_errors_on_nested_writes('create', self, validated_data)
+
+        ModelClass = self.Meta.model
+
+        # Remove many-to-many relationships from validated_data.
+        # They are not valid arguments to the default `.create()` method,
+        # as they require that the instance has already been saved.
+        info = model_meta.get_field_info(ModelClass)
+        many_to_many = {}
+        for field_name, relation_info in info.relations.items():
+            if relation_info.to_many and (field_name in validated_data):
+                many_to_many[field_name] = validated_data.pop(field_name)
+
+        try:
+            instance = ModelClass._default_manager.create(**validated_data)
+        except TypeError:
+            tb = traceback.format_exc()
+            msg = (
+                'Got a `TypeError` when calling `%s.%s.create()`. '
+                'This may be because you have a writable field on the '
+                'serializer class that is not a valid argument to '
+                '`%s.%s.create()`. You may need to make the field '
+                'read-only, or override the %s.create() method to handle '
+                'this correctly.\nOriginal exception was:\n %s' %
+                (
+                    ModelClass.__name__,
+                    ModelClass._default_manager.name,
+                    ModelClass.__name__,
+                    ModelClass._default_manager.name,
+                    self.__class__.__name__,
+                    tb
+                )
+            )
+            raise TypeError(msg)
+
+        # Save many-to-many relationships after the instance is created.
+        if many_to_many:
+            for field_name, value in many_to_many.items():
+                field = getattr(instance, field_name)
+                field.set(value)
+
+        return instance
+
+==============================================================================
+NOMBRE: exists
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.exists (lineas 5544-5561) ---
+    @api.private
+    def exists(self) -> Self:
+        """ The subset of records in ``self`` that exist.
+        It can be used as a test on records::
+
+            if record.exists():
+                ...
+
+        By convention, new records are returned as existing.
+        """
+        new_ids, ids = partition(lambda i: isinstance(i, NewId), self._ids)
+        if not ids:
+            return self
+        query = Query(self.env, self._table, self._table_sql)
+        query.add_where(SQL("%s IN %s", SQL.identifier(self._table, 'id'), tuple(ids)))
+        real_ids = (id_ for [id_] in self.env.execute_query(query.select()))
+        valid_ids = {*real_ids, *new_ids}
+        return self.browse(i for i in self._ids if i in valid_ids)
+
+--- DJANGO db/models/query.py :: QuerySet.exists (lineas 1332-1338) ---
+    def exists(self):
+        """
+        Return True if the QuerySet would have any results, False otherwise.
+        """
+        if self._result_cache is None:
+            return self.query.has_results(using=self.db)
+        return bool(self._result_cache)
+
+==============================================================================
+NOMBRE: union
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.union (lineas 6593-6606) ---
+    @api.private
+    def union(self, *args: Self) -> Self:
+        """ Return the union of ``self`` with all the arguments (in linear time
+            complexity, with first occurrence order preserved).
+        """
+        ids = list(self._ids)
+        for arg in args:
+            try:
+                if arg._name != self._name:
+                    raise TypeError(f"inconsistent models in: {self} | {arg}")
+                ids.extend(arg._ids)
+            except AttributeError:
+                raise TypeError(f"unsupported operand types in: {self} | {arg!r}")
+        return self.browse(OrderedSet(ids))
+
+--- DJANGO db/models/query.py :: QuerySet.union (lineas 1600-1611) ---
+    def union(self, *other_qs, all=False):
+        # If the query is an EmptyQuerySet, combine all nonempty querysets.
+        if isinstance(self, EmptyQuerySet):
+            qs = [q for q in other_qs if not isinstance(q, EmptyQuerySet)]
+            if not qs:
+                return self
+            if len(qs) == 1:
+                return qs[0]
+            return qs[0]._combinator_query("union", *qs[1:], all=all)
+        elif not other_qs:
+            return self
+        return self._combinator_query("union", *other_qs, all=all)
+
+==============================================================================
+NOMBRE: update
+==============================================================================
+
+--- REFERENCIA odoo/orm/models.py :: BaseModel.update (lineas 6346-6350) ---
+    @api.private
+    def update(self, values: ValuesType) -> None:
+        """ Update the records in ``self`` with ``values``. """
+        for name, value in values.items():
+            self[name] = value
+
+--- DJANGO db/models/query.py :: QuerySet.update (lineas 1264-1302) ---
+    def update(self, **kwargs):
+        """
+        Update all elements in the current QuerySet, setting all the given
+        fields to the appropriate values.
+        """
+        self._not_support_combined_queries("update")
+        if self.query.is_sliced:
+            raise TypeError("Cannot update a query once a slice has been taken.")
+        self._for_write = True
+        query = self.query.chain(sql.UpdateQuery)
+        query.add_update_values(kwargs)
+
+        # Inline annotations in order_by(), if possible.
+        new_order_by = []
+        for col in query.order_by:
+            alias = col
+            descending = False
+            if isinstance(alias, str) and alias.startswith("-"):
+                alias = alias.removeprefix("-")
+                descending = True
+            if annotation := query.annotations.get(alias):
+                if getattr(annotation, "contains_aggregate", False):
+                    raise exceptions.FieldError(
+                        f"Cannot update when ordering by an aggregate: {annotation}"
+                    )
+                if descending:
+                    annotation = annotation.desc()
+                new_order_by.append(annotation)
+            else:
+                new_order_by.append(col)
+        query.order_by = tuple(new_order_by)
+
+        # Clear SELECT clause as all annotation references were inlined by
+        # add_update_values() already.
+        query.clear_select_clause()
+        with transaction.mark_for_rollback_on_error(using=self.db):
+            rows = query.get_compiler(self.db).execute_sql(ROW_COUNT)
+        self._result_cache = None
+        return rows
+
+--- DRF mixins.py :: UpdateModelMixin.update (lineas 63-75) ---
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
+--- DRF serializers.py :: BaseSerializer.update (lineas 171-172) ---
+    def update(self, instance, validated_data):
+        raise NotImplementedError('`update()` must be implemented.')
+
+--- DRF serializers.py :: ListSerializer.update (lineas 722-729) ---
+    def update(self, instance, validated_data):
+        raise NotImplementedError(
+            "Serializers with many=True do not support multiple update by "
+            "default, only multiple create. For updates it is unclear how to "
+            "deal with insertions and deletions. If you need to support "
+            "multiple update, use a `ListSerializer` class and override "
+            "`.update()` so you can specify the behavior exactly."
+        )
+
+--- DRF serializers.py :: ModelSerializer.update (lineas 1020-1044) ---
+    def update(self, instance, validated_data):
+        raise_errors_on_nested_writes('update', self, validated_data)
+        info = model_meta.get_field_info(instance)
+
+        # Simply set each attribute on the instance, and then save it.
+        # Note that unlike `.create()` we don't need to treat many-to-many
+        # relationships as being a special case. During updates we already
+        # have an instance pk for the relationships to be associated with.
+        m2m_fields = []
+        for attr, value in validated_data.items():
+            if attr in info.relations and info.relations[attr].to_many:
+                m2m_fields.append((attr, value))
+            else:
+                setattr(instance, attr, value)
+
+        instance.save()
+
+        # Note that many-to-many fields are set after updating instance.
+        # Setting m2m fields triggers signals which could potentially change
+        # updated instance and we do not want it to collide with .update()
+        for attr, value in m2m_fields:
+            field = getattr(instance, attr)
+            field.set(value)
+
+        return instance
+

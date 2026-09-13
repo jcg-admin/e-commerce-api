@@ -209,7 +209,8 @@ BINDING_TYPE_CHOICES = [
 ]
 
 
-class IrActionsBase(models.CopyMixin, models.OriginMixin, TimeStampedModel):
+class IrActionsBase(models.DefaultGetMixin, models.CopyMixin, models.OriginMixin,
+                    TimeStampedModel):
     """Campos comunes de toda acción — el ``_inherit`` de la referencia.
 
     Abstracto porque allá la herencia es **por prototipo**: cada subtipo copia

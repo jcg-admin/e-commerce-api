@@ -42,8 +42,34 @@ sin el mecanismo (sub-patrón D de ``metrica-decide-la-conclusion``).
 import pytest
 from django.db.models import QuerySet
 
+import fields
 from addons.base.models.res_partner import ResPartner
+from orm.environments import Environment
+from orm.models import BaseModel
 from orm.utils import as_record_list, browse, model_of, record_ids
+
+
+class UtilsRecordsetProbe(BaseModel):
+    """Sonda que lleva la terna: es lo que la rama nueva tiene que ver.
+
+    El nombre NO puede ser ``RecordsetProbe``: la llave del registro de
+    Django es ``app_label`` mas el nombre de la CLASE en minusculas, no el
+    ``_name`` de la referencia ni el ``db_table``. Con los tres archivos de
+    ``tests/unit/orm`` recolectados juntos, esa sonda choca con la de
+    ``test_base_model_recordset.py`` y la recoleccion entera aborta con
+    ``RuntimeError: Conflicting 'recordsetprobe' models``. Corriendo el
+    archivo solo no se ve: el defecto solo existe en el universo completo.
+    """
+
+    _name = 'orm.utils.recordset.probe'
+    _description = "Recordset probe for record_ids"
+
+    label = fields.Char('Label')
+
+    class Meta:
+        app_label = 'base'
+        managed = False
+        db_table = 'orm_utils_recordset_probe'
 
 
 @pytest.mark.django_db
@@ -149,6 +175,42 @@ class TestTheDivergencesAreDeclaredAndMeasured:
         """La fuente guarda ``(7, 7)``; una fila no se puede duplicar en SQL."""
         partner = ResPartner.objects.create(name='Repetido')
         assert record_ids(browse(ResPartner, [partner.pk, partner.pk])) == (partner.pk,)
+
+
+@pytest.mark.django_db
+class TestTheTripleWinsOverThePkOfTheRow:
+    """La premisa de este archivo cambio con TASK-API-0397.
+
+    La cabecera dice *"aqui un conjunto de filas es una instancia de modelo de
+    Django o un QuerySet, asi que ese objeto unico no existe"*. Desde que
+    ``BaseModel`` lleva la terna ``(env, _ids, _prefetch_ids)``, **si existe**:
+    una instancia de modelo puede portar N ids. Y ``record_ids`` seguia
+    resolviendo por ``isinstance(records, models.Model) -> (records.pk,)``, que
+    sobre esa instancia va al descriptor de ``id`` y levanta ``ValueError:
+    Expected singleton``.
+
+    Es el defecto que el propio docstring de ``record_ids`` prometia no tener:
+    *"donde la fuente escribe ``records._ids``, aqui se escribe
+    ``record_ids(records)``"* — y nunca leia ``_ids``.
+    """
+
+    def test_a_multi_recordset_gives_its_ids(self):
+        environment = Environment()
+        records = UtilsRecordsetProbe._from_ids(environment, (7, 18, 33), (7, 18, 33))
+        assert record_ids(records) == (7, 18, 33)
+
+    def test_the_order_of_the_triple_survives(self):
+        environment = Environment()
+        records = UtilsRecordsetProbe._from_ids(environment, (33, 7), (33, 7))
+        assert record_ids(records) == (33, 7)
+
+    def test_a_plain_django_row_still_answers_with_its_pk(self):
+        # Control que DISCRIMINA: la rama nueva no puede comerse la vieja.
+        # Una fila que construye Django NO lleva ``_ids`` y sigue resolviendo
+        # por ``pk``. Si la rama del ``_ids`` se pusiera despues, este caso
+        # seguiria pasando y los dos de arriba caerian — por eso hacen falta
+        # los tres.
+        assert record_ids(UtilsRecordsetProbe(id=99)) == (99,)
 
 
 @pytest.mark.django_db

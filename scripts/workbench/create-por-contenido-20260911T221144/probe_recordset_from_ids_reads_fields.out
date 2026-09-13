@@ -1,0 +1,7 @@
+len_is_two: OK
+iter_pk_in_order: OK
+iter_name_reads: OK
+unpack_two: OK
+singleton_returns_self: OK
+browse_from_empty: OK
+VEREDICTO recordset_from_ids: OK

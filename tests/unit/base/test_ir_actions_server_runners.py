@@ -29,7 +29,7 @@ from addons.base.models.ir_actions import (
 from addons.base.models.ir_model import IrModel, IrModelFields
 from addons.base.models.ir_sequence import IrSequence
 from addons.base.models.res_partner import ResPartner
-from orm.environments import context_scope
+from orm.environments import context_scope, sudo
 
 
 #: El modelo de prueba es ``ResPartner`` y no cualquiera: los corredores
@@ -40,6 +40,16 @@ from orm.environments import context_scope
 #: adopta ninguno, así que medir con él habría medido esa divergencia del
 #: árbol en vez de los corredores.
 PARTNER = 'base.ResPartner'
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 def _action(**kwargs):

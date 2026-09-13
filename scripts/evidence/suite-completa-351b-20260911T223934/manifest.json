@@ -1,0 +1,4 @@
+{
+  "instrument": "bash -c uv run pytest -n 4 -q --reuse-db -p no:cacheprovider 2>&1 | tail -12",
+  "started_at": "2026-09-11T22:39:34+00:00"
+}

@@ -1,0 +1,31 @@
+      9 src/orm/models.py:274: django.core.exceptions.PermissionDenied: No tiene permiso para crear registros de «Partner» (base.ResPartner).
+      8 src/orm/models.py:1707: TypeError: DefaultGetMixin.create() missing 1 required positional argument: 'vals_list'
+      1 tests/unit/stock/test_stock_picking.py:348: TypeError: StockPicking.create() missing 1 required positional argument: 'vals_list'
+      1 tests/unit/account/test_setup_wizards.py:76: TypeError: AccountFinancialYearOp.create() missing 1 required positional argument: 'vals_list'
+      1 tests/integration/base/test_res_currency_rate.py:632: TypeError: ResCurrencyRate.create() missing 1 required positional argument: 'vals_list'
+      1 tests/integration/base/test_res_currency_rate.py:615: TypeError: ResCurrencyRate.create() missing 1 required positional argument: 'vals_list'
+      1 tests/integration/base/test_res_currency_rate.py:604: TypeError: ResCurrencyRate.create() missing 1 required positional argument: 'vals_list'
+      1 FAILED tests/unit/stock/test_stock_picking.py::test_create_respects_an_explicit_name
+      1 FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_without_an_email_in_the_name_the_context_one_lands
+      1 FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_with_an_email_in_the_name_the_guard_shields_the_context
+      1 FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_name_create_writes_through_rec_name
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_the_original_keeps_its_children
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_the_copy_is_a_new_row - Ty...
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_the_copy_gets_the_defaults_of_a_normal_create
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_the_children_are_duplicated_under_the_new_parent
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_res_partner_appends_the_copy_suffix
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_a_given_name_is_not_suffixed
+      1 FAILED tests/unit/orm/test_copy.py::TestCopy::test_a_child_is_not_visited_twice
+      1 FAILED tests/unit/base/test_ir_actions_server_runners.py::TestObjectCreate::test_the_record_is_created_with_the_value_as_name
+      1 FAILED tests/unit/base/test_ir_actions_server_runners.py::TestObjectCopy::test_the_referenced_record_is_duplicated
+      1 FAILED tests/unit/account/test_setup_wizards.py::TestFinancialYearOp::test_the_fiscal_year_fields_read_from_the_company
+      1 FAILED tests/integration/base/test_res_partner_create_and_delete.py::TestNameCreate::test_without_an_email_the_partner_has_none
+      1 FAILED tests/integration/base/test_res_partner_create_and_delete.py::TestNameCreate::test_with_only_an_email_the_name_is_the_email
+      1 FAILED tests/integration/base/test_res_partner_create_and_delete.py::TestNameCreate::test_it_splits_the_name_and_the_email
+      1 FAILED tests/integration/base/test_res_partner_create_and_delete.py::TestNameCreate::test_it_returns_the_pair_id_and_display_name
+      1 FAILED tests/integration/base/test_res_partner_create_and_delete.py::TestNameCreate::test_force_email_lets_a_valid_one_through
+      1 FAILED tests/integration/base/test_res_currency_rate.py::TestCreateAndWrite::test_rate_wins_when_two_arrive_together
+      1 FAILED tests/integration/base/test_res_currency_rate.py::TestCreateAndWrite::test_create_resolves_the_inverse_too
+      1 FAILED tests/integration/base/test_res_currency_rate.py::TestCreateAndWrite::test_create_resolves_company_rate_into_the_stored_rate
+      1 22 failed, 25 passed, 1 warning in 5.83s
+EXIT=0

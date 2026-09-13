@@ -1,0 +1,33 @@
+{
+  "question": "De los 21 símbolos que el cubo clasificó como TRAE —el stack ya lo tiene hecho—, ¿cuántos los trae de verdad una clase del stack, y cuántos sólo los resuelve `object` para toda clase de Python?",
+  "instrument": [
+    "scripts/workbench/basemodel-trae-contracts-20260911T050421/probes/probe_who_declares.py",
+    "scripts/workbench/basemodel-trae-contracts-20260911T050421/probes/extract_both_sides.py"
+  ],
+  "metric": "por cada nombre del cubo TRAE, la clase del MRO que DEFINE el atributo (`__mro__` + `vars(clase)`), no `hasattr`, sobre cinco sujetos del stack instalado: django.Model, django.QuerySet, django.Manager, drf.Serializer y drf.ModelSerializer. El segundo instrumento extrae el cuerpo de los dos lados —referencia y stack— para leer qué hace cada uno, no si el nombre resuelve.",
+  "blind_to": [
+    "si el cuerpo del stack hace LO MISMO que el de la referencia: el instrumento localiza la definición y extrae el texto, pero el veredicto de equivalencia lo emite quien lee, no el guion",
+    "un símbolo que el stack traiga bajo otro nombre — no hay tabla de equivalencia",
+    "las clases del stack fuera de los cinco sujetos medidos; un sexto que lo declarara saldría AUSENTE aquí"
+  ],
+  "corrected_premise": {
+    "decia": "21 símbolos de BaseModel caen en el cubo TRAE, clasificados con hasattr(clase, nombre)",
+    "mide": "hasattr responde True para __eq__, __ge__, __hash__, __repr__ e __init__ en CUALQUIER clase de Python: los hereda de `object`. object.__ge__ devuelve NotImplemented — no ordena nada.",
+    "consecuencia": "el cubo medía el SIGNIFICANTE (el nombre resuelve) y se leyó como el SIGNIFICADO (hay un cuerpo que hace el trabajo). Un TRAE sostenido por `object` es un CONSTRUYE sin declarar."
+  },
+  "reproducible": "python3 scripts/workbench/basemodel-trae-contracts-20260911T050421/probes/probe_who_declares.py && python3 scripts/workbench/basemodel-trae-contracts-20260911T050421/probes/extract_both_sides.py",
+  "outputs": [
+    "outputs/who_declares.json",
+    "outputs/trae_presence.json",
+    "outputs/both_sides.txt",
+    "outputs/mutacion_sin_los_tres.py"
+  ],
+  "source": [
+    "odoo19c: odoo/orm/models.py::BaseModel — la referencia que declara el contrato",
+    "django.db.models.query::QuerySet, django.db.models::Model, django.db.models::Manager — del paquete instalado, no de memoria",
+    "rest_framework.serializers::Serializer, ModelSerializer"
+  ],
+  "tasks": ["#319"],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/analisis-veredicto-contrato-de-los-21-del-cubo-trae.rst",
+  "measured_at": "2026-09-11T05:04:21"
+}

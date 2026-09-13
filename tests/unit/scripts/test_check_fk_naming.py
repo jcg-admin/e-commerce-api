@@ -199,3 +199,92 @@ class TestTheReferenceDecidesTheSymbolNotTheSuffix:
         """
         assert gate.classify('country_of_birth', False,
                              reference_names=frozenset({'country_of_birth'})) == 'B'
+
+
+class TestTheSourceDerivesStoreFromComputeAndRelated:
+    """``store`` no se declara sólo con la palabra clave: la fuente lo DERIVA.
+
+    Medido verbatim en ``odoo19c: odoo/orm/fields.py``, dos ramas del mismo
+    ``_setup_attrs``::
+
+        443:        if attrs.get('compute'):
+        447:            attrs['store'] = store = attrs.get('store', False)
+        452:        if attrs.get('related'):
+        455:            attrs['store'] = store = attrs.get('store', False)
+
+    El ``attrs.get('store', False)`` de las dos es lo que hace que un
+    ``store=True`` explícito SOBREVIVA a la derivación: la fuente sólo pone el
+    default, no impone el valor.
+
+    Nuestro despachador ya reproduce las dos ramas en tiempo de ejecución —
+    medido con ``fields.Many2one('base.ResPartner', compute='_compute_x')`` y
+    con ``related='partner_id.country_id'``, las dos devuelven un
+    ``orm.fields_nonstored.NonStored``; con ``store=True`` devuelve un
+    ``ForeignKey``. El lector estático del gate NO las veía, así que un campo
+    que en ejecución no tiene columna se clasificaba por el eje de la columna:
+    el sub-patrón A de ``metrica-decide-la-conclusion.md``, que la propia
+    ``classify`` ya documenta para ``store=False``.
+
+    Por qué el caso de ``related`` es sintético y el de ``compute`` no
+    ==================================================================
+
+    Medido sobre ``src`` y ``addons`` al escribir este control: **1**
+    declaración relacional de un solo valor con ``compute`` y sin ``store``, y
+    **0** con ``related`` y sin ``store``. El árbol no puede dar un positivo
+    real de la segunda rama, así que se fabrica — y se declara que se fabricó.
+    El positivo real de la primera llega con el addon ``test_orm`` (#332):
+    ``TestOrmCategory.root_categ``.
+
+    Qué haría FALLAR estos casos (sub-patrón D)
+    ===========================================
+
+    Retirar la derivación de ``declarations`` — volver a
+    ``stored = not (store is Constant(False))``. Caen los dos primeros casos y
+    sólo ésos: el ``store=True`` explícito y el ``store=False`` explícito
+    siguen midiéndose por la palabra clave, que es lo que ya funcionaba.
+    """
+
+    def _forms(self, tmp_path, body):
+        path = tmp_path / 'm.py'
+        path.write_text('import fields\n'
+                        'from django.db import models\n'
+                        '\n'
+                        'class M(models.Model):\n' + body)
+        return {name: form for _k, name, form in gate.declarations(path)}
+
+    def test_a_computed_many2one_has_no_column_axis(self, tmp_path):
+        """``:443-447`` — con ``compute`` y sin ``store``, no hay columna."""
+        forms = self._forms(
+            tmp_path,
+            "    depth = fields.Many2one('x.y', compute='_compute_depth')\n")
+
+        assert forms == {'depth': 'N'}
+
+    def test_a_related_many2one_has_no_column_axis(self, tmp_path):
+        """``:452-455`` — la segunda rama, idéntica. Caso SINTÉTICO: el árbol
+        no tiene hoy ninguna declaración de esta forma (medido: 0)."""
+        forms = self._forms(
+            tmp_path,
+            "    label = fields.Many2one(related='partner.country')\n")
+
+        assert forms == {'label': 'N'}
+
+    def test_an_explicit_store_true_survives_the_derivation(self, tmp_path):
+        """``attrs.get('store', False)`` pone el default, no impone el valor.
+
+        Con ``store=True`` el campo SÍ tiene columna, así que vuelve a medirse
+        por el eje que B y C separan: sin ``db_column``, forma B.
+        """
+        forms = self._forms(
+            tmp_path,
+            "    parent_id = fields.Many2one('x.y', compute='_c', store=True)\n")
+
+        assert forms == {'parent_id': 'B'}
+
+    def test_an_explicit_store_false_is_still_seen(self, tmp_path):
+        """La rama que ya existía no se pierde al añadir la derivación."""
+        forms = self._forms(
+            tmp_path,
+            "    parent_id = fields.Many2one('x.y', store=False)\n")
+
+        assert forms == {'parent_id': 'N'}

@@ -1,0 +1,9 @@
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_a_two_dot_name_no_longer_breaks_the_class_body
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_the_source_name_survives_on_the_field
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_related_model_resolves_to_the_class
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheSentinelNeverReachesAMigration::test_deconstruct_emits_the_real_label
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheSentinelNeverReachesAMigration::test_no_sentinel_key_of_a_registered_name_is_left_pending
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_target_first_resolves_at_construction
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_referrer_first_resolves_when_the_target_is_prepared
+  (c) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_self_reference_resolves_on_its_own_class_prepared
+  (c) 8 failed, 8 passed, 1 warning in 6.05s

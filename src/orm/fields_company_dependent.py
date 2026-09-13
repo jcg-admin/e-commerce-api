@@ -457,13 +457,14 @@ def make_dispatcher(name, base_type, plain, extra_doc=''):
 
     def dispatcher(*args, company_dependent=False, required=None,
                    related=None, **kwargs):
-        #: ``related=`` se resuelve ANTES del despacho: un related no se
-        #: guarda por defecto (``odoo19c: odoo/orm/fields.py:455``), así que
-        #: quien elige entre el campo con columna y :class:`NonStored` tiene
-        #: que ver el ``store`` ya resuelto. El mecanismo es del **campo**, no
-        #: del tipo, así que ninguno de los cinco que este molde fabrica puede
-        #: quedarse fuera.
-        related_attrs = apply_source_defaults(related, kwargs)
+        #: ``related=`` se resuelve ANTES de construir, pero **ya no elige
+        #: clase**: el tipo se construye siempre y ``store`` queda como
+        #: atributo, que es la forma de la fuente (``odoo19c:
+        #: odoo/orm/fields.py:455`` — ``store`` es un atributo, no un tipo).
+        #: Lo que la derivación decide aquí es el valor de ese atributo y el
+        #: ``editable`` que Django necesita al construir.
+        related_attrs = apply_source_defaults(
+            related, kwargs, company_dependent=company_dependent)
         if required is not None:
             # Los dos, y no solo ``blank``: en la fuente el valor vacio de un
             # escalar no-requerido es ``False``, que en la columna es NULL —
@@ -471,16 +472,7 @@ def make_dispatcher(name, base_type, plain, extra_doc=''):
             # vacio SI es ``''``, alli y en Django.
             kwargs.setdefault('blank', not required)
             kwargs.setdefault('null', not required)
-        if not related_attrs['store']:
-            #: Sin columna, con ``related=`` o sin él. La condición era
-            #: ``related and not …``: un ``store=False`` declarado a secas
-            #: —la forma que la referencia usa para un ``compute`` sin
-            #: columna, ``fields.Integer(compute='_compute_…')``— caía en la
-            #: rama de abajo y salía como columna, y su migración aparecía en
-            #: ``makemigrations``. ``apply_source_defaults`` ya resuelve el
-            #: ``store`` de los dos casos (``:297-299``); aquí sólo se lee.
-            field = NonStored(*args, related=related, **kwargs)
-        elif company_dependent:
+        if company_dependent:
             # La guarda de ``CompanyDependent`` lee ``required`` de kwargs;
             # el despachador ya lo sacó de ahí, así que se le devuelve para
             # que el aviso de la fuente siga disparando.
@@ -494,6 +486,17 @@ def make_dispatcher(name, base_type, plain, extra_doc=''):
         # La fuente hace lo contrario — ``required`` ausente significa False
         # (``odoo19c: odoo/orm/fields.py``) — y ese es el defecto que se porta.
         field.required = bool(required)
+        #: El tipo lo declara la FACHADA, no la conducta del campo construido.
+        #: En la fuente ``type`` es un atributo de clase —``Selection.type =
+        #: 'selection'`` (``odoo19c: odoo/orm/fields_selection.py``)— así que un
+        #: ``Selection(related=…)`` es ``selection`` desde su declaración,
+        #: antes de heredar la enumeración de su destino. Aquí ``type`` es una
+        #: ``property`` que despacha por conducta (``orm/fields.py``:
+        #: ``type_for``), y un ``CharField`` sin ``choices`` publicaba ``char``:
+        #: ``setup_related`` comparaba ``char`` contra el ``selection`` del
+        #: destino y abortaba la costura. La anotación es el porte del atributo
+        #: de clase; la ``property`` la lee primero. Ver :ref:`h-api-1109`.
+        field.declared_type = base_type
         return annotate_related(field, related, related_attrs)
 
     dispatcher.__name__ = name

@@ -1,0 +1,27 @@
+first read label_nostore: 't' | type: str | queries: 0
+first read fk_nostore: None(1,) | type: ProbeRelETarget | queries: 1
+record_ids(fresh): (None,)
+fresh.pk: None | _ids: (None,)
+label_nostore.readonly: True
+label_nostore.store: False
+label_nostore.computed: ok
+label_nostore.before_dict: {}
+label_nostore.after_dict: {'label_nostore': 't'}
+label_nostore.cache_keys: []
+label_nostore.missing: [None]
+label_nostore.read: str pk='t'
+fk_nostore.readonly: True
+fk_nostore.store: False
+fk_nostore.computed: ok
+fk_nostore.before_dict: {}
+fk_nostore.after_dict: {'fk_nostore_id': 1}
+fk_nostore.cache_keys: []
+fk_nostore.missing: [None]
+fk_nostore.read: ProbeRelETarget pk=1
+scalar_first_read_ok: OK
+scalar_first_read_zero_queries: OK
+fk_first_read_ok: OK
+scalar_read_after_compute_ok: OK
+fk_read_after_compute_ok: OK
+VEREDICTO related_fila_nueva: OK
+EXIT=0

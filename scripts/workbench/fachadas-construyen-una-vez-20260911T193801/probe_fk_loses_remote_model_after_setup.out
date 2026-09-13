@@ -1,0 +1,4 @@
+antes: 1141 relacionales; con model=None: 0 []
+ensure_field_setup -> 4647 campos
+despues: con model=None: 0; perdidos: 0
+EXIT=0

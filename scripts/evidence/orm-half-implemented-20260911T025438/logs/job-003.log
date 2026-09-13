@@ -1,0 +1,32 @@
+=== paridad de firma: odoo/orm <-> src/orm ===
+
+archivo                       comp  igual  difiere  sin portar  ambiguo
+commands.py                      7      0        7           0        0
+decorators.py                   12     12        0           4        0
+domains.py                      62     57        5           2       20
+environments.py                 68     60        8           0        7
+fields.py                       20     15        5          58        6
+fields_binary.py                 0      0        0          14        5
+fields_misc.py                   0      0        0           8        3
+fields_numeric.py                0      0        0          15        6
+fields_properties.py            28     21        7           1        8
+fields_reference.py              0      0        0           7        1
+fields_relational.py             1      0        1          26       26
+fields_selection.py              0      0        0          12        0
+fields_temporal.py               1      1        0           8        6
+fields_textual.py                8      8        0          28        6
+identifiers.py                   7      7        0           0        0
+model_classes.py                 9      9        0           7        0
+models.py                       69     42       27         140       12
+models_transient.py              3      0        3           0        0
+registry.py                     45     43        2           0       14
+table_objects.py                 4      4        0           0        7
+types.py                         0      0        0           0        0
+utils.py                         8      8        0           0        0
+
+firmas comparables: 352 · identicas: 287 (81.5 %) · divergentes: 65
+(alcance medido: 22 archivo(s) con contraparte; 330 simbolo(s) sin portar quedan FUERA — los mide el censo)
+
+divergencias por tipo: varargs_divergente 3 · renombre 38 · parametro_ausente 11 · parametro_extra 8 · default_anadido 5
+FUERA de la comparacion por nombre declarado mas de una vez: 83 nombre(s) distinto(s). No se comparan: el par seria arbitrario. Su cierre exige calificar por clase, que este arbol no puede en models.py — BaseModel no existe aqui como clase.
+EXIT=0

@@ -1,0 +1,20 @@
+no_relation_check_errors: OK
+not_in_migration_state: OK
+related_attrs_carry_comodel: OK
+setup_ran: OK
+setup_related_field_is_ctrl_fk: OK
+setup_copies_comodel_name: OK
+remote_model_is_target_after_setup: OK
+related_model_is_target_after_setup: OK
+read_returns_target_row: OK
+check_error_ids: []
+migration_state_fields: ['id', 'kept', 'mid']
+related_attr_keys: ['aggregator', 'comodel_name', 'groups', 'help', 'string']
+setup_count: 4656
+before: {'related_model': 'ProbeRelCOwner', 'remote_model': 'ProbeRelCOwner', 'related_model_cached': True, 'comodel_name': 'base.ProbeRelCOwner', 'comodel_in_dict': False}
+after: {'related_model': 'ProbeRelCTarget', 'remote_model': 'ProbeRelCTarget', 'related_model_cached': True, 'comodel_name': 'base.ProbeRelCTarget', 'comodel_in_dict': True, 'related_field': 'ctrl_fk', 'compute': '_field_compute_related', 'search': '_field_search_related'}
+class descriptors: {'fk_nostore': 'ForwardManyToOneDescriptor', 'fk_nostore_id': 'ComputedFieldDescriptor'}
+read value: None(1,) | type: ProbeRelCTarget | queries: 3
+read value_id: 1 | queries: 0
+VEREDICTO related_sin_to: OK
+EXIT=0

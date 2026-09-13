@@ -1,0 +1,24 @@
+# Control de anulacion — TASK-API-0319 / los tres comparadores portados
+# fecha: 2026-09-11T05:10:49
+# mecanismo de restauracion: git checkout -- src/orm/models.py NO sirve (hay
+#   trabajo sin commitear); la variante mutada se guarda en el BANCO
+#   (scripts/workbench/basemodel-trae-contracts-20260911T050421/outputs/mutacion_sin_los_tres.py) y el original se recupera con
+#   'git stash' o reaplicando el porte. NO se usa /tmp ni el scratchpad (#166).
+
+## sin los tres operadores
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_le_is_true_for_the_empty_recordset
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_le_is_true_for_a_singleton_the_other_contains
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_le_is_true_for_equal_sets_by_the_set_path
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_le_is_false_when_it_is_not_a_subset
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_ge_is_true_against_the_empty_recordset
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_ge_is_true_for_a_singleton_it_contains
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_ge_is_true_for_equal_sets_by_the_set_path
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_ge_is_false_when_it_is_not_a_superset
+FAILED tests/unit/orm/test_base_model_recordset.py::TestIdentity::test_the_four_comparisons_are_declared_here_not_inherited
+9 failed, 68 passed, 1 warning in 5.69s
+
+## con los tres operadores (restaurado)
+9 failed, 68 passed, 1 warning in 5.75s
+
+## con los tres operadores (restaurado)
+77 passed, 1 warning in 5.85s

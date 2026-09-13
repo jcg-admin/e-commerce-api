@@ -1,0 +1,85 @@
+== las dos decisiones de FORMA que la costura tiene que tomar ==
+medido 2026-09-11T18:44:01  ·  odoo19c @ abe4040ec1
+
+--------------------------------------------------------------------
+1. DONDE se deriva `store` — la fuente lo hace DESPUES de fusionar
+--------------------------------------------------------------------
+
+odoo/orm/fields.py — las fronteras, medidas con grep sobre la fuente:
+
+    :382  def __set_name__
+    :414  def _get_attrs          <- UNA funcion: fusiona Y deriva
+    :491  def _setup_attrs__
+
+  Dentro de `_get_attrs`, el orden es: recorrer `_base_fields__`,
+  `attrs.update(field._args__)` por eslabon, `attrs.update(self._args__)`
+  al final, y RECIEN AHI los bloques que derivan (`:443-460`):
+
+      if attrs.get('compute'):
+          attrs['store'] = store = attrs.get('store', False)
+          attrs['compute_sudo'] = attrs.get('compute_sudo', store)
+          ...
+      if attrs.get('related'):
+          attrs['store'] = store = attrs.get('store', False)
+          ...
+
+  `attrs` es el diccionario FUSIONADO. Un `compute=` declarado en una clase
+  base y un `store=True` declarado en la hija se ven ahi, juntos, una vez.
+
+== aqui el bloque esta partido en dos, y la mitad corre ANTES ==
+
+  api: src/orm/fields.py:1104-1177  `_field_get_attrs`  — fusiona, NO deriva.
+       Su propio docstring lo declara: "Tres de sus bloques —compute, related
+       y precompute— ya estaban portados en apply_source_defaults, que los
+       aplica en el sitio de declaracion".
+
+  api: src/orm/fields_nonstored.py  `apply_source_defaults` — deriva, y la
+       llaman las FACHADAS al construir:
+
+         src/orm/fields_company_dependent.py:466:        related_attrs = apply_source_defaults(related, kwargs)
+         src/orm/fields_nonstored.py:480:def apply_source_defaults(related, kwargs, many_to_many=False):
+         src/orm/fields_nonstored.py:764:    related_attrs = apply_source_defaults(related, kwargs, many_to_many)
+         src/orm/fields_textual.py:213:    related_attrs = apply_source_defaults(related, kwargs)
+
+  Consecuencia: `store` se deriva de lo que UNA clase escribio, antes de que
+  exista la cadena. Es la misma inversion que la eleccion de clase, en el
+  otro extremo del mismo flujo.
+
+--------------------------------------------------------------------
+2. La instancia fusionada NO se puede construir vacia y rellenar
+--------------------------------------------------------------------
+
+django: db/models/fields/__init__.py — `Field.validators` es cached_property,
+y `CharField.__init__` la MATERIALIZA al construir:
+
+    class CharField(Field):
+        def __init__(self, *args, db_collation=None, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.db_collation = db_collation
+            if self.max_length is not None:
+                self.validators.append(validators.MaxLengthValidator(self.max_length))
+
+Control de dos brazos sobre el mismo diccionario fusionado
+(`{'max_length': 9, 'null': True}`):
+
+    (a) init vacio + __dict__.update  max_length=9 validators=[]
+    (b) __init__(**fusionado)         max_length=9 validators=['MaxLengthValidator']
+
+    discrimina: True
+
+  El brazo (a) es la forma ingenua de `type(self)(_base_fields__=cadena)`:
+  deja `max_length` correcto y el validador ausente, para siempre — el
+  cached_property ya guardo `[]` en `__dict__`.
+
+  La forma correcta es construir con los kwargs FUSIONADOS en `__init__`.
+  Es viable sin filtrar a mano: `_field_init_with_copy` (`fields.py:1041`)
+  ya retira lo que Django no conoce y guarda el diccionario entero en
+  `_args__`.
+
+   Metrica: las fronteras de funcion en la fuente (grep de `def`), el sitio
+            de llamada de apply_source_defaults en nuestro arbol (grep), y
+            `.validators` de dos instancias construidas de las dos formas.
+   Ciega a: los otros diecinueve tipos de campo — se midio `CharField`, que
+            es el unico cuyo `__init__` materializa la cached_property por
+            `max_length`. `DecimalField` sobrescribe `validators` como
+            property y podria no envenenarse igual; no se midio.

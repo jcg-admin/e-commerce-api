@@ -1,0 +1,15 @@
+# Control de anulacion — TASK-DOCS-0545
+2026-09-11T06:29:59
+
+## Mutacion A: colapsar unavailable en unheld (lo que hace la fuente)
+  FALLO verdict
+  FALLO unavailable no se lee como unheld
+22 ok, 2 fallos
+
+## Mutacion B: quedarse con el PRIMER tenedor (el indexOf de la fuente)
+  FALLO los dos PIDs
+23 ok, 1 fallos
+
+## Restaurado
+(git diff --stat vacio = restaurado)
+24 ok, 0 fallos

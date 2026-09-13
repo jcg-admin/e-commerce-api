@@ -49,6 +49,7 @@ Después del renombre, verificar con un barrido AST: este guion garantiza que
 no tocó prosa, no que el árbol siga resolviendo.
 """
 import argparse
+import ast
 import io
 import sys
 import tokenize
@@ -99,7 +100,43 @@ def allowed_lines(path):
     return {int(x) for x in Path(path).read_text(encoding='utf-8').split()}
 
 
-def rename_file(path, mapping, allowed=None):
+def dict_key_edits(source, mapping, allowed=None):
+    """Las claves de diccionario que el mapa nombra, con su posición.
+
+    Una clave es un literal ``STRING``, así que el recorrido por token —que
+    sólo mira ``NAME``— es ciego a ella **en silencio**: el guion publicaba
+    «0 token(s) renombrado(s)» con el nombre español delante. Es la contraparte,
+    en el instrumento de barrido, del defecto que el gate de identificadores
+    tenía; `identificadores-en-ingles.md` cuenta la clave como identificador.
+
+    Sólo entra la clave que **puede ser un nombre** (``str.isidentifier``): una
+    cabecera MIME o una ruta son datos, no símbolos.
+
+    Se posiciona con ``col_offset``/``end_col_offset`` del nodo, que abarcan las
+    comillas — por eso se reescribe el literal ENTERO con su comilla original,
+    y no sólo su interior: reemplazar el interior exigiría saber cuántos
+    caracteres ocupa el prefijo, y un literal ``r''`` o con comilla triple lo
+    desplaza.
+    """
+    edits = []
+    for node in ast.walk(ast.parse(source)):
+        if not isinstance(node, ast.Dict):
+            continue
+        for key in node.keys:
+            if not (isinstance(key, ast.Constant) and isinstance(key.value, str)):
+                continue
+            if key.value not in mapping or not key.value.isidentifier():
+                continue
+            if key.lineno != key.end_lineno:     # literal multilínea: no aplica
+                continue
+            if allowed is not None and key.lineno not in allowed:
+                continue
+            edits.append((key.lineno, key.col_offset, key.end_col_offset,
+                          f"'{mapping[key.value]}'"))
+    return edits
+
+
+def rename_file(path, mapping, allowed=None, keys=False):
     """Devuelve cuántos tokens renombró. Escribe sólo si hubo alguno."""
     source = Path(path).read_text(encoding='utf-8')
     lines = source.splitlines(keepends=True)
@@ -113,6 +150,8 @@ def rename_file(path, mapping, allowed=None):
             continue
         edits.append((token.start[0], token.start[1], token.end[1],
                       mapping[token.string]))
+    if keys:
+        edits += dict_key_edits(source, mapping, allowed)
     for row, start, end, new in sorted(edits, reverse=True):
         line = lines[row - 1]
         lines[row - 1] = line[:start] + new + line[end:]
@@ -128,6 +167,12 @@ def main(argv=None):
                         help='archivo con "viejo nuevo" por línea')
     parser.add_argument('--lines', default=None,
                         help='acota el renombre a estos números de línea')
+    parser.add_argument('--keys', action='store_true',
+                        help='renombra tambien la CLAVE de un dict literal '
+                             '(opt-in: una clave puede ser un contrato que el '
+                             'AST no ve — un acceso por literal en otro '
+                             'archivo, un campo de respuesta, una clave de '
+                             'configuracion)')
     parser.add_argument('files', nargs='+')
     args = parser.parse_args(argv)
 
@@ -136,7 +181,7 @@ def main(argv=None):
 
     total = 0
     for path in args.files:
-        renamed = rename_file(path, mapping, allowed)
+        renamed = rename_file(path, mapping, allowed, args.keys)
         total += renamed
         print(f'{path}: {renamed} token(s) renombrado(s)')
     scope = (f'{len(args.files)} archivo(s); {len(mapping)} renombre(s) '

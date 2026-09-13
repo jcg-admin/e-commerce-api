@@ -215,6 +215,7 @@ from collections import Counter, defaultdict
 from decimal import Decimal
 
 import fields
+import api
 import models
 from django.apps import apps
 from django.db.models import Q
@@ -994,6 +995,7 @@ class StockMoveLine(TimeStampedModel):
     # CRUD (≙ :343-559)                                                    #
     # ------------------------------------------------------------------ #
 
+    @api.model_create_multi
     @classmethod
     def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :343-419``).
@@ -1009,8 +1011,6 @@ class StockMoveLine(TimeStampedModel):
         """
         move_model = apps.get_model('stock', 'StockMove')
         quant_model = apps.get_model('stock', 'StockQuant')
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
 
         for vals in vals_list:
             if vals.get('move_id'):

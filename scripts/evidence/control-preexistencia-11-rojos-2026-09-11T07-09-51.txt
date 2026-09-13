@@ -1,0 +1,22 @@
+
+==================================== ERRORS ====================================
+__ ERROR collecting tests/unit/scripts/test_check_identifier_language_stub.py __
+ImportError while importing test module '/home/user/kaupamex-api/tests/unit/scripts/test_check_identifier_language_stub.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/scripts/test_check_identifier_language_stub.py:27: in <module>
+    import check_identifier_language as stub  # noqa: E402
+E   ModuleNotFoundError: No module named 'check_identifier_language'
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/scripts/test_check_identifier_language_stub.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 warning, 1 error in 0.34s
+EXIT=2

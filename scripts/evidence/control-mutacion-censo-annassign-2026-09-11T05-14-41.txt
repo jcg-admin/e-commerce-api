@@ -1,0 +1,12 @@
+# Control de anulacion — TASK-API-0320 / census_class.py ve AnnAssign
+# fecha: 2026-09-11T05:14:41
+# mutacion: se ciega la rama AnnAssign de _attribute_of (el instrumento viejo)
+# restauracion: sed inverso, sin copia en /tmp ni en el scratchpad (#166)
+
+## con la rama AnnAssign cegada (el instrumento viejo)
+FAILED tests/unit/scripts/test_census_class.py::TestTheAnnotatedFormIsSeen::test_base_model_declares_thirty_one_class_attributes
+FAILED tests/unit/scripts/test_census_class.py::TestTheAnnotatedFormIsSeen::test_every_orm_attribute_the_rule_governs_is_annotated
+2 failed, 5 passed, 1 warning in 5.99s
+
+## restaurado
+7 passed, 1 warning in 5.66s

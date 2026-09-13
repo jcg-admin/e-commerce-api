@@ -1,0 +1,67 @@
+== private_only=True NO basta: hace falta column = None ==
+medido 2026-09-11T18:42:22  ·  PostgreSQL 16 por socket, base kaupamex_core_qa
+
+Tres brazos sobre la MISMA tabla, que solo tiene id y plain:
+
+A  CharField llano (control positivo)    PASA  first() -> plain='x'
+                                           SELECT pide          ['id', 'plain']
+B  private_only=True, columna intacta    FALLA ProgrammingError: column probe_campo_sin_columna.extra does not exist
+                                           column               'extra'
+                                           concrete             True
+                                           en_concrete_fields   True
+                                           en_local_fields      False
+                                           en_private_fields    True
+                                           SELECT pide          ['id', 'plain', 'extra']
+C  private_only=True + column=None       PASA  first() -> plain='x'
+                                           column               None
+                                           concrete             False
+                                           en_concrete_fields   False
+                                           en_local_fields      False
+                                           en_private_fields    True
+                                           SELECT pide          ['id', 'plain']
+
+== por que ==
+
+django: db/models/fields/__init__.py:940 — set_attributes_from_name
+
+    self.attname, self.column = self.get_attname_column()
+    self.concrete = self.column is not None
+
+  set_attributes_from_name corre SIEMPRE, con private_only o sin el:
+  contribute_to_class lo llama antes de add_field. Asi que un campo
+  privado con su columna intacta sigue siendo CONCRETO, entra en
+  concrete_fields, y get_default_columns lo mete en cada SELECT.
+  save() sobrevive (usa local_concrete_fields, del que si sale);
+  first() y refresh_from_db() no.
+
+django: contrib/contenttypes/fields.py — GenericForeignKey, el precedente
+  del stack para 'campo con descriptor y sin columna', declara LAS DOS:
+
+    def contribute_to_class(self, cls, name, **kwargs):
+        super().contribute_to_class(cls, name, private_only=True, **kwargs)
+
+    def get_attname_column(self):
+        attname, column = super().get_attname_column()
+        return attname, None
+
+== la consecuencia para el puerto ==
+
+   La forma de store=False es UNA clase contribuida con
+   private_only=True Y column = None. No dos clases: la eleccion de
+   clase no entra en juego en ningun punto — lo que cambia es como se
+   contribuye, y eso ocurre DESPUES de la fusion, que es el orden de
+   la fuente.
+
+   La medicion hermana (recoleccion-de-definiciones, 2 de 2) midio el
+   estado de migracion y local_fields, no el camino de consulta. Era
+   correcta y no alcanzaba: su verde no distinguia 'el campo no lleva
+   columna' de 'el campo no aparece en la migracion'. El brazo B de
+   esta sonda es justo el caso que aquella no podia ver.
+
+   Metrica: create() + first() reales contra PostgreSQL, mas la
+            pertenencia del campo a concrete_fields/local_fields/
+            private_fields y las columnas que el SELECT compila.
+   Ciega a: el camino de escritura en lote (bulk_create no pasa por
+            pre_save), y a lo que ocurra con un campo privado en una
+            HERENCIA multi-tabla — los tres brazos son de una sola
+            tabla sin padres concretos.

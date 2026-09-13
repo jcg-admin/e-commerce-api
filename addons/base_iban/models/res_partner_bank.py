@@ -32,9 +32,10 @@ Mapeo de forma frente a la referencia
 ===========================  ==================================================
 Referencia                   Aquí
 ===========================  ==================================================
-``create(vals_list)``        ``create(cls, **vals)`` — la firma de ``create``
-                             de este árbol (``orm/models.py:631``); se porta
-                             el paso, no la firma
+``create(vals_list)``        ``create(cls, vals_list)`` — la misma firma
+                             desde :ref:`h-api-1108`; la normalización va en
+                             un relevo de ``chain_method`` que devuelve
+                             ``None`` y deja el alta al ``create`` previo
 ``write(vals)``              ``write(self, **vals)`` — el idioma ya establecido
                              para portar ``write`` sobre un modelo sin
                              ``write`` previa (``stock_location.py:575``)
@@ -62,6 +63,7 @@ import re
 
 from addons.base.models.res_bank import ResPartnerBank
 from exceptions import UserError, ValidationError
+import api
 from orm.method_chain import chain_method, extend_list
 from tools.translate import _
 
@@ -227,25 +229,28 @@ def _prettify_iban_in_vals(vals):
     return vals
 
 
-def create(cls, **vals):
+def create(cls, vals_list):
     """Alta con el IBAN ya normalizado — ≙ ``create`` (``odoo19c: base_iban:110``).
 
-    La referencia recibe una **lista** de dicts y devuelve un recordset; aquí
-    recibe kwargs y devuelve la instancia, que es la firma de ``create`` en
-    este árbol (``orm/models.py:631`` y los seis ``create`` de clase de
-    ``src/addons/base/``). Lo que se porta es el **paso**, no la firma.
+    La referencia es ``@api.model_create_multi``: recibe una **lista** de
+    dicts, normaliza cada ``acc_number`` y delega en ``super().create``. Aquí
+    la firma es la misma desde :ref:`h-api-1108` —``DefaultGetMixin.create``
+    porta ``BaseModel.create`` por contenido y ``base.ResPartnerBank`` lo
+    adopta— y el ``super()`` de la fuente es el **relevo por ``None``** de
+    ``chain_method``: este eslabón normaliza ``vals`` **en sitio** y devuelve
+    ``None``, con lo que la cadena entrega la misma lista, ya bonita, al
+    ``create`` previo.
 
-    No hay ``create`` previa en ``base.ResPartnerBank`` —es un modelo Django
-    pelado, medido: ``hasattr(ResPartnerBank, 'create')`` era ``False``— así
-    que este método **es** el alta, no un envoltorio. El ``super().create(...)``
-    de la fuente se corresponde con la construcción + ``save()``, y ese
-    ``save()`` es el encadenado de este mismo addon, que vuelve a normalizar:
-    la operación es idempotente, igual que allá (su ``super().create`` recalcula
-    ``acc_type`` sobre el número ya bonito).
+    Hasta ese hallazgo el docstring de este método decía *"se porta el paso,
+    no la firma"* y su cuerpo era ``cls(**vals).save()`` — un alta sin
+    defaults, sin ``check_access`` y sin el resto de pasos de la fuente. La
+    normalización es idempotente, igual que allá (su ``super().create``
+    recalcula ``acc_type`` sobre el número ya bonito), así que el ``save()``
+    encadenado de este addon puede volver a pasar por ella.
     """
-    record = cls(**_prettify_iban_in_vals(dict(vals)))
-    record.save()
-    return record
+    for vals in vals_list:
+        _prettify_iban_in_vals(vals)
+    return None
 
 
 def write(self, **vals):
@@ -374,7 +379,7 @@ def apply_base_iban_extensions():
     chain_method(ResPartnerBank, 'check_iban', check_iban)
     chain_method(ResPartnerBank, '_check_iban', _check_iban)
     chain_method(ResPartnerBank, 'write', write)
-    chain_method(ResPartnerBank, 'create', classmethod(create))
+    chain_method(ResPartnerBank, 'create', api.model_create_multi(classmethod(create)))
 
 #: Mapa ISO 3166-1 -> plantilla IBAN, copiado verbatim de la referencia
 #: (``odoo19c: base_iban:146-218``, 70 países). La descripción del formato

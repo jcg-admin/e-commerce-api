@@ -1,0 +1,192 @@
+contrato: 188 nombres · archivos recorridos: 212
+presentes por nombre: 87 · ausentes: 101
+
+PRESENTE	__add__	src/orm/domains.py:377 Domain | src/tools/func.py:359 lazy
+PRESENTE	__and__	src/orm/domains.py:360 Domain | src/orm/domains.py:518 DomainBool | src/orm/domains.py:742 DomainAnd | src/tools/func.py:370 lazy | src/tools/intervals.py:140 Intervals | src/tools/set_expression.py:277 SetExpression | src/tools/set_expression.py:377 Union | src/tools/set_expression.py:554 Inter
+PRESENTE	__bool__	src/orm/identifiers.py:26 NewId | src/orm/registry.py:1486 TriggerTree | src/orm/domains.py:388 Domain | src/tools/query.py:359 Query | src/tools/func.py:346 lazy | src/tools/intervals.py:122 Intervals | src/tools/sql.py:292 SQL | src/tools/set_expression.py:433 Union
+PRESENTE	__contains__	src/modules/module_graph.py:69 ModuleGraph | src/orm/registry.py:699 _DerivedCollector | src/orm/registry.py:1079 _ComputedGrouper | src/orm/registry.py:1388 _FieldInversesProxy | src/orm/environments.py:913 Environment | src/orm/models.py:3890 RecordCache | src/tools/misc.py:168 ReadonlyDict | src/tools/misc.py:799 OrderedSet | src/tools/func.py:357 lazy | src/tools/lru.py:69 LRU
+PRESENTE	__eq__	src/orm/identifiers.py:29 NewId | src/orm/commands.py:104 One2manyChild | src/orm/fields_properties.py:1099 Property | src/orm/domains.py:392 Domain | src/orm/domains.py:503 DomainBool | src/orm/domains.py:582 DomainNot | src/orm/domains.py:656 DomainNary | src/orm/domains.py:779 DomainCustom | src/orm/domains.py:876 DomainCondition | src/orm/environments.py:932 Environment | src/orm/models.py:4027 ReversibleComparator | src/orm/table_objects.py:119 RawConstraint | src/tools/func.py:340 lazy | src/tools/sql.py:296 SQL | src/tools/set_expression.py:289 SetExpression | src/tools/set_expression.py:436 Union | src/tools/set_expression.py:564 Inter | src/tools/set_expression.py:628 Leaf
+PRESENTE	__ge__	src/tools/func.py:343 lazy
+PRESENTE	__getitem__	src/modules/module.py:122 Manifest | src/modules/module_graph.py:72 ModuleGraph | src/orm/fields_properties.py:1103 Property | src/orm/fields_textual.py:301 LangProxyDict | src/orm/registry.py:694 _DerivedCollector | src/orm/registry.py:1074 _ComputedGrouper | src/orm/registry.py:1385 _FieldInversesProxy | src/orm/registry.py:2820 Registry | src/orm/environments.py:888 Environment | src/orm/models.py:3896 RecordCache | src/tools/misc.py:171 ReadonlyDict | src/tools/misc.py:701 Collector | src/tools/misc.py:746 StackMap | src/tools/misc.py:913 _PrintfArgs | src/tools/func.py:351 lazy | src/tools/lru.py:72 LRU | src/tools/zeep/client.py:145 ReadOnlyMethodNamespace | src/tools/zeep/client.py:188 SerialProxy
+PRESENTE	__gt__	src/tools/func.py:342 lazy | src/tools/set_expression.py:662 UnknownId
+PRESENTE	__hash__	src/orm/identifiers.py:35 NewId | src/orm/fields_properties.py:1136 Property | src/orm/domains.py:395 Domain | src/orm/domains.py:506 DomainBool | src/orm/domains.py:585 DomainNot | src/orm/domains.py:663 DomainNary | src/orm/domains.py:786 DomainCustom | src/orm/domains.py:885 DomainCondition | src/orm/environments.py:944 Environment | src/orm/models.py:4030 ReversibleComparator | src/orm/table_objects.py:125 RawConstraint | src/tools/misc.py:675 frozendict | src/tools/func.py:345 lazy | src/tools/sql.py:300 SQL | src/tools/set_expression.py:301 SetExpression | src/tools/set_expression.py:479 Union | src/tools/set_expression.py:576 Inter | src/tools/set_expression.py:646 Leaf
+PRESENTE	__init__	src/exceptions.py:55 RedirectWarning | src/exceptions.py:72 AccessDenied | src/exceptions.py:87 CacheMiss | src/modules/module.py:117 Manifest | src/modules/module_graph.py:34 ModuleNode | src/modules/module_graph.py:66 ModuleGraph | src/orm/fields_binary.py:81 Binary | src/orm/fields_binary.py:139 Image | src/orm/identifiers.py:21 NewId | src/orm/commands.py:100 One2manyChild | src/orm/fields_relational.py:224 One2many | src/orm/fields_relational.py:903 PrefetchMany2one | src/orm/fields_relational.py:942 PrefetchX2many | src/orm/fields_properties.py:183 Properties | src/orm/fields_properties.py:1083 Property | src/orm/fields_properties.py:1187 PropertiesDefinition | src/orm/fields_textual.py:104 Html | src/orm/fields_textual.py:278 LangProxyDict | src/orm/registry.py:633 _DerivedCollector | src/orm/registry.py:773 _MarkedMethodCollector | src/orm/registry.py:844 _ConstraintMethods | src/orm/registry.py:918 _OndeleteMethods | src/orm/registry.py:944 _OnchangeMethods | src/orm/registry.py:1004 _ComputedGrouper | src/orm/registry.py:1123 _TriggerRegistry | src/orm/registry.py:1482 TriggerTree | src/orm/fields.py:2038 _DerivedFromPrefix | src/orm/fields.py:2962 _ComputedUnlessAssigned | src/orm/environments.py:434 Transaction | src/orm/environments.py:1534 Cache | src/orm/environments.py:1907 Starred | src/orm/fields_nonstored.py:78 NonStored | src/orm/fields_nonstored.py:608 _RegistryCache | src/orm/fields_company_dependent.py:267 CompanyDependent | src/orm/models.py:3885 RecordCache | src/orm/models.py:4009 ReversibleComparator | src/orm/checks.py:159 SystemCheckSummary | src/orm/table_objects.py:82 RawConstraint | src/orm/table_objects.py:138 RawIndex | src/orm/table_objects.py:185 TableObject | src/orm/table_objects.py:272 Constraint | src/orm/table_objects.py:363 Index | src/orm/table_objects.py:426 UniqueIndex | src/orm/utils.py:170 OriginIds | src/config/settings/options.py:56 Option | src/addons/base/report_catalog.py:180 ReportSpec | src/addons/base/models/res_device.py:774 DeviceLogMiddleware | src/addons/base/models/res_company.py:198 ZeepOrmCache | src/addons/base/models/ir_asset.py:134 AssetPaths | src/addons/base/models/res_config.py:147 ConfigWarning | src/addons/base/models/res_users.py:119 CryptContext | src/addons/base/models/ir_cron.py:278 ListLogHandler | src/addons/base/models/ir_http.py:384 CompanyContextMiddleware | src/addons/base/models/ir_http.py:492 CorrelationIdMiddleware | src/addons/base/models/ir_template_expressions.py:288 TemplateErrorInfo | src/addons/base/models/ir_template_expressions.py:310 TemplateError | src/service/db.py:70 Savepoint | src/service/db.py:545 _DumpStream | src/tools/facade.py:45 ProxyAttr | src/tools/facade.py:72 ProxyFunc | src/tools/facade.py:157 Proxy | src/tools/image.py:80 ImageProcess | src/tools/misc.py:165 ReadonlyDict | src/tools/misc.py:743 StackMap | src/tools/misc.py:796 OrderedSet | src/tools/misc.py:909 _PrintfArgs | src/tools/query.py:126 Query | src/tools/func.py:90 lazy_property | src/tools/func.py:245 classproperty | src/tools/func.py:303 lazy | src/tools/safe_eval.py:528 wrap_module | src/tools/intervals.py:88 Intervals | src/tools/sql.py:216 SQL | src/tools/set_expression.py:54 SetDefinitions | src/tools/set_expression.py:312 Union | src/tools/set_expression.py:490 Inter | src/tools/set_expression.py:587 Leaf | src/tools/profiler.py:197 Collector | src/tools/profiler.py:301 _BasePeriodicCollector | src/tools/profiler.py:422 QwebTracker | src/tools/profiler.py:481 QwebCollector | src/tools/profiler.py:578 ExecutionContext | src/tools/profiler.py:596 Profiler | src/tools/profiler.py:851 Nested | src/tools/lru.py:35 LRU | src/tools/cache.py:54 ormcache_counter | src/tools/cache.py:106 ormcache | src/tools/cache.py:198 ormcache_context | src/tools/speedscope.py:35 Speedscope | src/tools/convert.py:396 XmlImport | src/tools/zeep/client.py:44 Client | src/tools/zeep/client.py:136 ReadOnlyMethodNamespace | src/tools/zeep/client.py:179 SerialProxy | src/tools/_vendor/useragents.py:93 UserAgentParser | src/tools/pdf/__init__.py:70 PdfFileReader | src/tools/pdf/__init__.py:143 PdfFileWriter | src/core/middleware/cookie_governance.py:82 CookieGovernanceMiddleware
+PRESENTE	__int__	src/tools/func.py:409 lazy
+PRESENTE	__iter__	src/modules/module.py:125 Manifest | src/modules/module_graph.py:75 ModuleGraph | src/orm/fields_relational.py:907 PrefetchMany2one | src/orm/fields_relational.py:946 PrefetchX2many | src/orm/fields_properties.py:1088 Property | src/orm/fields_textual.py:329 LangProxyDict | src/orm/registry.py:1391 _FieldInversesProxy | src/orm/registry.py:2816 Registry | src/orm/domains.py:398 Domain | src/orm/domains.py:528 DomainBool | src/orm/domains.py:568 DomainNot | src/orm/domains.py:651 DomainNary | src/orm/domains.py:789 DomainCustom | src/orm/domains.py:870 DomainCondition | src/orm/environments.py:922 Environment | src/orm/models.py:3902 RecordCache | src/orm/utils.py:173 OriginIds | src/tools/misc.py:177 ReadonlyDict | src/tools/misc.py:758 StackMap | src/tools/misc.py:802 OrderedSet | src/tools/query.py:372 Query | src/tools/func.py:355 lazy | src/tools/intervals.py:128 Intervals | src/tools/sql.py:304 SQL | src/tools/lru.py:110 LRU | src/tools/zeep/client.py:201 SerialProxy
+PRESENTE	__le__	src/tools/func.py:339 lazy | src/tools/set_expression.py:293 SetExpression | src/tools/set_expression.py:439 Union | src/tools/set_expression.py:567 Inter | src/tools/set_expression.py:631 Leaf
+PRESENTE	__len__	src/modules/module.py:128 Manifest | src/modules/module_graph.py:79 ModuleGraph | src/orm/fields_properties.py:1096 Property | src/orm/fields_textual.py:334 LangProxyDict | src/orm/registry.py:1394 _FieldInversesProxy | src/orm/registry.py:2812 Registry | src/orm/environments.py:926 Environment | src/orm/models.py:3929 RecordCache | src/tools/misc.py:174 ReadonlyDict | src/tools/misc.py:761 StackMap | src/tools/misc.py:805 OrderedSet | src/tools/query.py:362 Query | src/tools/func.py:350 lazy | src/tools/intervals.py:125 Intervals | src/tools/lru.py:107 LRU
+PRESENTE	__lt__	src/orm/identifiers.py:38 NewId | src/orm/models.py:4014 ReversibleComparator | src/tools/func.py:338 lazy | src/tools/set_expression.py:297 SetExpression | src/tools/set_expression.py:453 Union | src/tools/set_expression.py:573 Inter | src/tools/set_expression.py:643 Leaf | src/tools/set_expression.py:657 UnknownId
+PRESENTE	__or__	src/orm/domains.py:365 Domain | src/orm/domains.py:523 DomainBool | src/orm/domains.py:761 DomainOr | src/tools/func.py:372 lazy | src/tools/intervals.py:134 Intervals | src/tools/set_expression.py:281 SetExpression | src/tools/set_expression.py:393 Union
+PRESENTE	__repr__	src/modules/module.py:137 Manifest | src/modules/module_graph.py:59 ModuleNode | src/modules/module_graph.py:188 ModuleGraph | src/orm/identifiers.py:47 NewId | src/orm/commands.py:108 One2manyChild | src/orm/fields_relational.py:420 One2many | src/orm/fields_textual.py:342 LangProxyDict | src/orm/registry.py:1489 TriggerTree | src/orm/domains.py:406 Domain | src/orm/environments.py:949 Environment | src/orm/environments.py:1537 Cache | src/orm/environments.py:1910 Starred | src/orm/models.py:4033 ReversibleComparator | src/orm/table_objects.py:170 RawIndex | src/addons/base/report_catalog.py:192 ReportSpec | src/tools/misc.py:821 OrderedSet | src/tools/misc.py:1230 unquote | src/tools/func.py:329 lazy | src/tools/safe_eval.py:548 wrap_module | src/tools/sql.py:288 SQL | src/tools/set_expression.py:476 Union | src/tools/zeep/client.py:204 SerialProxy
+PRESENTE	__reversed__	src/orm/fields_relational.py:914 PrefetchMany2one | src/orm/fields_relational.py:954 PrefetchX2many | src/orm/domains.py:403 Domain | src/orm/utils.py:178 OriginIds | src/tools/func.py:356 lazy | src/tools/intervals.py:131 Intervals
+PRESENTE	__setitem__	src/orm/fields_textual.py:309 LangProxyDict | src/orm/registry.py:2824 Registry | src/tools/misc.py:657 frozendict | src/tools/misc.py:704 Collector | src/tools/misc.py:752 StackMap | src/tools/func.py:353 lazy | src/tools/lru.py:78 LRU | src/tools/zeep/client.py:194 SerialProxy
+PRESENTE	__sub__	src/tools/func.py:360 lazy | src/tools/intervals.py:144 Intervals
+PRESENTE	_add_missing_default_values	src/orm/models.py:599 DefaultGetMixin
+PRESENTE	_add_precomputed_values	src/orm/models.py:3715 <modulo>
+PRESENTE	_additional_allowed_keys_properties_definition	src/orm/models.py:1974 RecordLoaderMixin
+PRESENTE	_check_access	src/orm/models.py:223 AccessQuerySet
+PRESENTE	_check_company	src/orm/models.py:883 CheckCompanyMixin
+PRESENTE	_check_company_domain	src/orm/models.py:857 CheckCompanyMixin | src/addons/base/models/res_users.py:1370 ResUsers
+PRESENTE	_check_field_access	src/orm/models.py:1635 FieldSqlMixin
+PRESENTE	_check_qorder	src/orm/models.py:2849 OrderMixin
+PRESENTE	_clean_properties	src/orm/models.py:1926 RecordLoaderMixin
+PRESENTE	_compute_display_name	src/orm/models.py:2940 DisplayNameMixin | src/addons/base/models/res_bank.py:159 ResBank | src/addons/base/models/ir_actions.py:731 IrActionsServerHistory | src/addons/base/models/ir_model.py:1042 IrModelFields | src/addons/base/models/ir_model.py:2983 IrModelData | src/addons/base/models/res_partner.py:1985 ResPartner | src/addons/base/models/res_partner.py:3081 ResPartnerCategory | src/addons/base/models/properties_base_definition.py:161 PropertiesBaseDefinition
+PRESENTE	_convert_records	src/orm/models.py:2401 RecordLoaderMixin
+PRESENTE	_convert_to_cache_properties_definition	src/orm/models.py:1978 RecordLoaderMixin
+PRESENTE	_convert_to_column_properties_definition	src/orm/models.py:1982 RecordLoaderMixin
+PRESENTE	_extract_records	src/orm/models.py:2297 RecordLoaderMixin
+PRESENTE	_field_to_sql	src/orm/models.py:1742 FieldSqlMixin | src/addons/base/models/properties_base_definition_mixin.py:192 PropertiesBaseDefinitionMixin
+PRESENTE	_filtered_access	src/orm/models.py:273 AccessQuerySet
+PRESENTE	_flush	src/orm/models.py:3432 <modulo>
+PRESENTE	_get_external_ids	src/orm/models.py:352 AccessQuerySet
+PRESENTE	_get_redirect_suggested_company	src/orm/models.py:287 AccessQuerySet
+PRESENTE	_has_field_access	src/orm/models.py:1614 FieldSqlMixin
+PRESENTE	_init_column	src/orm/models.py:4057 <modulo>
+PRESENTE	_invalidate_cache	src/orm/fields.py:3840 <modulo>
+PRESENTE	_load_records	src/orm/models.py:2659 RecordLoaderMixin
+PRESENTE	_load_records_create	src/orm/models.py:2247 RecordLoaderMixin | src/addons/base/models/res_partner.py:1405 ResPartner
+PRESENTE	_load_records_write	src/orm/models.py:2024 RecordLoaderMixin
+PRESENTE	_modified	src/orm/models.py:3275 <modulo>
+PRESENTE	_modified_triggers	src/orm/models.py:3230 <modulo>
+PRESENTE	_origin	src/orm/models.py:465 OriginMixin
+PRESENTE	_recompute_field	src/orm/models.py:3381 <modulo>
+PRESENTE	_recompute_model	src/orm/models.py:3398 <modulo>
+PRESENTE	_recompute_recordset	src/orm/models.py:3415 <modulo>
+PRESENTE	_search	src/addons/base/models/res_groups.py:333 ResGroups | src/tools/convert.py:151 <modulo>
+PRESENTE	_search_display_name	src/orm/models.py:2971 DisplayNameMixin | src/addons/base/models/res_bank.py:169 ResBank | src/addons/base/models/res_currency.py:1106 ResCurrencyRate | src/addons/base/models/res_partner.py:3096 ResPartnerCategory
+PRESENTE	_sql_error_to_message	src/orm/models.py:2276 RecordLoaderMixin
+PRESENTE	_table_has_rows	src/orm/models.py:4106 <modulo>
+PRESENTE	_traverse_related_sql	src/orm/models.py:1708 FieldSqlMixin
+PRESENTE	_update_cache	src/orm/fields.py:3981 <modulo>
+PRESENTE	_validate_fields	src/orm/models.py:3771 <modulo>
+PRESENTE	_validate_properties_definition	src/orm/fields_properties.py:1307 PropertiesDefinition | src/orm/models.py:1971 RecordLoaderMixin
+PRESENTE	browse	src/orm/utils.py:340 <modulo>
+PRESENTE	check_access	src/orm/models.py:256 AccessQuerySet
+PRESENTE	copy	src/orm/models.py:1332 CopyMixin | src/addons/base/models/res_config.py:397 ResConfigSettings | src/addons/base/models/res_users.py:122 CryptContext | src/tools/misc.py:827 OrderedSet
+PRESENTE	copy_data	src/orm/models.py:1224 CopyMixin | src/addons/base/models/ir_actions.py:1587 IrActionsServer | src/addons/base/models/res_groups.py:360 ResGroups | src/addons/base/models/ir_model.py:2249 IrModelConstraint | src/addons/base/models/ir_model.py:3141 IrModelData | src/addons/base/models/res_partner.py:316 ResPartner
+PRESENTE	copy_translations	src/orm/models.py:1312 CopyMixin
+PRESENTE	create	src/orm/commands.py:18 Command | src/orm/models.py:678 DefaultGetMixin | src/addons/base/models/ir_config_parameter.py:194 SystemParameter | src/addons/base/models/decimal_precision.py:88 DecimalPrecision | src/addons/base/models/res_company.py:222 ResCompanyManager | src/addons/base/models/properties_base_definition_mixin.py:160 PropertiesBaseDefinitionMixin | src/addons/base/models/res_currency.py:287 ResCurrency | src/addons/base/models/res_currency.py:1078 ResCurrencyRate | src/addons/base/models/ir_default.py:296 IrDefault
+PRESENTE	default_get	src/orm/models.py:510 DefaultGetMixin | src/addons/base/models/ir_cron.py:556 IrCron | src/addons/base/models/res_partner.py:331 ResPartner | src/addons/base/models/ir_sequence.py:570 IrSequenceDateRange
+PRESENTE	filtered_domain	src/orm/models.py:335 AccessQuerySet | src/orm/models.py:410 <modulo>
+PRESENTE	flush_model	src/orm/models.py:3523 <modulo>
+PRESENTE	flush_recordset	src/orm/models.py:3545 <modulo>
+PRESENTE	get_base_url	src/orm/models.py:784 BaseUrlMixin
+PRESENTE	get_external_id	src/orm/models.py:389 AccessQuerySet
+PRESENTE	get_property_definition	src/orm/models.py:1856 RecordLoaderMixin
+PRESENTE	has_access	src/orm/models.py:269 AccessQuerySet
+PRESENTE	init	src/orm/registry.py:1748 Registry | src/addons/base/models/ir_config_parameter.py:245 SystemParameter
+PRESENTE	is_transient	src/orm/model_classes.py:897 <modulo>
+PRESENTE	load	src/orm/registry.py:2020 Registry | src/orm/models.py:2465 RecordLoaderMixin
+PRESENTE	modified	src/orm/models.py:3300 <modulo>
+PRESENTE	name_create	src/orm/models.py:2993 DisplayNameMixin | src/addons/base/models/ir_model.py:642 IrModel | src/addons/base/models/res_partner.py:1748 ResPartner
+PRESENTE	name_search	src/orm/models.py:3011 DisplayNameMixin
+PRESENTE	new	src/orm/registry.py:1696 Registry
+PRESENTE	onchange	src/orm/decorators.py:86 <modulo>
+PRESENTE	read	src/service/db.py:548 _DumpStream
+PRESENTE	sudo	src/orm/environments.py:237 <modulo>
+PRESENTE	union	src/orm/domains.py:2453 <modulo>
+PRESENTE	unlink	src/orm/commands.py:48 Command | src/addons/base/models/ir_config_parameter.py:224 SystemParameter | src/addons/base/models/decimal_precision.py:109 DecimalPrecision | src/addons/base/models/res_currency.py:276 ResCurrency | src/addons/base/models/ir_default.py:317 IrDefault
+PRESENTE	update	src/orm/commands.py:28 Command | src/orm/environments.py:1608 Cache | src/addons/base/models/res_users.py:156 CryptContext | src/tools/misc.py:672 frozendict | src/tools/misc.py:814 OrderedSet
+PRESENTE	write	src/orm/fields_properties.py:558 Properties | src/orm/models.py:2057 RecordLoaderMixin | src/addons/base/models/ir_config_parameter.py:205 SystemParameter | src/addons/base/models/decimal_precision.py:101 DecimalPrecision | src/addons/base/models/res_currency.py:296 ResCurrency | src/addons/base/models/res_currency.py:1091 ResCurrencyRate | src/addons/base/models/properties_base_definition.py:204 PropertiesBaseDefinition | src/addons/base/models/ir_default.py:306 IrDefault | src/tools/pdf/__init__.py:187 PdfFileWriter
+
+AUSENTE 	__deepcopy__
+AUSENTE 	__ensure_xml_id
+AUSENTE 	_add_sql_constraints
+AUSENTE 	_apply_onchange_methods
+AUSENTE 	_as_query
+AUSENTE 	_auto_init
+AUSENTE 	_cache
+AUSENTE 	_can_return_content
+AUSENTE 	_check_m2m_recursion
+AUSENTE 	_check_parent_path
+AUSENTE 	_check_recursion
+AUSENTE 	_check_removed_columns
+AUSENTE 	_compute_field_value
+AUSENTE 	_constraint_methods
+AUSENTE 	_context
+AUSENTE 	_convert_to_record
+AUSENTE 	_convert_to_write
+AUSENTE 	_cr
+AUSENTE 	_create
+AUSENTE 	_determine_fields_to_fetch
+AUSENTE 	_export_rows
+AUSENTE 	_fetch_field
+AUSENTE 	_fetch_query
+AUSENTE 	_filter_access_rules
+AUSENTE 	_filter_access_rules_python
+AUSENTE 	_get_base_lang
+AUSENTE 	_get_placeholder_filename
+AUSENTE 	_has_cycle
+AUSENTE 	_has_onchange
+AUSENTE 	_is_an_ordinary_table
+AUSENTE 	_onchange_methods
+AUSENTE 	_ondelete_methods
+AUSENTE 	_order_field_to_sql
+AUSENTE 	_order_to_sql
+AUSENTE 	_parent_store_compute
+AUSENTE 	_parent_store_create
+AUSENTE 	_parent_store_update
+AUSENTE 	_parent_store_update_prepare
+AUSENTE 	_post_model_setup__
+AUSENTE 	_prepare_create_values
+AUSENTE 	_read_format
+AUSENTE 	_read_group
+AUSENTE 	_read_group_empty_value
+AUSENTE 	_read_group_expand_full
+AUSENTE 	_read_group_fill_results
+AUSENTE 	_read_group_fill_temporal
+AUSENTE 	_read_group_format_result
+AUSENTE 	_read_group_format_result_properties
+AUSENTE 	_read_group_groupby
+AUSENTE 	_read_group_groupby_properties
+AUSENTE 	_read_group_having
+AUSENTE 	_read_group_orderby
+AUSENTE 	_read_group_postprocess_aggregate
+AUSENTE 	_read_group_postprocess_groupby
+AUSENTE 	_read_group_select
+AUSENTE 	_read_grouping_sets
+AUSENTE 	_rec_name_fallback
+AUSENTE 	_register_hook
+AUSENTE 	_sorted_order_to_function
+AUSENTE 	_sql_error_to_message_generic
+AUSENTE 	_table_sql
+AUSENTE 	_uid
+AUSENTE 	_unregister_hook
+AUSENTE 	_update_field_translations
+AUSENTE 	_valid_field_parameter
+AUSENTE 	_write
+AUSENTE 	_write_multi
+AUSENTE 	action_archive
+AUSENTE 	action_unarchive
+AUSENTE 	check_access_rights
+AUSENTE 	check_access_rule
+AUSENTE 	check_field_access_rights
+AUSENTE 	concat
+AUSENTE 	ensure_one
+AUSENTE 	exists
+AUSENTE 	export_data
+AUSENTE 	fetch
+AUSENTE 	fields_get
+AUSENTE 	filtered
+AUSENTE 	get_field_translations
+AUSENTE 	get_metadata
+AUSENTE 	grouped
+AUSENTE 	ids
+AUSENTE 	invalidate_model
+AUSENTE 	invalidate_recordset
+AUSENTE 	lock_for_update
+AUSENTE 	mapped
+AUSENTE 	read_group
+AUSENTE 	search
+AUSENTE 	search_count
+AUSENTE 	search_fetch
+AUSENTE 	search_read
+AUSENTE 	sorted
+AUSENTE 	toggle_active
+AUSENTE 	try_lock_for_update
+AUSENTE 	update_field_translations
+AUSENTE 	with_company
+AUSENTE 	with_context
+AUSENTE 	with_env
+AUSENTE 	with_prefetch
+AUSENTE 	with_user

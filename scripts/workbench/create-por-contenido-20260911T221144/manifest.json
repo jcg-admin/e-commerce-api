@@ -1,0 +1,42 @@
+{
+  "question": "el `create` del arbol (`DefaultGetMixin.create(cls, **values)`, una instancia) hace lo que `BaseModel.create(vals_list)` de la referencia hace — lista de dicts en orden, singleton via `model_create_multi`, `check_access`, `default_*` del contexto, `ValueError` por campo desconocido, lote de padres `_inherits`, M2M tras el alta — y los adoptantes de los mixins lo heredan?",
+  "instrument": [
+    "cuatro sondas Python bajo config.settings.testing y `sudo()`, una condicion por linea con `OK`/`FALLA` y got/expected",
+    "grep -rn sobre src, addons y tests para el censo de firmas y llamadores (scripts/evidence/census-create-2026-09-11T22-07-40-00{1..4}.log)",
+    "pytest del derivado (tests/unit/orm + adoptantes) y de la suite entera con -n 4"
+  ],
+  "metric": "condiciones OK sobre condiciones medidas por sonda (12 de 12 en probe_create_list_returns_ordered_rows), y casos passed/failed de pytest",
+  "blind_to": [
+    "un llamador que construya el dict de vals en tiempo de ejecucion sin nombrar `create(` en la misma linea — el censo es por linea",
+    "un override de `create` en un modelo que NO mezcla DefaultGetMixin: sigue siendo el `create` del manager de Django y la sonda no lo alcanza",
+    "la clave `bypass_search_access` del contexto: 0 usos en el arbol, asi que la sonda no puede discriminar su ausencia (TASK-API-0422)",
+    "el coste de INSERT fila a fila contra el INSERT por lote de la fuente: se midio la conducta, no el reloj"
+  ],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/hallazgos/hallazgo-H-API-1108-*.rst",
+  "source": [
+    "odoo19c: odoo/orm/models.py:4611-4770 — BaseModel.create, y decorators.py:357-371 — model_create_multi",
+    "src/orm/models.py — DefaultGetMixin.create, _prepare_create_values, _create; src/orm/decorators.py — api.model_create_multi"
+  ],
+  "reproducible": "cd /home/user/kaupamex-api && for p in scripts/workbench/create-por-contenido-20260911T221144/probe_*.py; do PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python \"$p\"; done; uv run pytest tests/unit/orm/test_create.py -q --reuse-db",
+  "control": "anulacion: retirando el lote de padres _inherits de `create` (models.py restaurado byte a byte, verificado con cmp) tests/unit/orm/test_create.py pasa de 14 passed a 2 failed, 12 passed — caen exactamente TestInheritsParents::test_the_inherits_parent_is_created_first y ::test_a_model_without_the_loader_mixin_now_creates (IrCron tambien es _inherits de ir.actions.server). Log scripts/evidence/anulacion-351-2026-09-11T22-27-34-001.log",
+  "corrected_premise": {
+    "afirmado_antes": "el docstring de create decia «se porta el paso, no la firma»: la firma por kwargs era una adaptacion equivalente",
+    "medido_ahora": "con la firma cambiada ningun override de addon podia llamar super().create(vals_list) ni ningun llamador desempaquetar el recordset; el cuerpo ademas omitia check_access, default_* del contexto, ValueError por campo desconocido y el lote de padres _inherits — 16 sitios con `create(cls, **` y 24 llamadores por kwargs (census 001 y 003)",
+    "por_que_divergen": "el veredicto anterior midio presencia del simbolo, no contenido",
+    "cambia_el_veredicto": true
+  },
+  "tasks": [
+    "TASK-API-0421",
+    "TASK-API-0402",
+    "TASK-API-0422"
+  ],
+  "outputs": [
+    "probe_recordset_from_ids_reads_fields.out",
+    "probe_model_create_multi_wraps_mapping.out",
+    "probe_bulk_create_returns_ids_and_adopter_mro.out",
+    "probe_create_list_returns_ordered_rows.out"
+  ],
+  "findings": [
+    "H-API-1108"
+  ]
+}

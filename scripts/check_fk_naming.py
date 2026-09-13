@@ -176,6 +176,39 @@ def _keyword(call, name):
     return None
 
 
+def _is_stored(call):
+    """Si la declaración tiene eje de columna — DERIVADO como la fuente.
+
+    ``store`` no se declara sólo con la palabra clave. La fuente lo deriva de
+    ``compute`` y de ``related``, en dos ramas del mismo ``_setup_attrs``
+    (``odoo19c: odoo/orm/fields.py``), y sus propios comentarios lo dicen::
+
+        443:        if attrs.get('compute'):
+        444:            # by default, computed fields are not stored, ...
+        447:            attrs['store'] = store = attrs.get('store', False)
+        452:        if attrs.get('related'):
+        453:            # by default, related fields are not stored, ...
+        455:            attrs['store'] = store = attrs.get('store', False)
+
+    La forma ``attrs.get('store', False)`` es la que hace que un ``store=True``
+    explícito sobreviva a la derivación: la fuente fija el **default**, no
+    impone el valor. Por eso la palabra clave declarada manda y la derivación
+    sólo actúa en su ausencia.
+
+    Nuestro despachador ya espejaba las dos ramas EN EJECUCIÓN
+    (``src/orm/fields_relational.py``): con ``compute`` o ``related`` y sin
+    ``store``, devuelve un ``NonStored``, que no tiene columna. El lector
+    estático de este gate no lo hacía, así que clasificaba con eje de columna
+    un campo que en ejecución no la tiene.
+    """
+    store = _keyword(call, 'store')
+    if store is not None:
+        return not (isinstance(store, ast.Constant) and store.value is False)
+    if _keyword(call, 'compute') is not None or _keyword(call, 'related') is not None:
+        return False
+    return True
+
+
 def declarations(path):
     """Cada asignación relacional de un solo valor: ``(clase, campo, forma)``."""
     try:
@@ -210,8 +243,7 @@ def declarations(path):
             ctor = func.attr if isinstance(func, ast.Attribute) else getattr(func, 'id', '')
             if ctor not in SINGLE_VALUED:
                 continue
-            store = _keyword(node.value, 'store')
-            stored = not (isinstance(store, ast.Constant) and store.value is False)
+            stored = _is_stored(node.value)
             has_column = _keyword(node.value, 'db_column') is not None
             for target in targets:
                 if isinstance(target, ast.Name):

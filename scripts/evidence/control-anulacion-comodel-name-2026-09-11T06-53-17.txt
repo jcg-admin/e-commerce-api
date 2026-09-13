@@ -1,0 +1,55 @@
+# Control de anulacion — H-API-1090 y el reparto del descriptor de campo
+# fecha: 2026-09-11T06:53:17
+# HEAD: 9d1fd142
+
+=== 0. LINEA BASE (arbol como queda) ===================================
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2092 passed, 1 xfailed, 2 warnings in 23.00s
+
+=== 1. ANULACION A — comodel_name vuelve a ser property (descriptor de DATOS)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_setattr_lands_on_the_instance
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_the_class_attribute_is_not_a_data_descriptor
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheNameIsWritableAsTheSourceDeclaresIt::test_an_explicit_value_wins_over_the_derivation
+FAILED tests/unit/orm/test_comodel_name_contract.py::TestTheCopyLoopOfSetupRelatedCanRun::test_the_related_attrs_table_can_be_written_one_by_one
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_it_resolves_the_chain_to_its_last_field
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_it_wires_compute_inverse_and_search
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_a_stored_related_is_not_searchable_by_the_chain
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_it_copies_the_attributes_of_the_target
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_a_readonly_related_without_inverse_warns_about_its_default
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSetupWiresTheThreeFunctions::test_a_writable_related_with_default_does_not_warn
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSearchWalksTheChainBackwards::test_it_builds_the_any_chain
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSearchWalksTheChainBackwards::test_a_nullable_many2one_accepts_the_row_without_value
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSearchWalksTheChainBackwards::test_a_positive_search_does_not_add_it
+FAILED tests/unit/orm/test_related_field_setup.py::TestTheSearchWalksTheChainBackwards::test_a_negative_operator_with_a_truthy_value_gives_up
+14 failed, 2078 passed, 1 xfailed, 2 warnings in 25.70s
+--- restaurado; git diff --stat de src/orm/fields.py contra la version arreglada:
+ src/orm/fields.py | 185 +++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 140 insertions(+), 45 deletions(-)
+
+=== 2. ANULACION B — ComputedFieldDescriptor sobre TODO campo
+ERROR tests/unit/orm/test_field_descriptor.py::TestGetOnTheClass::test_class_level_access_returns_the_descriptor
+ERROR tests/unit/orm/test_field_descriptor.py::TestGetGoesThroughTheEnvironmentCache::test_it_returns_what_the_cache_holds
+ERROR tests/unit/orm/test_field_descriptor.py::TestGetGoesThroughTheEnvironmentCache::test_a_cache_miss_repopulates_the_cache
+ERROR tests/unit/orm/test_field_descriptor.py::TestSetPartitionsTheRecordAsTheSourceDoes::test_a_protected_record_gets_no_business_logic
+ERROR tests/unit/orm/test_field_descriptor.py::TestSetPartitionsTheRecordAsTheSourceDoes::test_a_real_record_is_not_flushed_on_assignment
+1 warning, 7 errors in 2.12s
+
+=== 3. ANULACION C — ningun descriptor sobre el campo llano
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_field_descriptor.py::TestTheDescriptorIsInstalledWhereItHasWork::test_a_plain_column_gets_the_non_data_descriptor
+1 failed, 6 passed, 1 warning in 5.74s
+
+=== 4. RESTAURACION verificada ========================================
+ src/orm/fields.py | 185 +++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 140 insertions(+), 45 deletions(-)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2092 passed, 1 xfailed, 2 warnings in 25.20s
+EXIT=0

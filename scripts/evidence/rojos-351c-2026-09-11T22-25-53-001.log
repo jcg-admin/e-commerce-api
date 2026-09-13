@@ -1,0 +1,8 @@
+.venv/lib/python3.12/site-packages/django/db/backends/base/base.py:296: RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+.venv/lib/python3.12/site-packages/django/db/backends/base/base.py:296: RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+.venv/lib/python3.12/site-packages/django/db/backends/base/base.py:296: RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+FAILED tests/unit/orm/test_default_get.py::TestContextWins::test_context_key_lands_in_the_defaults
+FAILED tests/unit/orm/test_default_get.py::TestContextWins::test_a_field_not_asked_for_is_not_returned
+FAILED tests/unit/orm/test_default_get.py::TestContextWins::test_an_unknown_field_is_skipped_not_raised
+3 failed, 244 passed, 1 warning in 13.98s
+EXIT=0

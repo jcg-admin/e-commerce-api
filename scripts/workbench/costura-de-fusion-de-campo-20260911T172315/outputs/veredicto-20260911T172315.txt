@@ -1,0 +1,7 @@
+fields.Char(...)             -> CharField
+fields.Char(store=False, ...)-> NonStored
+isinstance(conColumna, type(sinColumna)) = False
+isinstance(sinColumna, type(conColumna)) = False
+ancestros comunes: ['object']
+
+VEREDICTO: la guarda de la fuente NUNCA es verdadera cruzando la frontera con-columna / sin-columna, porque el unico ancestro comun es object. En la fuente SIEMPRE lo es, porque alli las dos declaraciones son la misma clase `Char` y `store` es un atributo.

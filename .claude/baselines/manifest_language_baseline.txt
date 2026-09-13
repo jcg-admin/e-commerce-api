@@ -1,0 +1,52 @@
+# Deuda heredada de claves de manifiesto en español.
+# Una entrada listada NO bloquea; una nueva SÍ. Se paga al tocar
+# el manifiesto — salvo la que sea DATO y no atributo, que se
+# queda con su razón declarada.
+analogue-in-the-client-20260830T192922/manifest.json::corrected_premise.afirmado_antes
+analogue-in-the-client-20260830T192922/manifest.json::corrected_premise.cambia_el_veredicto
+analogue-in-the-client-20260830T192922/manifest.json::corrected_premise.medido_ahora
+analogue-in-the-client-20260830T192922/manifest.json::corrected_premise.por_que_divergen
+atributos-de-clase-paridad-20260910T085330/manifest.json::corrected_premise.consecuencia
+atributos-de-clase-paridad-20260910T085330/manifest.json::corrected_premise.decia
+atributos-de-clase-paridad-20260910T085330/manifest.json::corrected_premise.mide
+construccion-de-clase-de-modelo-20260903T020920/manifest.json::corrected_premise.asumido
+construccion-de-clase-de-modelo-20260903T020920/manifest.json::corrected_premise.lo_destapo
+construccion-de-clase-de-modelo-20260903T020920/manifest.json::corrected_premise.medido
+filter-function-de-properties-20260831T102803/manifest.json::corrected_premise.afirmado_antes
+filter-function-de-properties-20260831T102803/manifest.json::corrected_premise.cambia_el_veredicto
+filter-function-de-properties-20260831T102803/manifest.json::corrected_premise.medido_ahora
+filter-function-de-properties-20260831T102803/manifest.json::corrected_premise.por_que_divergen
+identifier-gate-interpreter-verdict-20260910T192542/manifest.json::corrected_premise.antes
+identifier-gate-interpreter-verdict-20260910T192542/manifest.json::corrected_premise.despues
+openapi-contract-20260902T202807/manifest.json::corrected_premise.antes
+openapi-contract-20260902T202807/manifest.json::corrected_premise.despues
+orm-inventory-axis-20260902T205231/manifest.json::corrected_premise.antes
+orm-inventory-axis-20260902T205231/manifest.json::corrected_premise.despues
+orm-inventory-axis-20260902T205231/manifest.json::corrected_premise.quien_la_destapo
+orm-rename-resolution-20260910T083919/manifest.json::corrected_premise.consecuencia
+orm-rename-resolution-20260910T083919/manifest.json::corrected_premise.decia
+orm-rename-resolution-20260910T083919/manifest.json::corrected_premise.mide
+orm-root-census-20260902T203712/manifest.json::corrected_premise.antes
+orm-root-census-20260902T203712/manifest.json::corrected_premise.despues
+orm-root-census-20260902T203712/manifest.json::corrected_premise.quien_la_destapo
+orm-signature-parity-20260904T162214/manifest.json::corrected_premise.decia
+orm-signature-parity-20260904T162214/manifest.json::corrected_premise.medido
+orm-symbol-presence-census-20260910T175850/manifest.json::corrected_premise.consecuencia
+orm-symbol-presence-census-20260910T175850/manifest.json::corrected_premise.decia
+orm-symbol-presence-census-20260910T175850/manifest.json::corrected_premise.mide
+registry-field-axis-support-20260903T053330/manifest.json::corrected_premise.consecuencia
+registry-field-axis-support-20260903T053330/manifest.json::corrected_premise.decia
+registry-field-axis-support-20260903T053330/manifest.json::corrected_premise.mide
+registry-signaling-axis-support-20260903T063526/manifest.json::corrected_premise.consecuencia
+registry-signaling-axis-support-20260903T063526/manifest.json::corrected_premise.decia
+registry-signaling-axis-support-20260903T063526/manifest.json::corrected_premise.mide
+slug-de-producto-20260831T105114/manifest.json::corrected_premise.afirmado_antes
+slug-de-producto-20260831T105114/manifest.json::corrected_premise.cambia_el_veredicto
+slug-de-producto-20260831T105114/manifest.json::corrected_premise.medido_ahora
+slug-de-producto-20260831T105114/manifest.json::corrected_premise.por_que_divergen
+trigger-graph-of-fields-20260902T134137/manifest.json::corrected_premise.consecuencia
+trigger-graph-of-fields-20260902T134137/manifest.json::corrected_premise.decia
+trigger-graph-of-fields-20260902T134137/manifest.json::corrected_premise.mide
+ventana-de-lectura-20260903T174426/manifest.json::corrected_premise.antes
+ventana-de-lectura-20260903T174426/manifest.json::corrected_premise.despues
+ventana-de-lectura-20260903T174426/manifest.json::corrected_premise.detectado_por

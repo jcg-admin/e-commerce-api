@@ -1,0 +1,602 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of TestOwnManagersDeriveFromIt.test_the_soft_delete_manager_still_hides_the_deleted _
+
+request = <SubRequest 'django_db_setup' for <Function test_the_soft_delete_manager_still_hides_the_deleted>>
+django_test_environment = None
+django_db_blocker = <pytest_django.plugin.DjangoDbBlocker object at 0x7f6f786385c0>
+django_db_use_migrations = True, django_db_keepdb = True
+django_db_createdb = False, django_db_modify_db_settings = None
+
+    @pytest.fixture(scope="session")
+    def django_db_setup(
+        request: pytest.FixtureRequest,
+        django_test_environment: None,
+        django_db_blocker: DjangoDbBlocker,
+        django_db_use_migrations: bool,
+        django_db_keepdb: bool,
+        django_db_createdb: bool,
+        django_db_modify_db_settings: None,
+    ) -> Generator[None, None, None]:
+        """Top level fixture to ensure test databases are available"""
+        from django.test.utils import setup_databases, teardown_databases
+    
+        setup_databases_args = {}
+    
+        if not django_db_use_migrations:
+            _disable_migrations()
+    
+        if django_db_keepdb and not django_db_createdb:
+            setup_databases_args["keepdb"] = True
+    
+        with django_db_blocker.unblock():
+>           db_cfg = setup_databases(
+                verbosity=request.config.option.verbose,
+                interactive=False,
+                **setup_databases_args,
+            )
+
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+verbosity = -1, interactive = False
+time_keeper = <django.test.utils.NullTimeKeeper object at 0x7f6f6eaa7140>
+keepdb = True, debug_sql = False, parallel = 0, aliases = ['default']
+serialized_aliases = None, kwargs = {}
+test_databases = {('/var/run/postgresql', '5432', 'django.db.backends.postgresql', 'kaupamex_core_qa'): ('kaupamex_core_qa', ['default'])}
+
+    def setup_databases(
+        verbosity,
+        interactive,
+        *,
+        time_keeper=None,
+        keepdb=False,
+        debug_sql=False,
+        parallel=0,
+        aliases=None,
+        serialized_aliases=None,
+        **kwargs,
+    ):
+        """Create the test databases."""
+        if time_keeper is None:
+            time_keeper = NullTimeKeeper()
+    
+        test_databases, mirrored_aliases = get_unique_databases_and_mirrors(aliases)
+    
+        old_names = []
+        serialize_connections = []
+    
+        for db_name, aliases in test_databases.values():
+            first_alias = None
+            for alias in aliases:
+                connection = connections[alias]
+                old_names.append((connection, db_name, first_alias is None))
+    
+                # Actually create the database for the first connection
+                if first_alias is None:
+                    first_alias = alias
+                    with time_keeper.timed("  Creating '%s'" % alias):
+                        connection.creation.create_test_db(
+                            verbosity=verbosity,
+                            autoclobber=not interactive,
+                            keepdb=keepdb,
+                        )
+                        if serialized_aliases is None or alias in serialized_aliases:
+                            serialize_connections.append(connection)
+                    if parallel > 1:
+                        for index in range(parallel):
+                            with time_keeper.timed("  Cloning '%s'" % alias):
+                                connection.creation.clone_test_db(
+                                    suffix=str(index + 1),
+                                    verbosity=verbosity,
+                                    keepdb=keepdb,
+                                )
+                # Configure all other connections as mirrors of the first one
+                else:
+                    connections[alias].creation.set_as_test_mirror(
+                        connections[first_alias].settings_dict
+                    )
+    
+        # Configure the test mirrors.
+        for alias, mirror_alias in mirrored_aliases.items():
+            connections[alias].creation.set_as_test_mirror(
+                connections[mirror_alias].settings_dict
+            )
+    
+        # Serialize content of test databases only once all of them are setup to
+        # account for database mirroring and routing during serialization. This
+        # slightly horrific process is so people who are testing on databases
+        # without transactions or using TransactionTestCase still get a clean
+        # database on every test run.
+        for serialize_connection in serialize_connections:
+            serialize_connection._test_serialized_contents = (
+>               serialize_connection.creation.serialize_db_to_string()
+            )
+
+.venv/lib/python3.12/site-packages/django/test/utils.py:241: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.backends.postgresql.creation.DatabaseCreation object at 0x7f6f73cf5d60>
+
+    def serialize_db_to_string(self):
+        """
+        Serialize all data in the database into a JSON string.
+        Designed only for test runner usage; will not handle large
+        amounts of data.
+        """
+    
+        # Iteratively return every object for all models to serialize.
+        def get_objects():
+            from django.db.migrations.loader import MigrationLoader
+    
+            loader = MigrationLoader(self.connection)
+            for app_config in apps.get_app_configs():
+                if (
+                    app_config.models_module is not None
+                    and app_config.label in loader.migrated_apps
+                    and app_config.name not in settings.TEST_NON_SERIALIZED_APPS
+                ):
+                    for model in app_config.get_models():
+                        if model._meta.can_migrate(
+                            self.connection
+                        ) and router.allow_migrate_model(self.connection.alias, model):
+                            queryset = model._base_manager.using(
+                                self.connection.alias,
+                            ).order_by(model._meta.pk.name)
+                            chunk_size = (
+                                2000 if queryset._prefetch_related_lookups else None
+                            )
+                            yield from queryset.iterator(chunk_size=chunk_size)
+    
+        # Serialize to a string
+        out = StringIO()
+>       serializers.serialize("json", get_objects(), indent=None, stream=out)
+
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+format = 'json'
+queryset = <generator object BaseDatabaseCreation.serialize_db_to_string.<locals>.get_objects at 0x7f6f72818bf0>
+options = {'indent': None, 'stream': <_io.StringIO object at 0x7f6f6ec1bd00>}
+s = <django.core.serializers.json.Serializer object at 0x7f6f6eaa6d50>
+
+    def serialize(format, queryset, **options):
+        """
+        Serialize a queryset (or any iterator that returns database objects) using
+        a certain serializer.
+        """
+        s = get_serializer(format)()
+>       s.serialize(queryset, **options)
+
+.venv/lib/python3.12/site-packages/django/core/serializers/__init__.py:134: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.core.serializers.json.Serializer object at 0x7f6f6eaa6d50>
+queryset = <generator object BaseDatabaseCreation.serialize_db_to_string.<locals>.get_objects at 0x7f6f72818bf0>
+stream = <_io.StringIO object at 0x7f6f6ec1bd00>, fields = None
+use_natural_foreign_keys = False, use_natural_primary_keys = False
+progress_output = None, object_count = 0, options = {'indent': None}
+progress_bar = <django.core.serializers.base.ProgressBar object at 0x7f6f6eaa7440>
+
+    def serialize(
+        self,
+        queryset,
+        *,
+        stream=None,
+        fields=None,
+        use_natural_foreign_keys=False,
+        use_natural_primary_keys=False,
+        progress_output=None,
+        object_count=0,
+        **options,
+    ):
+        """
+        Serialize a queryset.
+        """
+        self.options = options
+    
+        self.stream = stream if stream is not None else self.stream_class()
+        self.selected_fields = fields
+        self.use_natural_foreign_keys = use_natural_foreign_keys
+        self.use_natural_primary_keys = use_natural_primary_keys
+        progress_bar = self.progress_class(progress_output, object_count)
+    
+        self.start_serialization()
+        self.first = True
+>       for count, obj in enumerate(queryset, start=1):
+
+.venv/lib/python3.12/site-packages/django/core/serializers/base.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def get_objects():
+        from django.db.migrations.loader import MigrationLoader
+    
+        loader = MigrationLoader(self.connection)
+        for app_config in apps.get_app_configs():
+            if (
+                app_config.models_module is not None
+                and app_config.label in loader.migrated_apps
+                and app_config.name not in settings.TEST_NON_SERIALIZED_APPS
+            ):
+                for model in app_config.get_models():
+                    if model._meta.can_migrate(
+                        self.connection
+                    ) and router.allow_migrate_model(self.connection.alias, model):
+                        queryset = model._base_manager.using(
+                            self.connection.alias,
+                        ).order_by(model._meta.pk.name)
+                        chunk_size = (
+                            2000 if queryset._prefetch_related_lookups else None
+                        )
+>                       yield from queryset.iterator(chunk_size=chunk_size)
+
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <[RuntimeError('Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.') raised in repr()] QuerySet object at 0x7f6f6e798e90>
+use_chunked_fetch = True, chunk_size = None
+
+    def _iterator(self, use_chunked_fetch, chunk_size):
+        iterable = self._iterable_class(
+            self,
+            chunked_fetch=use_chunked_fetch,
+            chunk_size=chunk_size or 2000,
+        )
+        if not self._prefetch_related_lookups or chunk_size is None:
+>           yield from iterable
+
+.venv/lib/python3.12/site-packages/django/db/models/query.py:508: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.models.query.ModelIterable object at 0x7f6f6e017680>
+
+    def __iter__(self):
+        queryset = self.queryset
+        db = queryset.db
+        compiler = queryset.query.get_compiler(using=db)
+        # Execute the query. This will also fill compiler.select, klass_info,
+        # and annotations.
+        results = compiler.execute_sql(
+            chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+        )
+        select, klass_info, annotation_col_map = (
+            compiler.select,
+            compiler.klass_info,
+            compiler.annotation_col_map,
+        )
+        model_cls = klass_info["model"]
+        select_fields = klass_info["select_fields"]
+        model_fields_start, model_fields_end = select_fields[0], select_fields[-1] + 1
+        init_list = [
+            f[0].target.attname for f in select[model_fields_start:model_fields_end]
+        ]
+        related_populators = get_related_populators(klass_info, select, db)
+        known_related_objects = [
+            (
+                field,
+                related_objs,
+                operator.attrgetter(
+                    *[
+                        (
+                            field.attname
+                            if from_field == "self"
+                            else queryset.model._meta.get_field(from_field).attname
+                        )
+                        for from_field in field.from_fields
+                    ]
+                ),
+            )
+            for field, related_objs in queryset._known_related_objects.items()
+        ]
+        for row in compiler.results_iter(results):
+>           obj = model_cls.from_db(
+                db, init_list, row[model_fields_start:model_fields_end]
+            )
+
+.venv/lib/python3.12/site-packages/django/db/models/query.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+cls = <class 'addons.base.models.res_partner.ResPartner'>, db = 'default'
+field_names = ['id', 'created_at', 'updated_at', 'image_1920', 'image_1024', 'image_512', ...]
+values = [1, datetime.datetime(2026, 9, 12, 7, 51, 53, 456763, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 9, 12, 7, 51, 53, 557736, tzinfo=datetime.timezone.utc), '', '', '', ...]
+
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        if len(values) != len(cls._meta.concrete_fields):
+            values_iter = iter(values)
+            values = [
+                next(values_iter) if f.attname in field_names else DEFERRED
+                for f in cls._meta.concrete_fields
+            ]
+>       new = cls(*values)
+
+.venv/lib/python3.12/site-packages/django/db/models/base.py:605: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <ResPartner: Probe Addr>
+args = (1, datetime.datetime(2026, 9, 12, 7, 51, 53, 456763, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 9, 12, 7, 51, 53, 557736, tzinfo=datetime.timezone.utc), '', '', '', ...)
+kwargs = {}
+
+    def _model_init_marking_the_load(self, *args, **kwargs):
+        """Envuelve ``Model.__init__`` para marcar el tramo de construcción."""
+        object.__setattr__(self, '_orm_building', True)
+        try:
+>           _DJANGO_MODEL_INIT(self, *args, **kwargs)
+
+src/orm/fields.py:1393: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <ResPartner: Probe Addr>
+args = (1, datetime.datetime(2026, 9, 12, 7, 51, 53, 456763, tzinfo=datetime.timezone.utc), datetime.datetime(2026, 9, 12, 7, 51, 53, 557736, tzinfo=datetime.timezone.utc), '', '', '', ...)
+kwargs = {}, cls = <class 'addons.base.models.res_partner.ResPartner'>
+opts = <Options for ResPartner>, _setattr = <built-in function setattr>
+_DEFERRED = <Deferred field>
+fields_iter = <tuple_iterator object at 0x7f6f6db19870>, val = 'Probe Addr'
+field = <django.db.models.fields.CharField: commercial_company_name>
+
+    def __init__(self, *args, **kwargs):
+        # Alias some things as locals to avoid repeat global lookups
+        cls = self.__class__
+        opts = self._meta
+        _setattr = setattr
+        _DEFERRED = DEFERRED
+        if opts.abstract:
+            raise TypeError("Abstract models cannot be instantiated.")
+    
+        pre_init.send(sender=cls, args=args, kwargs=kwargs)
+    
+        # Set up the storage for instance state
+        self._state = ModelState()
+    
+        # There is a rather weird disparity here; if kwargs, it's set, then
+        # args overrides it. It should be one or the other; don't duplicate the
+        # work The reason for the kwargs check is that standard iterator passes
+        # in by args, and instantiation for iteration is 33% faster.
+        if len(args) > len(opts.concrete_fields):
+            # Daft, but matches old exception sans the err msg.
+            raise IndexError("Number of args exceeds number of fields")
+    
+        if not kwargs:
+            fields_iter = iter(opts.concrete_fields)
+            # The ordering of the zip calls matter - zip throws StopIteration
+            # when an iter throws it. So if the first iter throws it, the
+            # second is *not* consumed. We rely on this, so don't change the
+            # order without changing the logic.
+            for val, field in zip(args, fields_iter):
+                if val is _DEFERRED:
+                    continue
+>               _setattr(self, field.attname, val)
+
+.venv/lib/python3.12/site-packages/django/db/models/base.py:513: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <orm.fields.ComputedFieldDescriptor object at 0x7f6f7278be60>
+instance = <ResPartner: Probe Addr>, value = 'Probe Addr'
+
+    def __set__(self, instance, value):
+        """≙ ``Field.__set__`` (``:1807-1841``) — el reparto en tres cubos.
+    
+        **Divergencia de mecanismo declarada, y es la del cubo real.** La fuente
+        manda la fila persistida a ``records.write({name: value})``, que en este
+        árbol es ``BaseModel.write`` (``orm/models.py:2057``) — y ése llama a
+        ``self.save(update_fields=…)``, o sea emite SQL. Portarlo literal haría
+        que ``partner.campo = x`` lanzara un UPDATE, cuando la asignación de
+        Django emite **cero** consultas (medido en
+        ``test_a_real_record_does_not_emit_sql_on_assignment``). Se porta lo que
+        ``Field.write`` hace —descartar el recálculo pendiente, filtrar la fila
+        cuyo valor ya coincide, marcar la caché sucia— más ``modified()``, que
+        es la mitad de disparo; el volcado sigue siendo ``save()``.
+        """
+        field = self.field
+        # El atributo de instancia se escribe SIEMPRE: es de donde ``save()``
+        # de Django lee la columna, y de donde la lee ``_cache_computed_values``
+        # tras el cómputo.
+        instance.__dict__[field.attname] = value
+    
+        if instance.__dict__.get('_orm_building'):
+            # **Construir NO es asignar, y esto lo decide la fuente.**
+            #
+            # Su camino de lectura es ``BaseModel._fetch_query``
+            # (``odoo19c: odoo/orm/models.py:3879-3933``), que **no pasa por
+            # ``Field.__set__``**: lee las columnas y puebla la caché con
+            # ``field._insert_cache(fetched, values)``. El comentario de la
+            # fuente dice por qué es ``insert`` y no ``update``: *"If we assume
+            # that the value of a pending update is in cache, we can avoid
+            # flushing pending updates if the fetched values do not overwrite
+            # values in cache"* — *"store values in cache, but without
+            # overwriting"*.
+            #
+            # Aquí el ``_fetch_query`` es el cargador de Django: ``from_db``
+            # construye con ``cls(*values)`` y ``Model.__init__`` asigna cada
+            # campo concreto por posición. Ése es el enganche equivalente, así
+            # que este tramo hace lo mismo que la fuente y nada más: poblar sin
+            # pisar. Sin ``remove_to_compute``, sin marca de sucio y sin
+            # ``modified()`` — son la lógica de negocio de una escritura, y
+            # cancelaban el recálculo pendiente de la fila recién cargada.
+            #
+            # El ``setdefault`` de ``_insert_cache`` subsume la guarda del
+            # valor sucio: una escritura pendiente ES lo que la fuente se niega
+            # a sobreescribir, con esas palabras.
+            if instance.pk:
+>               field._insert_cache(
+                    instance,
+                    [field.convert_to_cache(value, instance, validate=False)])
+
+src/orm/fields.py:1713: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.models.fields.CharField: commercial_company_name>
+records = <ResPartner: Probe Addr>, values = ['Probe Addr']
+
+    def _insert_cache(self, records, values):
+        """Rellena la caché SIN pisar lo que ya hay.
+    
+        ≙ ``Field._insert_cache`` (``:1595``). El ``setdefault`` no es un
+        detalle: la fuente lo explica —*"this enables to keep the pending
+        updates of records, and flush them later"*—. Una asignación borraría una
+        escritura pendiente y la fila se guardaría con el valor leído de la base.
+    
+        El ``deque(maxlen=0)`` es el drenaje en C que la fuente mide un 15 % más
+        rápido que el bucle equivalente; se porta igual, porque es el stack quien
+        lo trae hecho.
+        """
+>       field_cache = self._get_cache(get_environment())
+
+src/orm/fields.py:4632: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.models.fields.CharField: commercial_company_name>
+env = <Environment uid=None su=False company=None>
+
+    def _get_cache(self, env):
+        """La caché del campo: un mapa mutable de id a valor.
+    
+        ≙ ``Field._get_cache`` (``:1525``). Docstring de la fuente: *"Calling
+        this function multiple times, always returns the same mapping instance
+        for a given environment, unless the transaction was entirely
+        invalidated."* Esa promesa sostiene el resto — quien recibe el mapa
+        escribe en él y espera que la escritura se vea.
+        """
+        transaction = env.transaction
+>       memo_key = (self, env.cache_key(self) if _has_context_buckets(self) else None)
+
+src/orm/fields.py:4495: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+field = <django.db.models.fields.CharField: commercial_company_name>
+
+    def _has_context_buckets(field):
+        """Si el campo separa su caché por clave de contexto.
+    
+        ≙ ``self in env._field_depends_context`` de la fuente. Allá el registro
+        guarda el conjunto; aquí lo responde el mismo mapa derivado que ya
+        existía, ``registry.field_depends_context``.
+        """
+>       return field in field_depends_context
+
+src/orm/fields.py:4482: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <orm.registry._DerivedContextCollector object at 0x7f6f74073920>
+field = <django.db.models.fields.CharField: commercial_company_name>
+
+    def __contains__(self, field):
+>       return bool(self[field])
+
+src/orm/registry.py:835: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <orm.registry._DerivedContextCollector object at 0x7f6f74073920>
+field = <django.db.models.fields.CharField: commercial_company_name>
+
+    def __getitem__(self, field):
+        if self._table is None:
+>           self._table = self._build()
+
+src/orm/registry.py:831: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <orm.registry._DerivedContextCollector object at 0x7f6f74073920>
+
+    def _build(self):
+        table = {}
+        for model in apps.get_models():
+            for field in model._meta.get_fields():
+>               declared = self._declared_by_the_field(field, model)
+
+src/orm/registry.py:818: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <orm.registry._DerivedContextCollector object at 0x7f6f74073920>
+field = <django.db.models.fields.CharField: company_label>
+model = <class 'tests.unit.orm.test_nonstored_compute_dispatch.ComputeDispatchProbe'>
+
+    def _declared_by_the_field(self, field, model):
+        """Lo que ``Field.get_depends`` produce, o ``None`` si no lo publica.
+    
+        El productor es ``get_depends`` (``odoo19c: odoo/orm/fields.py:561``),
+        que decide las tres ramas —``_depends`` explicito, ``related`` y el
+        recorrido del MRO sobre la funcion de calculo—. Leer el atributo en
+        crudo, que es lo que este colector hacia, veia solo la primera y media:
+        el ``related`` no aportaba nada y del computo tomaba una sola funcion.
+    
+        Devuelve ``None`` —y no la tupla vacia— cuando el campo no lleva el
+        metodo, para que el respaldo de :meth:`_build` distinga «el productor
+        dice que no hay» de «este objeto no es un campo nuestro». La relacion
+        inversa de Django entra por ahi: ``_meta.get_fields()`` la incluye y no
+        hereda de ``models.Field`` (tarea **#347**).
+        """
+        producer = getattr(field, 'get_depends', None)
+        if producer is None:
+            return None
+>       return producer(model)[self.INDEX]
+
+src/orm/registry.py:812: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <django.db.models.fields.CharField: company_label>
+model = <class 'tests.unit.orm.test_nonstored_compute_dispatch.ComputeDispatchProbe'>
+
+    def get_depends(self, model):
+        """Las dependencias del campo y las de contexto — ≙ ``Field.get_depends``
+        (``odoo19c: odoo/orm/fields.py:561-598``), *"Return the field's
+        dependencies and cache dependencies"*.
+    
+        Es el **productor** del par que :func:`_field_resolve_depends` consume: aquel
+        expande cada nombre punteado a las tuplas de campos que lo recorren, y este
+        decide **cuales son esos nombres** a partir de lo que la clase declara. Sin
+        el, el mapa ``registry.field_depends`` se derivaba del atributo ``_depends``
+        en crudo y dos de las tres ramas de la fuente no existian: la de ``related``
+        y la del recorrido del MRO sobre la funcion de calculo.
+    
+        Las tres ramas, en el orden en que la fuente las evalua:
+    
+        1. ``_depends`` explicito — *"the parameter 'depends' has priority over
+           'depends' on compute"* (``:563``).
+        2. ``related`` — la dependencia **es** la ruta; el contexto sale de recorrer
+           la cadena punteada eslabon por eslabon, acumulando el de cada campo.
+        3. ``compute`` — el ``_depends`` de **todas** las funciones sobreescritas
+           (``resolve_mro``), no solo el de la mas derivada.
+    
+        Dos divergencias de mecanismo, ambas declaradas:
+    
+        - el modelo de cada eslabon lo da :func:`_comodel_of` —que lee el
+          ``related_model`` de Django y cae a ``comodel_name``— en vez del
+          ``model.env[nombre]`` de la fuente, porque aqui el registro es un modulo;
+        - el mapa de campos lo da :func:`~orm.utils.model_field_registry`, el cuerpo
+          de ``BaseModel._fields``, y no ``model._fields`` directo.
+    
+        :param model: la clase de modelo que declara el campo.
+        :returns: el par ``(depends, depends_context)``.
+        """
+        if self._depends is not None:
+            # ``:563-565`` — lo declarado en el campo gana sobre lo del computo.
+            return self._depends, self._depends_context or ()
+    
+        if self.related:
+            if self._depends_context is not None:
+                depends_context = self._depends_context
+            else:
+                depends_context = []
+                field_model = model
+                for field_name in self.related.split('.'):
+                    if field_model is None:
+                        raise ValueError(
+                            f'{model.__name__}.{self.name}: la ruta related '
+                            f'{self.related!r} atraviesa un campo que no lleva a '
+                            f'ningun modelo')
+>                   field = model_field_registry(field_model)[field_name]
+E                   KeyError: 'company_id'
+
+src/orm/fields.py:4144: KeyError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/orm/test_access_manager.py::TestOwnManagersDeriveFromIt::test_the_soft_delete_manager_still_hides_the_deleted
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 warning, 1 error in 2.47s
+EXIT=1

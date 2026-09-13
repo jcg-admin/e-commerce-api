@@ -129,7 +129,7 @@ def main(argv=None):
     fresh = [f for f in findings if f.key not in baseline]
 
     for finding in sorted(fresh, key=lambda f: f.key):
-        print(f'{finding.path}::{finding.symbol}\n'
+        print(f'{finding.key}\n'
               f'    {finding.direction}\n'
               f'    nuestro: {finding.ours} · la fuente: {finding.theirs}')
 

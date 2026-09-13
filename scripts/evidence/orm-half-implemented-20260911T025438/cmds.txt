@@ -1,0 +1,4 @@
+cd /home/user/kaupamex-api && eval "$(python3 scripts/reference_roots.py --env)" && uv run python scripts/workbench/orm-root-census-20260902T203712/census_orm_root.py --detalle
+cd /home/user/kaupamex-api && eval "$(python3 scripts/reference_roots.py --env)" && uv run python scripts/workbench/orm-symbol-presence-census-20260910T175850/census_symbol_presence.py
+cd /home/user/kaupamex-api && eval "$(python3 scripts/reference_roots.py --env)" && python3 scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py
+cd /home/user/kaupamex-api && eval "$(python3 scripts/reference_roots.py --env)" && python3 scripts/workbench/atributos-de-clase-paridad-20260910T085330/class_attr_parity.py

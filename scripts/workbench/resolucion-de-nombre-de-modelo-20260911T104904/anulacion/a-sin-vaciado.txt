@@ -1,0 +1,3 @@
+  (a) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_referrer_first_resolves_when_the_target_is_prepared
+  (a) FAILED tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_self_reference_resolves_on_its_own_class_prepared
+  (a) 2 failed, 14 passed, 1 warning in 5.51s

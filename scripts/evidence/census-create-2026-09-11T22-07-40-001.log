@@ -1,0 +1,16 @@
+src/orm/models.py:685:    def create(cls, **values):
+src/addons/base/models/res_company.py:222:    def create(self, **kwargs):
+src/addons/base/models/res_currency.py:287:    def create(cls, **vals):
+src/addons/base/models/res_currency.py:1078:    def create(cls, **vals):
+addons/account/wizard/setup_wizards.py:202:    def create(cls, **vals):
+addons/base_iban/models/res_partner_bank.py:230:def create(cls, **vals):
+addons/html_editor/models/html_field_history_mixin.py:163:    def create(cls, **vals):
+addons/stock/models/stock_package_type.py:301:    def create(cls, **vals):
+addons/stock/models/stock_location.py:534:    def create(cls, **vals):
+addons/stock/models/stock_quant.py:752:    def create(cls, **vals):
+addons/stock/models/stock_move.py:1285:    def create(cls, **vals):
+addons/stock/models/product_strategy.py:343:    def create(cls, **vals):
+addons/stock/models/stock_picking.py:440:    def create(cls, **vals):
+addons/stock/models/stock_picking.py:1480:    def create(cls, **vals):
+addons/stock/models/stock_package.py:615:    def create(cls, **vals):
+EXIT=0

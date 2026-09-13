@@ -1,0 +1,24 @@
+{
+  "question": "cual es la FORMA de un campo sin columna en este stack, y donde se deriva store — antes o despues de fusionar la cadena de declaraciones?",
+  "instrument": "probes/probe_private_needs_no_column.py — tres brazos sobre una misma tabla de sonda que solo tiene id y plain: CharField llano (control positivo), CharField contribuido con private_only=True, y CharField con column=None ademas de private_only. Cada brazo hace create() + first() contra PostgreSQL real y publica la pertenencia del campo a concrete_fields/local_fields/private_fields y las columnas que el SELECT compila. Las dos decisiones de forma se midieron aparte: fronteras de _get_attrs por grep sobre la fuente, y .validators de dos instancias construidas de las dos maneras",
+  "metric": "veredicto PASA/FALLA de create()+first() por brazo, con la columna, concrete, y las tres pertenencias de _meta; y para la segunda medicion, la lista de validators de un CharField construido vacio+__dict__.update contra uno construido con los kwargs fusionados",
+  "blind_to": [
+    "el camino de escritura en lote — bulk_create no pasa por pre_save, y los tres brazos usan create() fila a fila",
+    "la herencia multi-tabla: los tres modelos son de una sola tabla sin padres concretos, asi que no se midio que hace un campo privado cuando _meta tiene parents",
+    "los otros diecinueve tipos de campo en la medicion de validators — se midio CharField, que es el unico cuyo __init__ materializa la cached_property por max_length; DecimalField sobrescribe validators como property y podria no envenenarse igual",
+    "si la forma private+column=None sobrevive a makemigrations --check sobre el arbol entero: se midio el camino de consulta, no el autodetector"
+  ],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/hallazgos/",
+  "source": [
+    "odoo19c: odoo/orm/fields.py:414-490 (_get_attrs fusiona y deriva en UNA funcion), :443-460 (los bloques compute y related que derivan store)",
+    "odoo19c: odoo/orm/model_classes.py:411-415 (la clase sale de type(fields_[-1]), sin predicado sobre store)",
+    "django: db/models/fields/__init__.py:940 (concrete = column is not None), CharField.__init__ (materializa validators)",
+    "django: contrib/contenttypes/fields.py (GenericForeignKey: private_only=True Y get_attname_column -> None)",
+    "api: src/orm/fields.py:1104-1177 (_field_get_attrs fusiona y NO deriva), :1041 (_field_init_with_copy retira lo que Django no conoce)",
+    "api: src/orm/fields_nonstored.py (apply_source_defaults deriva, y la llaman las fachadas al construir)"
+  ],
+  "tasks": ["#346"],
+  "control": "el brazo A de la sonda es el control positivo: un CharField llano DEBE ir y volver. Si A fallara, el instrumento esta roto y ningun otro brazo vale. La segunda medicion trae su propio control de dos brazos y publica si discrimina",
+  "reproducible": "PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python scripts/workbench/campo-sin-columna-*/probes/probe_private_needs_no_column.py",
+  "outputs": ["outputs/veredicto-private-necesita-column-none.txt", "outputs/dos-decisiones-de-forma.txt"]
+}

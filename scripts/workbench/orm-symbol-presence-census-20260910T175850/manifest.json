@@ -1,0 +1,30 @@
+{
+  "question": "De lo que src/orm y src/tools YA declaran, ¿cuánto tiene cuerpo? Los cinco instrumentos previos miden AUSENCIA; su criterio de cierre —«0 ausentes»— lo satisface un árbol de firmas vacías, porque ninguno mira el cuerpo. (TASK-API-0391)",
+  "instrument": "scripts/workbench/orm-symbol-presence-census-20260910T175850/census_symbol_presence.py",
+  "metric": "por archivo de las dos raíces espejadas: clases y funciones declaradas por AST (módulo y método; NO anidadas dentro de una función), cada una con su FIRMA —parámetros en orden sin el receptor, banderas de default, vararg, kw-only, kwarg— y su CLASE DE CUERPO. `stub` = retirado el docstring, el cuerpo queda vacío o es exactamente uno de `pass`, `...`, `raise NotImplementedError` (con o sin mensaje), `return` pelado o `return None`. Todo lo demás es `substantive`, incluido el que sólo delega en super(). La unión con odoo19c es por NOMBRE DE ARCHIVO dentro del par de FIXED_MIRRORED_ROOTS y por NOMBRE DE SÍMBOLO vía resolve() de orm-rename-resolution.",
+  "blind_to": "Cuatro cegueras, tres medidas en este mismo pase.\n(1) El PREFIJO DE DISOLUCIÓN que resolve() conoce se derivó de fields.py (`_field_`, `_model_`, `_registry_`). Los archivos que disuelven con otro prefijo cuentan sus símbolos como ausentes: medido por la sonda, 52 de 650 ocurrencias de la referencia (8 %) casarían por sufijo, concentradas en fields_temporal.py (20 de 23). La ausencia deduplicada tras descontarlas sigue siendo el eje dominante.\n(2) DESACUERDO DE UNIVERSO entre el censo y su propia sonda: el censo deduplica por nombre (1518 símbolos, 557 ausentes) y la sonda cuenta ocurrencias (650), porque `convert_to_column` existe en varias clases del mismo archivo. Las dos cifras son correctas y NO son comparables entre sí.\n(3) El emparejamiento por nombre de ARCHIVO: un símbolo cuyo homólogo vive en otro archivo de la referencia sale como ausente — es la misma ceguera declarada de check_mirrored_roots (H-API-855).\n(4) Un cuerpo de DOS statements no es stub aunque los dos sean vacíos: `__iter__` de domains.py hace `yield from ()` y luego `raise NotImplementedError`, y se cuenta como sustantivo. Y ciega, como todos los instrumentos previos, a que un cuerpo sustantivo HAGA lo que el de la referencia hace.",
+  "control": "dos anulaciones, cada una sobre su mecanismo, con las aserciones que caen contadas. (1) Retirado el detector de stub (todo `substantive`): caen EXACTAMENTE 4 de 8 — las tres de sujeto real del árbol más la unitaria; sobreviven las cuatro que miden firma y cuerpos sustantivos. (2) El `raise` detectado por SUBCADENA en vez de por nodo: cae EXACTAMENTE 1 de 8 — `depends` de decorators.py, que levanta NotImplementedError dentro de un `elif` y un detector laxo borraría de la medición una guarda con lógica real. Los sujetos son reales y del árbol, no fabricados.",
+  "corrected_premise": {
+    "decia": "el eje nuevo es la presencia con firma, y la columna que discrimina es el stub — la sospecha era que el criterio «0 ausentes» estuviera satisfecho por símbolos vacíos",
+    "mide": "42 stubs sobre 1646 símbolos declarados. De los 33 que casan contra la referencia, 32 son FIDELIDAD —la fuente también los deja vacíos— y sólo 1 es hueco real: `copy_translations` en src/orm/models.py:1312, sustantivo en la referencia y vacío aquí.",
+    "consecuencia": "la sospecha que motivó el censo NO se sostiene: el árbol no está hueco por dentro. El eje que sí gobierna sigue siendo la AUSENCIA — 557 de 1518 símbolos de la referencia (37 %) no resuelven bajo ningún nombre, concentrados en models.py (129), translate.py (90 de 90), config.py (55 de 56) y misc.py (48). Y aparece un tercer eje que ningún instrumento medía: 95 firmas DIVERGENTES entre símbolos que sí están portados."
+  },
+  "reproducible": "eval \"$(uv run python scripts/reference_roots.py --env)\" && uv run python scripts/workbench/orm-symbol-presence-census-20260910T175850/census_symbol_presence.py   # 0.47 s, sin ledger de trabajos: medido antes de decidir",
+  "outputs": [
+    "outputs/census.json"
+  ],
+  "source": [
+    "odoo19c @ odoo-tools abe4040ec1 — resuelto por scripts/reference_roots.py, NUNCA tecleado: el árbol de 19 está triplicado y la ruta de tres segmentos da 0 addons",
+    "src/orm y src/tools @ api b521f421",
+    "scripts/check_mirrored_roots.py — FIXED_MIRRORED_ROOTS",
+    "scripts/workbench/orm-rename-resolution-20260910T083919/resolve_renames.py — resolve, DISSOLUTION_PREFIXES",
+    "scripts/compare_reference_symbols.py — inventory(): da métodos por clase con lineno, y NI firma NI clase de cuerpo, que son los dos ejes de este censo"
+  ],
+  "tasks": [
+    "TASK-API-0391"
+  ],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/ — el censo reencuadra OE-1: el hueco no es de cuerpo (1 caso) sino de ausencia (557) y de firma divergente (95)",
+  "measured_at": "2026-09-10T18:04:23",
+  "api_head": "b521f421",
+  "odoo_tools_head": "abe4040ec1"
+}

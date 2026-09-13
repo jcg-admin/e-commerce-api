@@ -42,6 +42,7 @@ registry es el módulo (divergencia de enlace declarada en ``tools/cache.py``),
 así que el alias entra en la clave: ``@ormcache('key', 'using', ...)``. Sin él
 dos bases compartirían entrada, que es un defecto que la fuente no tiene.
 """
+import api
 import uuid
 
 from django.core.exceptions import ValidationError
@@ -190,15 +191,14 @@ class SystemParameter(models.Model):
 
     # -- Los cuatro enganches de mutación de la referencia -------------------
 
+    @api.model_create_multi
     @classmethod
     def create(cls, vals_list, using=DEFAULT_DB_ALIAS):
         """≙ ``odoo19c: ir_config_parameter.py:101-104`` (``@api.model_create_multi``).
 
-        Vacía la familia ``stable`` y delega. Admite un dict o una lista de
-        dicts, como el decorador de la fuente; devuelve la lista de instancias.
+        Vacía la familia ``stable`` y delega. Un dict suelto lo envuelve el
+        decorador, como en la fuente; devuelve la lista de instancias.
         """
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
         registry.clear_cache('stable')
         return [cls.objects.using(using).create(**vals) for vals in vals_list]
 

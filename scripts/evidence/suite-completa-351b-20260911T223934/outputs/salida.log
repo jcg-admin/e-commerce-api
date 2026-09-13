@@ -1,0 +1,13 @@
+    from crypt import crypt as _crypt
+
+tests/unit/orm/test_fields_related.py::TestResolveDepends::test_it_resolves_a_declared_chain_to_its_fields
+  /home/user/kaupamex-api/src/orm/fields.py:3886: UserWarning: Field base.ResPartner.name should be declared with recursive=True
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_display_name.py::TestUniversalAdoption::test_none_declares_it_as_something_other_than_the_field
+FAILED tests/unit/orm/test_display_name.py::TestTheGateDiscriminates::test_it_names_a_model_that_declares_display_name_as_a_property
+FAILED tests/unit/scripts/test_check_fk_naming.py::TestTheBaselineAbsorbsTheInheritedDebtAndOnlyThat::test_every_offender_measured_today_is_in_the_baseline
+3 failed, 10593 passed, 30 skipped, 1 xfailed, 6 warnings in 337.84s (0:05:37)
+__BG_EXIT__=0

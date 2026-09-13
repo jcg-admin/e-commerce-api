@@ -1,0 +1,407 @@
+EEEEEEEEE                                                                [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of TestTheExtensionIsInstalled.test_the_extension_is_created __
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_ ERROR at setup of TestTheExtensionIsInstalled.test_the_one_argument_function_exists _
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_ ERROR at setup of TestBothWaysIgnoreTheAccent.test_the_engine_finds_the_accented_row _
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_ ERROR at setup of TestBothWaysIgnoreTheAccent.test_the_in_memory_predicate_finds_it_too _
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+____ ERROR at setup of TestBothWaysIgnoreTheAccent.test_the_two_ways_agree _____
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_ ERROR at setup of TestBothWaysIgnoreTheAccent.test_it_works_in_the_other_direction_too _
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_____ ERROR at setup of TestOnlyILikeUnaccents.test_like_does_not_unaccent _____
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+_ ERROR at setup of TestOnlyILikeUnaccents.test_the_ilike_sql_names_the_function _
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+______ ERROR at setup of TestTheExtensionIsInstalled.test_the_flag_is_on _______
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.UndefinedTable: relation "res_users" does not exist
+
+The above exception was the direct cause of the following exception:
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:319: in handle
+    self.sync_apps(connection, executor.loader.unmigrated_apps)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:466: in sync_apps
+    with connection.schema_editor() as editor:
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:170: in __exit__
+    self.execute(sql, None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "res_users" does not exist
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/orm/test_unaccent.py::TestTheExtensionIsInstalled::test_the_extension_is_created
+ERROR tests/unit/orm/test_unaccent.py::TestTheExtensionIsInstalled::test_the_one_argument_function_exists
+ERROR tests/unit/orm/test_unaccent.py::TestBothWaysIgnoreTheAccent::test_the_engine_finds_the_accented_row
+ERROR tests/unit/orm/test_unaccent.py::TestBothWaysIgnoreTheAccent::test_the_in_memory_predicate_finds_it_too
+ERROR tests/unit/orm/test_unaccent.py::TestBothWaysIgnoreTheAccent::test_the_two_ways_agree
+ERROR tests/unit/orm/test_unaccent.py::TestBothWaysIgnoreTheAccent::test_it_works_in_the_other_direction_too
+ERROR tests/unit/orm/test_unaccent.py::TestOnlyILikeUnaccents::test_like_does_not_unaccent
+ERROR tests/unit/orm/test_unaccent.py::TestOnlyILikeUnaccents::test_the_ilike_sql_names_the_function
+ERROR tests/unit/orm/test_unaccent.py::TestTheExtensionIsInstalled::test_the_flag_is_on
+1 warning, 9 errors in 1.38s
+EXIT=1

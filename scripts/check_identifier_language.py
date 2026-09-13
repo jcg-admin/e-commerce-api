@@ -19,6 +19,15 @@ precedencia—.
 Sin thyrox alcanzable **NO se emite un veredicto**: se rehúsa con exit 2. Un 0
 aquí no distinguiría «ningún identificador incumple» de «no pude medir», que
 es el sub-patrón D de ``metrica-decide-la-conclusion.md``.
+
+Y el MECANISMO corre con el intérprete del PROVEEDOR, no con el que este
+puente herede. Sus dependencias —el corpus abierto entre ellas— las declara
+``thyrox: pyproject.toml``, así que viven en el entorno de thyrox y en ningún
+otro. Medido antes de cerrarlo: con ``sys.executable`` el mismo gate, sobre el
+mismo árbol y el mismo baseline, daba exit 1 con 2994 incumplidores bajo
+``python3`` y exit 0 bajo ``uv run python`` — el veredicto lo decidía quién
+invocaba. La regla de reparto y su rehúse viven en
+``thyrox: src/lib/toolchain.sh``; aquí se consultan, no se reimplementan.
 """
 import os
 import pathlib
@@ -39,12 +48,39 @@ def thyrox_gate():
     mismo resultado que sin declarar nada)."""
     declared = os.environ.get('THYROX_ROOT')
     if declared:
-        gate = pathlib.Path(declared) / 'src' / 'gates' / 'check_identifier_language.py'
+        gate = pathlib.Path(declared) / 'src' / 'verify' / 'check_identifier_language.py'
         return gate if gate.is_file() else None
     # Clon hermano: <arbol>/thyrox junto a <arbol>/kaupamex-api — SOLO
     # cuando THYROX_ROOT no se declaró en absoluto.
-    gate = HERE.parents[1] / 'thyrox' / 'src' / 'gates' / 'check_identifier_language.py'
+    gate = HERE.parents[1] / 'thyrox' / 'src' / 'verify' / 'check_identifier_language.py'
     return gate if gate.is_file() else None
+
+
+def provider_interpreter(gate):
+    """El intérprete del proveedor, preguntado a su propio selector.
+
+    Se consulta ``thyrox: src/lib/toolchain.sh`` en vez de derivar la ruta aquí:
+    el reparto —mecanismo al proveedor, sujeto al consumidor— es una decisión
+    del proveedor, y una segunda copia de la regla en este puente derivaría en
+    silencio. Devuelve ``None`` cuando el selector rehúsa, y su mensaje ya
+    nombra el remedio.
+    """
+    # El gate vive en `<raiz>/src/verify/`; su hermano `lib/` cuelga del mismo
+    # `src/`. Se asciende desde el ARCHIVO que ya se resolvió, no desde este
+    # puente: el puente no sabe dónde está thyrox, y el gate sí.
+    selector = gate.parent.parent / 'lib' / 'toolchain.sh'
+    if not selector.is_file():
+        print(f'FATAL: no se encontró el selector de toolchain en {selector}.',
+              file=sys.stderr)
+        return None
+    asked = subprocess.run(
+        ['bash', '-c',
+         f'source {selector} && thyrox_toolchain_provider_python'],
+        capture_output=True, text=True)
+    if asked.returncode != 0:
+        sys.stderr.write(asked.stderr)
+        return None
+    return asked.stdout.strip()
 
 
 def main(argv):
@@ -61,7 +97,10 @@ def main(argv):
     # (p. ej. para probar contra otro archivo), esa declaración manda.
     env.setdefault('IDENTIFIER_LANGUAGE_BASELINE',
                     str(HERE / 'identifier_language_baseline.txt'))
-    return subprocess.call([sys.executable, str(gate), *argv[1:]], env=env)
+    interpreter = provider_interpreter(gate)
+    if interpreter is None:
+        return 2
+    return subprocess.call([interpreter, str(gate), *argv[1:]], env=env)
 
 
 if __name__ == '__main__':

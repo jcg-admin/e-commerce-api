@@ -48,12 +48,23 @@ confirma.
 import collections
 
 import pytest
+from orm.environments import sudo
 
 import fields
 from addons.base.models import ResPartner
 from addons.base.models.ir_model import IrModelData
 from addons.base.models.res_config import ResConfig
 from orm.models import LOG_ACCESS_COLUMNS, MAGIC_COLUMNS, CopyMixin
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 class TestFieldCopyFlag:

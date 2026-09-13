@@ -262,7 +262,7 @@ RESET_MODE_CHOICES = [
 ]
 
 
-class IrUiView(TimeStampedModel):
+class IrUiView(models.DefaultGetMixin, TimeStampedModel):
     """``ir.ui.view`` — una vista y su lugar en el árbol de herencia."""
 
     _name = 'ir.ui.view'

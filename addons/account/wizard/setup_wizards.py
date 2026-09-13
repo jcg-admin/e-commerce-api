@@ -72,6 +72,7 @@ Lo que este archivo NO cierra
 from datetime import date, timedelta
 
 import fields
+import api
 import models
 from addons.account.models.account_journal import AccountJournal
 from addons.account.models.account_move import AccountMove
@@ -84,7 +85,8 @@ from orm.models_transient import TransientModel
 from tools.translate import _
 
 
-class AccountFinancialYearOp(TransientModel):
+class AccountFinancialYearOp(models.DefaultGetMixin, models.RecordLoaderMixin,
+                             models.CheckCompanyMixin, TransientModel):
     """≙ ``account.financial.year.op`` — fecha de apertura y cierre fiscal
     de la empresa (``odoo19c: setup_wizards.py:10-91``)."""
 
@@ -198,11 +200,14 @@ class AccountFinancialYearOp(TransientModel):
             opening_move.date = opening_date - timedelta(days=1)
             opening_move.save(update_fields=['date'])
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``:65-75``): la empresa se actualiza ANTES de guardar
         el asistente, y los campos que ya viajaron a la empresa se sacan de
-        ``vals``.
+        ``vals``. El bucle por ``vals`` es el de la referencia; ``super().create``
+        es ``DefaultGetMixin.create``, el porte por contenido de
+        ``BaseModel.create`` (:ref:`h-api-1108`).
 
         **La excepción de la fuente no aplica aquí, y decirlo importa.** Allá
         ``opening_date`` se conserva en ``vals`` con este comentario verbatim:
@@ -215,12 +220,13 @@ class AccountFinancialYearOp(TransientModel):
         igual. El valor sigue siendo legible: se lee de la empresa, que es
         donde ``_update_company`` acaba de escribirlo.
         """
-        company = vals.get('company_id')
-        if company is not None:
-            cls._update_company(company, vals)
-        for key in cls._company_fields_to_update():
-            vals.pop(key, None)
-        return cls.objects.create(**vals)
+        for vals in vals_list:
+            company = vals.get('company_id')
+            if company is not None:
+                cls._update_company(company, vals)
+            for key in cls._company_fields_to_update():
+                vals.pop(key, None)
+        return super().create(vals_list)
 
     def write(self, **vals):
         """≙ ``write`` (``:77-84``)."""

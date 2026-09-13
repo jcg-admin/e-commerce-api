@@ -1,0 +1,7 @@
+# Mitad ROJA — 2026-09-10T08:54:27
+$ python3 tests/test_class_attr_parity.py
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/atributos-de-clase-paridad-20260910T085330/tests/test_class_attr_parity.py", line 25, in <module>
+    from class_attr_parity import (  # noqa: E402
+ModuleNotFoundError: No module named 'class_attr_parity'
+EXIT=1

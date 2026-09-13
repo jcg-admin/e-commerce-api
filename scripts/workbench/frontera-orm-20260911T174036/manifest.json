@@ -1,0 +1,33 @@
+{
+  "question": "¿Qué símbolos de nivel superior de odoo/orm/ no están en src/orm/, y dónde recoge la referencia las definiciones de campo que alimentan la fusión?",
+  "instrument": [
+    "python3 scripts/census_orm_reference.py --global",
+    "grep -rn _base_fields__ $ODOO19C/odoo/orm/",
+    "grep -rn _field_definitions $ODOO19C/odoo/orm/"
+  ],
+  "metric": "nombres ligados en el cuerpo del módulo por AST (ClassDef, FunctionDef, AsyncFunctionDef y el destino de un Assign simple) de cada odoo/orm/*.py, buscados en TODA la raíz src/orm/; más los sitios de población de _base_fields__ y _field_definitions en la referencia, contados por grep.",
+  "blind_to": "los métodos dentro de una clase — un Field con la mitad de sus métodos cuenta como presente, y para eso está check_porte_completo; el símbolo portado con OTRO nombre, que cuenta como ausente sin serlo; y el orden en que las cuatro etapas del flujo corren en tiempo de arranque, que este censo no ejecuta.",
+  "destination": [
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/",
+    "TASK-API-0416 — portar la fase que recoge las definiciones de campo por clase"
+  ],
+  "reproducible": "python3 scripts/census_orm_reference.py --global",
+  "outputs": [
+    "outputs/ausentes-por-archivo.txt"
+  ],
+  "source": [
+    "odoo19c: odoo/orm/fields.py:397 — __set_name__ apenda a owner._field_definitions",
+    "odoo19c: odoo/orm/models.py:229 — MetaModel.__new__ crea la lista por clase",
+    "odoo19c: odoo/orm/model_classes.py:370-374 — recorre reversed(_model_classes__)",
+    "odoo19c: odoo/orm/model_classes.py:411-415 — Field(_base_fields__=tuple(fields_))"
+  ],
+  "control": "el modo --global es el control del modo por archivo: corrige la sobre-cuenta buscando el nombre en toda la raíz. Discrimina — 33 ausentes por archivo contra 28 globales, y los 5 de diferencia son símbolos que este árbol declara en otro archivo del mismo paquete.",
+  "tasks": [
+    "TASK-API-0416",
+    "#318",
+    "#319"
+  ],
+  "measured_at": "2026-09-11T17:48:03",
+  "api_head": "82bb1443",
+  "odoo_tools_head": "abe4040ec1"
+}

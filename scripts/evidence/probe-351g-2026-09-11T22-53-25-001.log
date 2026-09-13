@@ -1,0 +1,14 @@
+OK  sin usuario ni elevación → denegado: got='PermissionDenied' expected='PermissionDenied'
+OK  lista → tres filas en orden: got=['Sonda A', 'Sonda B', 'Sonda C'] expected=['Sonda A', 'Sonda B', 'Sonda C']
+OK  ids crecientes: got=True expected=True
+OK  dict → singleton (len 1): got=1 expected=1
+OK  singleton desempaquetado lee su campo: got='Sonda D' expected='Sonda D'
+OK  default_* del contexto aterriza: got='del contexto' expected='del contexto'
+OK  campo desconocido → ValueError: got="Invalid field 'nonexistent_field' in 'res.partner'" expected="Invalid field 'nonexistent_field' in 'res.partner'"
+OK  kwargs rechazados: got='TypeError' expected='TypeError'
+OK  lista vacía → recordset vacío: got=0 expected=0
+OK  _inherits: FK al padre puesta: got=True expected=True
+OK  _inherits: el nombre vive en el padre: got='Usuario Sonda' expected='Usuario Sonda'
+OK  IrCron.create por contenido: got='Cron sonda' expected='Cron sonda'
+VEREDICTO OK 12 de 12
+EXIT=0

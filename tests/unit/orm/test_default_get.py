@@ -51,9 +51,19 @@ from addons.base.models.ir_sequence import IrSequenceDateRange
 from addons.base.models.ir_ui_view import IrUiViewCustom
 from addons.base.models.res_users import ResUsers
 from orm import registry
-from orm.environments import context_scope
+from orm.environments import context_scope, sudo
 from orm.model_classes import ensure_rec_names, resolve_rec_name
 from orm.models import DefaultGetMixin, _delegated_origin, _field_names
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 @pytest.mark.django_db
@@ -239,22 +249,23 @@ class TestCreateAppliesTheDefaults:
     """``create`` aplica ``_add_missing_default_values``, como la fuente."""
 
     def test_the_context_default_reaches_the_row(self):
-        with context_scope(default_comment='sembrado por el contexto'):
-            partner = ResPartner.create(name='Alta con contexto')
+        with sudo(), context_scope(default_comment='sembrado por el contexto'):
+            partner, = ResPartner.create([{'name': 'Alta con contexto'}])
         partner.refresh_from_db()
         assert partner.comment == 'sembrado por el contexto'
 
     def test_the_given_value_always_beats_the_default(self):
         """*"never allow the other way around"* — comentario de la fuente."""
-        with context_scope(default_comment='del contexto'):
-            partner = ResPartner.create(name='Alta', comment='explicito')
+        with sudo(), context_scope(default_comment='del contexto'):
+            partner, = ResPartner.create([{'name': 'Alta', 'comment': 'explicito'}])
         partner.refresh_from_db()
         assert partner.comment == 'explicito'
 
     def test_ir_default_reaches_the_row_too(self):
         IrDefault.set('base.ResPartner', 'comment', 'del administrador')
         registry.clear_cache('default')
-        partner = ResPartner.create(name='Alta con ir.default')
+        with sudo():
+            partner, = ResPartner.create([{'name': 'Alta con ir.default'}])
         partner.refresh_from_db()
         assert partner.comment == 'del administrador'
 

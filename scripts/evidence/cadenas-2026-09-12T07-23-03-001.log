@@ -1,0 +1,7 @@
+cadenas related medidas: 14 | resuelven: 12 | rotas: 2
+  ROTA SiteConfigSettings.company_country_code = company_id.country.code  -> falta ResCompany.country
+  ROTA SiteConfigSettings.company_country_group_codes = company_id.country.country_group_codes  -> falta ResCompany.country
+eslabones ausentes distintos: 1
+  ResCompany.country: 2 cadena(s)
+VEREDICTO cadenas_rotas: FALLA
+EXIT=0

@@ -1,0 +1,24 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/manager.py  (213 lineas)
+
+=== BaseManager(-)  :10-173  metodos=16 atributos=3
+  ATTR	creation_counter	12	creation_counter = 0
+  ATTR	auto_created	15	auto_created = False
+  ATTR	use_in_migrations	19	use_in_migrations = False
+  DEF 	__new__	21-25	-	(cls, *args, **kwargs)	
+  DEF 	__init__	27-33	-	(self)	
+  DEF 	__str__	35-37	-	(self)	Return "app_label.model_label.manager_name".
+  DEF 	__class_getitem__	39-40	-	(cls, *args, **kwargs)	
+  DEF 	deconstruct	42-77	-	(self)	Return a 5-tuple of the form (as_manager (True), manager_class,
+  DEF 	check	79-80	-	(self, **kwargs)	
+  DEF 	_get_queryset_methods	83-105	classmethod	(cls, queryset_class)	
+  DEF 	from_queryset	108-118	classmethod	(cls, queryset_class, class_name=None)	
+  DEF 	contribute_to_class	120-126	-	(self, cls, name)	
+  DEF 	_set_creation_counter	128-134	-	(self)	Set the creation counter value for this instance and increment the
+  DEF 	db_manager	136-140	-	(self, using=None, hints=None)	
+  DEF 	db	143-144	property	(self)	
+  DEF 	get_queryset	150-155	-	(self)	Return a new QuerySet object. Subclasses can override this method to
+  DEF 	all	157-164	-	(self)	
+  DEF 	__eq__	166-170	-	(self, other)	
+  DEF 	__hash__	172-173	-	(self)	
+
+=== Manager(BaseManager.from_queryset(QuerySet))  :176-177  metodos=0 atributos=0

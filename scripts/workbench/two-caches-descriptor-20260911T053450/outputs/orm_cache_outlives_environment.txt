@@ -1,0 +1,5 @@
+env A  -> ['primero-7', 'primero-18']
+A is B                      : True
+transaccion A is B          : True
+env B (tras _insert_cache)  -> ['primero-7', 'primero-18']
+env B tras invalidate_all   -> ['SEGUNDO-7', 'SEGUNDO-18']

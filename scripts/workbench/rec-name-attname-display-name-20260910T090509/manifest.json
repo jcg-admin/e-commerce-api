@@ -1,0 +1,20 @@
+{
+  "question": "Declarar _rec_name verbatim cuando la fuente nombra el sufijo _id de una Many2one, ¿reproduce la etiqueta de la fuente o degrada a id crudo?",
+  "instrument": "tests/probe_rec_name_attname.py — instancia sin base un modelo cuyo _rec_name declarado es el attname de una FK y lee su display_name",
+  "metric": "el valor de display_name de IrUiViewCustom(id=1, user_id=7), y la resolucion de get_field por ambas caras del campo",
+  "blind_to": "la FK vacia (None), que cae en la guarda de _many2one_convert_to_display_name y devuelve False por otra via; y todo modelo cuyo _rec_name nombre la cara `name`, que ya funciona",
+  "control": "el mismo get_field probado por las DOS caras: resuelve ambas, asi que el defecto NO esta en la resolucion del campo sino en la lectura del valor — getattr por attname devuelve el entero crudo",
+  "reference": "odoo19c: odoo/orm/models.py:1433-1435 — self._fields[self._rec_name].convert_to_display_name(record[self._rec_name], record); alla _fields tiene UNA clave por campo",
+  "measured_at": "2026-09-10T09:05:09",
+  "api_head": "f5ff8031",
+  "odoo_tools_head": "abe4040ec1",
+  "verdict": "DEFECTO PRE-EXISTENTE: display_name = '7' en vez de la etiqueta del res.users. Vive hoy en ir.ui.view.custom (_rec_name='user_id', campo `user`), no lo introduce el porte de ir_actions.py",
+  "destination": [
+    "scripts/workbench/rec-name-attname-display-name-20260910T090509/outputs/probe-rojo.txt",
+    "src/orm/models.py — el arreglo de _compute_display_name, en su propio commit"
+  ],
+  "reproducible": "PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python tests/probe_rec_name_attname.py  # uv, no python3: las dependencias las fija pyproject.toml via uv.lock",
+  "outputs": [
+    "outputs/probe-rojo.txt"
+  ]
+}

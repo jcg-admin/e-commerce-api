@@ -1,0 +1,31 @@
+{
+  "question": "OE-8 del alcance completar-raiz-orm declara que el único medidor de cuerpo empareja con `methods_of` y es «58.7 % ciego». ¿Cuánto ve realmente, y qué perdería un emparejamiento por (owner, name)?",
+  "instrument": [
+    "scripts/workbench/orm-body-axis-blindness-20260911T021435/measure_pairing_blindness.py",
+    "scripts/workbench/orm-body-axis-blindness-20260911T021435/measure_owner_agreement.py"
+  ],
+  "metric": "pares de símbolo del mismo nombre presentes en ambos lados del espejo, sobre src/orm y src/tools (77 archivos, 67 con contraparte), contados por dos extractores del propio motor: `methods_of` (métodos declarados en clase, colapsados por nombre) y `declarations_of` (clase, método de clase, función de módulo y asignación, sin colapsar). El segundo guion mide, de los pares que `methods_of` ve, en cuántos la clase dueña coincide entre lado y lado.",
+  "blind_to": [
+    "si los dos cuerpos de un par HACEN lo mismo — un par visible sólo dice que el instrumento los puede comparar",
+    "el símbolo portado bajo otro nombre: no hay tabla de equivalencia, así que un renombre se lee como ausencia",
+    "las raíces espejadas que no son src/orm ni src/tools (src/addons, addons/<x>), fuera del alcance medido",
+    "de qué par concreto salió el 1416 del alcance: el numerador (585) reproduce exacto y el denominador no lo hace ningún emparejamiento del árbol de hoy"
+  ],
+  "corrected_premise": {
+    "decia": "el alcance publica «585 de 1416 pares: 58.7 % ciego» como el estado de OE-8",
+    "mide": "el numerador reproduce EXACTO (585 sobre src/orm+src/tools), y ningún emparejamiento del árbol da 1416. Denominadores medidos sobre el mismo alcance: 826 (métodos + funciones de módulo, colapsados por nombre), 923 (funciones por (owner,name)), 1253 (todas las declaraciones por (owner,name,kind)). Sobre alcance ['src']: methods_of 1177, funciones por (owner,name) 1472.",
+    "consecuencia": "la cobertura real de `methods_of` sobre su universo emparejable es 70.8 %, no 41.3 %. La ceguera existe y es menor de lo declarado; el método del denominador de 1416 está perdido y no se puede reconstruir."
+  },
+  "control": "el emparejamiento por (owner, name) se midió ANTES de escribirlo: 522 de 585 pares coinciden en clase dueña y 63 NO, los 63 con clase en ambos lados. La causa de los 63 está nombrada — nuestro puerto disuelve BaseModel en mixins, que es el bloqueo que OE-5 ya declara. Un emparejamiento estricto por dueña perdería esos 63; por eso el respaldo por nombre no es opcional y Scope publica cuántos resolvió cada ruta.",
+  "reproducible": "python3 scripts/workbench/orm-body-axis-blindness-20260911T021435/measure_pairing_blindness.py && python3 scripts/workbench/orm-body-axis-blindness-20260911T021435/measure_owner_agreement.py",
+  "outputs": ["outputs/blindness.txt", "outputs/owner-agreement.txt"],
+  "source": [
+    "scripts/counterpart_body.py — el motor: methods_of (consumido por compare) y declarations_of (declarado y sin consumir)",
+    "scripts/check_write_path.py — el único eje vivo sobre el motor",
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/alcance-completar-raiz-orm.rst v1.3.0, fila OE-8"
+  ],
+  "destination": "scripts/counterpart_body.py (pair_declarations + Scope por ruta) · scripts/write_path_baseline.txt (regenerado con la clave nueva) · docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/hallazgos/",
+  "measured_at": "2026-09-11T02:21:27",
+  "api_head": "742ae2dc",
+  "odoo_tools_head": "abe4040ec1"
+}

@@ -106,7 +106,6 @@ import api
 import fields
 import models
 from orm.domains import NEGATIVE_CONDITION_OPERATORS, Domain
-from orm.fields_nonstored import NonStored
 from django.apps import apps
 from django.core.exceptions import ValidationError
 
@@ -168,15 +167,26 @@ class ResGroups(models.CopyMixin, TimeStampedModel):
         (USER_TYPE_PUBLIC, 'Público'),
     ]
 
-    #: ≙ ``full_name = fields.Char(compute='_compute_full_name',
-    #: search='_search_full_name')`` (``odoo19c: res_groups.py:30``). No tiene
-    #: columna: es ``privilegio / nombre`` calculado al leerlo. Era una
-    #: ``property``, que no se puede buscar; ahora es el campo sin columna con
-    #: su ``search=``, el mecanismo que ``api@5ae823c9`` construyó — y con él
-    #: ``_rec_name = 'full_name'`` deja de apuntar a un nombre que no resuelve.
-    full_name = NonStored(default=lambda record: record._compute_full_name(),
-                          search='_search_full_name',
-                          help_text='Group Name')
+    #: ≙ la declaración de la fuente, verbatim salvo el nombre del argumento
+    #: de la etiqueta (``odoo19c: odoo/addons/base/models/res_groups.py:30``)::
+    #:
+    #:     full_name = fields.Char(compute='_compute_full_name',
+    #:                             string='Group Name',
+    #:                             search='_search_full_name')
+    #:
+    #: No tiene columna porque el bloque ``compute`` de la fuente deriva
+    #: ``store=False`` cuando nadie lo declara (``odoo19c:
+    #: odoo/orm/fields.py:443-450``); así ``_rec_name = 'full_name'`` deja de
+    #: apuntar a un nombre que no resuelve.
+    #:
+    #: La etiqueta va en el primer posicional —``verbose_name`` en Django,
+    #: ``string`` en la fuente—; antes viajaba en ``help_text=``, que es el
+    #: alias de ``help=``. Y el cómputo va en ``compute=``: hasta
+    #: ``TASK-API-0415`` se cableaba con un ``default=`` que lo envolvía,
+    #: porque el descriptor guardaba ``compute`` y nadie lo despachaba.
+    full_name = fields.Char('Group Name',
+                            compute='_compute_full_name',
+                            search='_search_full_name')
 
     name = fields.Char(max_length=120, verbose_name='Nombre')
     comment = fields.Text(blank=True, default='', verbose_name='Comentario')

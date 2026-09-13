@@ -1,0 +1,55 @@
+medicion   : cobertura real del porte de BaseModel contra el banco de contrato
+fecha      : 2026-09-11T04:25:08
+banco      : scripts/workbench/basemodel-contract-20260911T030334
+sujeto     : src/orm/models.py::BaseModel
+
+== por que se re-deriva ==
+El docstring del puerto declaraba "36 de los 194 simbolos" y "los 158
+restantes", con un desglose por familia que sumaba 130. Las tres cifras
+estaban mal por la misma causa: mezclaban dos poblaciones (metodos y
+atributos de clase) y tomaban 194 DECLARACIONES por 194 nombres unicos.
+
+== eje 1 — metodos ==
+declaraciones en la referencia : 194  (reference_basemodel.tsv)
+nombres unicos                 : 188
+duplicados (@overload)         : __getitem__, grouped, mapped
+declarados en el puerto        : 36
+  de ellos, EN el contrato     : 33
+  fuera del contrato           : 3  (__str__, _from_ids, _read_field)
+sin portar                     : 155
+
+== eje 2 — atributos de clase ==
+en la referencia               : 31  (3 ast.Assign + 28 ast.AnnAssign)
+declarados en el puerto        : 29
+ausentes                       : id, display_name
+  id          -> portado como descriptor IdFromIds via class_prepared
+  display_name-> es campo, fuera del alcance de este pase
+
+CONFIRMA el board #320: census_reference_basemodel.py recorre solo
+ast.Assign y publica "atributos de clase: 1". La referencia declara 28
+de sus 31 con anotacion, asi que el censo ve 1 de 29 con guion bajo.
+
+
+== eje 3 — las 155 sin portar, por familia (suman) ==
+  otros             30
+  read_group        16
+  cache/recompute   16
+  CRUD              16
+  schema/SQL        14
+  access/check      11
+  search/fetch       9
+  parent_store       8
+  import/export      8
+  constraints        7
+  properties         6
+  traduccion         5
+  name_search        5
+  onchange           4
+  SUMA             155
+
+  otros: __deepcopy__ __ensure_xml_id __ge__ __gt__ __init__ __le__ __reversed__ __setitem__ _can_return_content _context _cr _get_external_ids _get_placeholder_filename _get_redirect_suggested_company _is_an_ordinary_table _post_model_setup__ _register_hook _sorted_order_to_function _uid _unregister_hook action_archive action_unarchive fields_get get_base_url get_external_id get_metadata is_transient lock_for_update toggle_active try_lock_for_update
+
+Metrica: nombres de metodo declarados en clase, por AST, a cada lado.
+Ciega a: si el cuerpo portado HACE lo que hace el de la referencia —
+  eso lo mide check_porte_completo, no este conteo; y a la familia de
+  un nombre cuyo patron no la delate (el cubo "otros" son 30).

@@ -124,12 +124,13 @@ class TestAgainstTheRealTree:
 
         ``Registry`` salio de esta lista al portarse como clase (tarea #342),
         y su salida es el control funcionando: el caso se puso rojo el mismo
-        pase en que la clase aterrizo. Los cuatro que quedan siguen sin
-        declararse en ``src/orm/`` bajo ninguna forma.
+        pase en que la clase aterrizo. ``BaseModel`` salio por lo mismo en
+        **TASK-API-0397**. Los tres que quedan siguen sin declararse en
+        ``src/orm/`` bajo ninguna forma.
         """
         here = port_order.declared_here(
             port_order.REPO.joinpath(*port_order.OUR_SUBPATH))
-        assert not ({'BaseModel', 'MetaModel', 'add_to_registry',
+        assert not ({'MetaModel', 'add_to_registry',
                      'setup_model_classes'} & here)
 
     def test_the_ported_registry_is_seen(self):
@@ -141,3 +142,7 @@ class TestAgainstTheRealTree:
         here = port_order.declared_here(
             port_order.REPO.joinpath(*port_order.OUR_SUBPATH))
         assert 'Registry' in here
+        # Y el que salio de la lista de arriba en TASK-API-0397: sin este
+        # renglon, quitar un nombre de aquella lista pasaria verde tanto si el
+        # simbolo aterrizo como si alguien lo borro por comodidad.
+        assert 'BaseModel' in here

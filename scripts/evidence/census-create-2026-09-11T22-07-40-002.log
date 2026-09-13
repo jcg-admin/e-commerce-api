@@ -1,0 +1,8 @@
+src/orm/decorators.py:216:        if isinstance(vals_list, collections.abc.Mapping):
+src/addons/base/models/ir_config_parameter.py:200:        if isinstance(vals_list, dict):
+src/addons/base/models/decimal_precision.py:95:        if isinstance(vals_list, dict):
+src/addons/base/models/properties_base_definition_mixin.py:170:        if isinstance(vals_list, dict):
+addons/base_automation/models/base_automation.py:916:        if isinstance(vals_list, dict):
+addons/stock/models/stock_move_line.py:1012:        if isinstance(vals_list, dict):
+addons/stock/models/stock_warehouse.py:558:        if isinstance(vals_list, dict):
+EXIT=0

@@ -1,0 +1,7 @@
+lecturas por caso: 300000
+atributo llano (sin descriptor)        22.8 ns/lectura
+descriptor de NO datos                 22.8 ns/lectura
+descriptor de DATOS (__set__)          73.9 ns/lectura
+
+NO datos contra llano : 1.00x
+DATOS   contra llano : 3.24x

@@ -51,7 +51,9 @@ PORTABLE_NOW = {
                # Los tres que la tarea #328 porta y liga en el mismo pase.
                'AbstractModel', 'parse_read_group_spec', 'check_method_name',
                # El que la tarea #331 porta y liga en el mismo pase.
-               'to_record_ids'),
+               'to_record_ids',
+               # El que TASK-API-0397 porta y liga en el mismo pase.
+               'BaseModel'),
 }
 
 #: Lo que la fachada de la referencia liga y ``src/orm`` todavia NO declara.
@@ -68,7 +70,9 @@ BLOCKED_BY_ITS_SYMBOL = {
     # ``orm/utils.py``, junto a su hermano de numero. La fuente lo
     # re-exporta desde ``odoo.orm.utils`` (``odoo/models/__init__.py:27``),
     # asi que la fachada lo liga por el mismo bloque.
-    'models': ('READ_GROUP_DISPLAY_FORMAT', 'BaseModel', 'MetaModel'),
+    # ``BaseModel`` salio de aqui en TASK-API-0397, que lo porto como base
+    # abstracta de Django y lo ligo en la fachada en el mismo pase.
+    'models': ('READ_GROUP_DISPLAY_FORMAT', 'MetaModel'),
 }
 
 PACKAGES = {'api': api, 'fields': fields, 'models': models}
@@ -95,6 +99,7 @@ DECLARANTE = {
     'depends_context': 'orm.decorators', 'ondelete': 'orm.decorators',
     'check_method_name': 'orm.utils',
     'AbstractModel': 'orm.models', 'parse_read_group_spec': 'orm.models',
+    'BaseModel': 'orm.models',
     'to_record_ids': 'orm.models',
     'is_model_class': 'orm.model_classes',
     'is_model_definition': 'orm.model_classes',

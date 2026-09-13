@@ -1,0 +1,30 @@
+{
+  "question": "¿Puede el ORM consultar su caché de campo desde el descriptor sin encarecer el camino caliente de Django, y qué construye Django de verdad cuando `_from_ids` fabrica una fila con la terna del recordset?",
+  "instrument": [
+    "scripts/workbench/two-caches-descriptor-20260911T053450/probes/probe_descriptor_cost.py",
+    "scripts/workbench/two-caches-descriptor-20260911T053450/probes/probe_orm_cache_outlives_environment.py",
+    "scripts/workbench/two-caches-descriptor-20260911T053450/probes/probe_id_resolution_on_recordset.py"
+  ],
+  "metric": "nanosegundos por lectura de `row.label` sobre 300 000 repeticiones con `__dict__` YA poblado, en tres formas: atributo llano, descriptor de NO datos (`__get__` solo) y descriptor de DATOS (`__get__` + `__set__`). Más dos sondas de conducta: si la caché de campo sobrevive a un Environment nuevo, y qué devuelve `rs.id` / `rs.pk` / `rs.label` sobre una terna de uno y de tres ids.",
+  "blind_to": [
+    "el coste del FALLO del almacén — ahí el cuerpo del descriptor sí corre, y es el caso que el porte quiere habilitar, no abaratar",
+    "el reloj de otra máquina: 22.8 ns es este contenedor con este CPython, no una constante del lenguaje",
+    "si la tabla existe en la base: la sonda de resolución de id corre sobre una sonda `managed = False`, así que `rs.label` termina en ProgrammingError cuando cae al camino de Django — eso mide el CAMINO, no el valor"
+  ],
+  "control": "el descriptor de NO datos contra el llano da 1.00x — no es un «casi igual» leído a ojo, es la anulación de la hipótesis de que todo descriptor encarece: el de DATOS sí, 3.24x, porque gana sobre `instance.__dict__`. Si las tres formas hubieran dado lo mismo, la medición no habría discriminado nada.",
+  "reproducible": "python3 scripts/workbench/two-caches-descriptor-20260911T053450/probes/probe_descriptor_cost.py (las otras dos exigen DJANGO_SETTINGS_MODULE=config.settings.testing y PYTHONPATH=src)",
+  "outputs": [
+    "outputs/descriptor_cost.txt",
+    "outputs/orm_cache_outlives_environment.txt",
+    "outputs/id_resolution_on_recordset.txt",
+    "outputs/recordset_is_a_django_row.txt"
+  ],
+  "source": [
+    "odoo19c: odoo/orm/fields.py — el descriptor de la referencia y su caché por transacción",
+    "django/db/models/query_utils.py::DeferredAttribute — del paquete instalado: el descriptor que Django instala por campo",
+    "src/orm/fields.py, src/orm/models.py — el puerto medido"
+  ],
+  "tasks": ["#323", "#324"],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/ — el eje de la guarda de tamaño en el acceso llano y el de la terna en la fila que Django construye",
+  "measured_at": "2026-09-11T05:34:50"
+}

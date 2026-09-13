@@ -1,0 +1,21 @@
+== 1. la metaclase y el cuerpo de clase ==
+metaclase de un modelo : ModelBase
+ModelBase.__new__ firma: (cls, name, bases, attrs, **kwargs)
+
+== 2/3. base ABSTRACTA y la hija que redeclara ==
+la hija se construye  : SI
+max_length que queda  : 20
+verbose_name que queda: del override
+campos "label" en _meta: 1
+
+contribuciones registradas (clase, nombre, id):
+    ('CollectionBase', 'label', 139714987629872)
+    ('CollectionChild', 'label', 139714987629920)
+
+== 4. ¿sobrevive la ocurrencia de la BASE en algún sitio? ==
+la base declara label  : True
+max_length de la base  : 10
+mismo objeto que la hija: False
+
+vars(Base) conserva el campo: True
+vars(Child) conserva el campo: True

@@ -1,0 +1,14 @@
+cadenas related= declaradas (AST): 19
+  primer eslabon con sufijo _id (deletreo de la fuente): 10
+  primer eslabon sin sufijo:                             9
+--- las que NO llevan el sufijo ---
+  addons/account/models/account_journal.py:105  company.partner
+  addons/base_address_extended/models/res_partner.py:405  structured.city_id
+  src/addons/base/models/res_bank.py:147  country.code
+  src/addons/base/models/res_bank.py:319  bank.name
+  src/addons/base/models/res_bank.py:320  bank.bic
+  src/addons/base/models/res_bank.py:325  partner.country_code
+  src/addons/base/models/res_company.py:288  partner.bank_accounts
+  src/addons/base/models/res_company.py:528  country.code
+  src/addons/base/models/res_partner.py:510  country.code
+EXIT=0

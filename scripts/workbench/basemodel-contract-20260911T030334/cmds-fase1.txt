@@ -1,0 +1,2 @@
+cd /home/user/kaupamex-api && ODOO19C=/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0 python3 scripts/workbench/basemodel-contract-20260911T030334/census_reference_basemodel.py BaseModel > scripts/workbench/basemodel-contract-20260911T030334/outputs/reference_basemodel.tsv
+cd /home/user/kaupamex-api && python3 scripts/workbench/basemodel-contract-20260911T030334/census_ours_models.py > scripts/workbench/basemodel-contract-20260911T030334/outputs/ours_models.txt

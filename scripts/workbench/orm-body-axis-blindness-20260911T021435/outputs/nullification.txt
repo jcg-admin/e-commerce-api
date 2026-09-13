@@ -1,0 +1,21 @@
+# ANULACION del control — 2026-09-11T02:28:44, api@742ae2dc
+# pair_declarations sustituido por el colapso por nombre de methods_of.
+# Tienen que caer EXACTAMENTE las aserciones que dependen del
+# emparejamiento nuevo — ni una mas, ni una menos.
+
+E   AssertionError: assert 'por clase duena' == 'por nombre, duena divergente'
+E     - por nombre, duena divergente
+E     + por clase duena
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheCollapseByNameComparesTheWrongBody::test_the_new_pairing_puts_property_against_property
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheModuleLevelFunctionIsPaired::test_a_module_writer_is_now_visible[create_column]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheModuleLevelFunctionIsPaired::test_a_module_writer_is_now_visible[drop_constraint]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheDissolvedBaseKeepsItsPairs::test_the_mixin_still_pairs_against_base_model[create]
+FAILED tests/unit/scripts/test_counterpart_body.py::TestTheDissolvedBaseKeepsItsPairs::test_the_mixin_still_pairs_against_base_model[copy]
+5 failed, 29 passed, 1 warning in 6.98s

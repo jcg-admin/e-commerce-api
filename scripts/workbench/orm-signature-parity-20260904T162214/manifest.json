@@ -2,7 +2,7 @@
   "question": "Cuando un simbolo de odoo/orm ya esta portado en src/orm, la firma que declara aqui es la que declara la referencia?",
   "instrument": [
     "scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py",
-    "python3 scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py --detalle"
+    "python3 scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py --detail"
   ],
   "metric": "Simbolos con contraparte en los 22 archivos de src/orm que espejan un archivo de odoo/orm, comparados por AST en cinco categorias de parametro: posicionales EN ORDEN, keyword-only COMO CONJUNTO, *args y **kwargs por presencia y nombre, y que parametros LLEVAN default. Un veredicto por simbolo, el mas estructural.",
   "blind_to": [
@@ -15,7 +15,7 @@
   ],
   "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/tareas-completar-raiz-orm.rst — seccion «La firma no la mide ninguno de los dos»",
   "control": "neutralize_and_measure.sh — anula classify() a «nunca diverge» con un parche en proceso (no escribe ningun archivo) y mide que cae. Con el comparador intacto: clear_all_caches marcado, init_models no. Anulado: clear_all_caches deja de estar marcado y la suite cae de 20 passed a 9 failed, 11 passed. Los dos anclajes son REALES y verificados leyendo la fuente, no aceptando el veredicto del instrumento: clear_all_caches es metodo con self en odoo19c: odoo/orm/registry.py:988 y funcion de modulo sin self en src/orm/registry.py:303; init_models declara los mismos cinco posicionales con default en install en :723 y :2155.",
-  "reproducible": "eval \"$(python3 scripts/reference_roots.py --env)\" && python3 scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py --detalle && uv run pytest scripts/workbench/orm-signature-parity-20260904T162214/tests/ -q && bash scripts/workbench/orm-signature-parity-20260904T162214/neutralize_and_measure.sh",
+  "reproducible": "eval \"$(python3 scripts/reference_roots.py --env)\" && python3 scripts/workbench/orm-signature-parity-20260904T162214/signature_parity.py --detail && uv run pytest scripts/workbench/orm-signature-parity-20260904T162214/tests/ -q && bash scripts/workbench/orm-signature-parity-20260904T162214/neutralize_and_measure.sh",
   "source": "odoo19c @ abe4040ec1 (Community 19) contra src/orm de api@c4b4628e",
   "outputs": [
     "outputs/control-2026-09-04T16-33-54.txt",

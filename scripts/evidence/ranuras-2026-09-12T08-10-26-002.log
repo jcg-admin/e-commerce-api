@@ -1,0 +1,20 @@
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_code should be searchable. This is necessary to determine which records to recompute when base.ResCountry.code is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_group_codes should be searchable. This is necessary to determine which records to recompute when base.ResCountry.country_group_codes is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+setup_ran: OK
+new_field_has_no_column: OK
+new_field_does_not_point_at_partner: OK
+partner_already_had_column_less_reverse_fks: OK
+the_culprit_predates_the_new_field: OK
+setup_count: 5674
+FK sin columna en el arbol: 95
+politicas del censo: ['None', 'RESTRICT']
+sin DO_NOTHING en el censo: [{'model': 'auth.Group', 'field': 'permissions', 'comodel': 'Permission', 'policy': 'None'}, {'model': 'base.ResGroups', 'field': 'implied_ids', 'comodel': 'ResGroups', 'policy': 'None'}, {'model': 'base.ResGroups', 'field': 'user_ids', 'comodel': 'ResUsers', 'policy': 'None'}, {'model': 'base.IrUiView', 'field': 'groups', 'comodel': 'ResGroups', 'policy': 'None'}, {'model': 'base.IrModelFields', 'field': 'groups', 'comodel': 'ResGroups', 'policy': 'None'}, {'model': 'base.IrActionsActWindow', 'field': 'groups', 'comodel': 'ResGroups', 'policy': 'None'}, {'model': 'base.IrActionsServer', 'field': 'webhook_field_ids', 'comodel': 'IrModelFields', 'policy': 'None'}, {'model': 'base.IrActionsServer', 'field': 'group_ids', 'comodel': 'ResGroups', 'policy': 'None'}, {'model': 'base.IrActionsServer', 'field': 'resource_ref', 'comodel': None, 'policy': 'None'}, {'model': 'base.IrActionsReport', 'field': 'group_ids', 'comodel': 'ResGroups', 'policy': 'None'}]
+apuntando a ResPartner sin columna: [{'model': 'base.ResPartnerCategory', 'field': 'partners', 'policy': 'None'}, {'model': 'fleet.FleetVehicleModel', 'field': 'vendors', 'policy': 'None'}]
+...de esas, sin DO_NOTHING: [{'model': 'base.ResPartnerCategory', 'field': 'partners', 'policy': 'None'}, {'model': 'fleet.FleetVehicleModel', 'field': 'vendors', 'policy': 'None'}]
+campo nuevo -> comodelo: ResCountry | politica: SET_NULL | columna: None
+borrado del partner: EXC TypeError: argument of type 'NoneType' is not iterable
+marco del reventon: compiler.py:578 compile | expressions.py:1325 as_sql | compiler.py:30 quote_name_unless_alias
+VEREDICTO el_reventon_no_lo_causa_el_campo_nuevo: OK
+EXIT=0

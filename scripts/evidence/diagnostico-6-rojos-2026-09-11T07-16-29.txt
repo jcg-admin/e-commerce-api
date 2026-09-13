@@ -1,0 +1,24 @@
+...........F......................sssssssss.ssssssssF.FFssssss...F...... [ 47%]
+........................................................................ [ 94%]
+..F.....                                                                 [100%]
+=================================== FAILURES ===================================
+/home/user/kaupamex-api/tests/integration/auto_backup/test_backups.py:212: AssertionError: assert 'kaupamex.com' not in 'admin@kaupamex.com'
+/home/user/kaupamex-api/tests/integration/base/test_report_engine.py:702: assert 'Pie compartido ñ' in ''
+/home/user/kaupamex-api/tests/integration/base/test_report_engine.py:736: assert 'Tel del pie' in ''
+/home/user/kaupamex-api/tests/integration/base/test_report_engine.py:752: AssertionError: assert 'Pie prioritario' in ''
+/home/user/kaupamex-api/tests/integration/test_schema.py:49: AssertionError: assert 'Kaupamex' not in 'Kaupamex API'
+/home/user/kaupamex-api/tests/unit/base/test_system_parameter.py:192: AssertionError: assert 'kaupamex.com' not in 'admin@kaupamex.com'
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/auto_backup/test_backups.py::TestBackupFailAlert::test_uses_the_value_seeded_by_the_migration
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_the_call_grafts_the_children_of_the_called_descriptor
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_the_called_template_arrives_with_its_combined_arch
+FAILED tests/integration/base/test_report_engine.py::TestCallBetweenTemplates::test_priority_breaks_the_tie_as_it_does_in_the_root
+FAILED tests/integration/test_schema.py::TestSchemaEndpoint::test_schema_titulo_nombra_la_plataforma
+FAILED tests/unit/base/test_system_parameter.py::TestBusinessKeysL2::test_backup_alert_email_seeded_without_stale_domain
+6 failed, 123 passed, 23 skipped, 1 warning in 31.03s

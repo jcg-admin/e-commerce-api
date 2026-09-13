@@ -1,0 +1,31 @@
+E     Left contains one more item: 'test_orm.TestOrmCategory.display_name es FieldDescriptor declarado en TestOrmCategory, no el campo NonStored del mixin — el cómputo va en _compute_display_name'
+E     Use -v to get more diff
+_ TestTheBaselineAbsorbsTheInheritedDebtAndOnlyThat.test_every_offender_measured_today_is_in_the_baseline _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_fk_naming.py:99: in test_every_offender_measured_today_is_in_the_baseline
+    assert fresh == []
+E   AssertionError: assert ['src/addons/...on.moderator'] == []
+E     Left contains 2 more items, first extra item: 'src/addons/test_orm/models/test_orm.py::TestOrmCategory.parent'
+E     Use -v to get more diff
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+tests/unit/orm/test_fields_related.py::TestResolveDepends::test_it_resolves_a_declared_chain_to_its_fields
+  /home/user/kaupamex-api/src/orm/fields.py:3886: UserWarning: Field base.ResPartner.name should be declared with recursive=True
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/sale/test_mrp_subcontracting.py::test_subcontract_produce_cost_is_components_plus_service
+FAILED tests/integration/sale/test_mrp_valuation.py::test_produce_values_finished_at_raw_plus_labor
+FAILED tests/unit/orm/test_display_name.py::TestUniversalAdoption::test_none_declares_it_as_something_other_than_the_field
+FAILED tests/unit/orm/test_display_name.py::TestTheGateDiscriminates::test_it_names_a_model_that_declares_display_name_as_a_property
+FAILED tests/unit/scripts/test_check_fk_naming.py::TestTheBaselineAbsorbsTheInheritedDebtAndOnlyThat::test_every_offender_measured_today_is_in_the_baseline
+5 failed, 10591 passed, 30 skipped, 1 xfailed, 6 warnings in 328.45s (0:05:28)
+EXIT=0

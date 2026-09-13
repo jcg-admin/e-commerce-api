@@ -1,0 +1,15 @@
+E
+==================================== ERRORS ====================================
+_ ERROR at setup of TestOwnManagersDeriveFromIt.test_the_soft_delete_manager_still_hides_the_deleted _
+E   ValueError: ComputeDispatchProbe.company_label: la ruta related 'company_id.name' pide 'company_id' sobre ComputeDispatchProbe, que no lo declara
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/orm/test_access_manager.py::TestOwnManagersDeriveFromIt::test_the_soft_delete_manager_still_hides_the_deleted
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 warning, 1 error in 2.24s
+EXIT=1

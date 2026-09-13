@@ -1,0 +1,61 @@
+{
+  "corpus_available": true,
+  "subjects": [
+    {
+      "word": "ir",
+      "reason": "prefijo de namespace de la referencia — excluido del lexico cerrado",
+      "in_closed_lexicon": false,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 2
+    },
+    {
+      "word": "vals",
+      "reason": "convencion de dict de la referencia; homografo del ingles",
+      "in_closed_lexicon": false,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 4
+    },
+    {
+      "word": "es",
+      "reason": "codigo de idioma y particula española de dos letras",
+      "in_closed_lexicon": false,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 2
+    },
+    {
+      "word": "q",
+      "reason": "una letra: nombre de variable corriente",
+      "in_closed_lexicon": false,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 1
+    },
+    {
+      "word": "iban",
+      "reason": "estandar bancario; homografo de una forma verbal española",
+      "in_closed_lexicon": false,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 4
+    },
+    {
+      "word": "clasificar",
+      "reason": "palabra española inequivoca — control positivo",
+      "in_closed_lexicon": true,
+      "in_particles": false,
+      "by_corpus": true,
+      "length": 10
+    }
+  ],
+  "caught_only_by_corpus": [
+    "ir",
+    "vals",
+    "es",
+    "q",
+    "iban"
+  ],
+  "closed_lexicon_size": 175
+}

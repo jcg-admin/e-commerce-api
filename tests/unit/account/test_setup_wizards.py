@@ -26,6 +26,7 @@ guarda» — un ``import`` habría pasado en verde con los tres eslabones rotos.
 from datetime import date
 
 import pytest
+from orm.environments import sudo
 from django.core.exceptions import ValidationError
 
 from addons.account.models import AccountJournal
@@ -37,6 +38,16 @@ from addons.base.models import ResBank, ResCompany, ResPartner, ResPartnerBank
 from orm.registry import MODELS_BY_NAME
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 @pytest.fixture
@@ -73,8 +84,8 @@ class TestFinancialYearOp:
         company.fiscalyear_last_month = '12'
         company.save(update_fields=['fiscalyear_last_day',
                                     'fiscalyear_last_month'])
-        wizard = AccountFinancialYearOp.create(
-            company_id=company, opening_date=date(2026, 1, 1))
+        wizard, = AccountFinancialYearOp.create([
+            {'company_id': company, 'opening_date': date(2026, 1, 1)}])
         assert wizard.fiscalyear_last_day == 31
         assert wizard.fiscalyear_last_month == '12'
 

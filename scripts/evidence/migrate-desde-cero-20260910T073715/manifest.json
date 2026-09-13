@@ -1,0 +1,8 @@
+{
+  "instrument": "env DB_QA_NAME=kaupamex_qa PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python -m django migrate --no-input",
+  "exit_code": 0,
+  "question": "Una migracion DESDE CERO contra una base nueva kaupamex_qa, ¿termina limpia? Es la clase H-API-01: un fallo de migracion from-scratch que `--reuse-db` enmascara porque nunca la corre.",
+  "metric": "lineas `... OK` en el log de `migrate --no-input` (376) y el codigo del marcador `__BG_EXIT__` que bg.sh escribe siempre (0). Las dos extensiones que podian fallar bajo django_user se citan por linea: base.0084_unaccent_extension (:244) y website.0005_pg_trgm_extension (:377).",
+  "blind_to": "si el ESQUEMA resultante coincide con el que --reuse-db venia reusando sobre kaupamex_core_qa — mide que las 376 se apliquen sin error, no que produzcan la misma forma. Y ciega a toda migracion que aun no existe.",
+  "destination": "No hay hallazgo de migracion que escribir: la clase H-API-01 NO aplica a este arbol. Desbloquea el renombre de la base de pruebas a kaupamex_qa y el DROP de kaupamex_core_qa."
+}

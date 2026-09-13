@@ -1,0 +1,134 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/sql/query.py  (2853 lineas)
+
+=== Query(BaseExpression)  :232-2747  metodos=92 atributos=39
+  ATTR	alias_prefix	235	alias_prefix = "T"
+  ATTR	empty_result_set_value	236	empty_result_set_value = None
+  ATTR	subq_aliases	237	subq_aliases = frozenset([alias_prefix])
+  ATTR	compiler	239	compiler = "SQLCompiler"
+  ATTR	base_table_class	241	base_table_class = BaseTable
+  ATTR	join_class	242	join_class = Join
+  ATTR	default_cols	244	default_cols = True
+  ATTR	default_ordering	245	default_ordering = True
+  ATTR	standard_ordering	246	standard_ordering = True
+  ATTR	filter_is_sticky	248	filter_is_sticky = False
+  ATTR	subquery	249	subquery = False
+  ATTR	contains_subquery	250	contains_subquery = False
+  ATTR	select	257	select = ()
+  ATTR	group_by	264	group_by = None
+  ATTR	order_by	265	order_by = ()
+  ATTR	low_mark	266	low_mark = 0  # Used for offset/limit.
+  ATTR	high_mark	267	high_mark = None  # Used for offset/limit.
+  ATTR	distinct	268	distinct = False
+  ATTR	distinct_fields	269	distinct_fields = ()
+  ATTR	select_for_update	270	select_for_update = False
+  ATTR	select_for_update_nowait	271	select_for_update_nowait = False
+  ATTR	select_for_update_skip_locked	272	select_for_update_skip_locked = False
+  ATTR	select_for_update_of	273	select_for_update_of = ()
+  ATTR	select_for_no_key_update	274	select_for_no_key_update = False
+  ATTR	select_related	275	select_related = False
+  ATTR	max_depth	277	max_depth = 5
+  ATTR	values_select	280	values_select = ()
+  ATTR	selected	281	selected = None
+  ATTR	annotation_select_mask	284	annotation_select_mask = None
+  ATTR	_annotation_select_cache	285	_annotation_select_cache = None
+  ATTR	combinator	288	combinator = None
+  ATTR	combinator_all	289	combinator_all = False
+  ATTR	combined_queries	290	combined_queries = ()
+  ATTR	extra_select_mask	294	extra_select_mask = None
+  ATTR	_extra_select_cache	295	_extra_select_cache = None
+  ATTR	extra_tables	297	extra_tables = ()
+  ATTR	extra_order_by	298	extra_order_by = ()
+  ATTR	deferred_loading	302	deferred_loading = (frozenset(), True)
+  ATTR	explain_info	304	explain_info = None
+  DEF 	__init__	306-331	-	(self, model, alias_cols=True)	
+  DEF 	output_field	334-339	property	(self)	
+  DEF 	base_table	342-344	cached_property	(self)	
+  DEF 	__str__	346-355	-	(self)	Return the query as a string of SQL with the parameter values
+  DEF 	sql_with_params	357-362	-	(self)	Return the query as an SQL string and the parameters that will be
+  DEF 	__deepcopy__	364-368	-	(self, memo)	Limit the amount of work when a Query is deepcopied.
+  DEF 	get_compiler	370-377	-	(self, using=None, connection=None, elide_empty=True)	
+  DEF 	get_meta	379-386	-	(self)	Return the Options instance (the model._meta) from which to start
+  DEF 	clone	388-431	-	(self)	Return a copy of the current Query. A lightweight alternative to
+  DEF 	chain	433-446	-	(self, klass=None)	Return a copy of the current Query that's ready for another operation.
+  DEF 	relabeled_clone	448-451	-	(self, change_map)	
+  DEF 	_get_col	453-456	-	(self, target, field, alias)	
+  DEF 	get_aggregation	458-649	-	(self, using, aggregate_exprs)	Return the dictionary with the values of the existing aggregations.
+  DEF 	get_count	651-656	-	(self, using)	Perform a COUNT() query using the current filter constraints.
+  DEF 	has_filters	658-659	-	(self)	
+  DEF 	exists	661-681	-	(self, limit=True)	
+  DEF 	has_results	683-686	-	(self, using)	
+  DEF 	explain	688-698	-	(self, using, format=None, **options)	
+  DEF 	combine	700-814	-	(self, rhs, connector)	Merge the 'rhs' query into the current one (with any 'rhs' effects
+  DEF 	_get_defer_select_mask	816-858	-	(self, opts, mask, select_mask=None)	
+  DEF 	_get_only_select_mask	860-875	-	(self, opts, mask, select_mask=None)	
+  DEF 	get_select_mask	877-897	-	(self)	Convert the self.deferred_loading data structure to an alternate data
+  DEF 	table_alias	899-924	-	(self, table_name, create=False, filtered_relation=None)	Return a table alias for the given table_name and whether this is a
+  DEF 	ref_alias	926-928	-	(self, alias)	Increases the reference count for this alias.
+  DEF 	unref_alias	930-932	-	(self, alias, amount=1)	Decreases the reference count for this alias.
+  DEF 	promote_joins	934-970	-	(self, aliases)	Promote recursively the join type of given aliases and its children to
+  DEF 	demote_joins	972-989	-	(self, aliases)	Change join type from LOUTER to INNER for all joins in aliases.
+  DEF 	reset_refcounts	991-998	-	(self, to_counts)	Reset reference counts for aliases so that they match the value passed
+  DEF 	change_aliases	1000-1055	-	(self, change_map)	Change the aliases in change_map (which maps old-alias -> new-alias),
+  DEF 	bump_prefix	1057-1110	-	(self, other_query, exclude=None)	Change the alias prefix to the next letter in the alphabet in a way
+  DEF 	get_initial_alias	1112-1124	-	(self)	Return the first alias for this query, after increasing its reference
+  DEF 	count_active_tables	1126-1132	-	(self)	Return the number of tables in this query with a non-zero reference
+  DEF 	join	1134-1186	-	(self, join, reuse=None)	Return an alias for the 'join', either reusing an existing alias for
+  DEF 	join_parent_model	1188-1219	-	(self, opts, model, alias, seen)	Make sure the given 'model' is joined in the query. If 'model' isn't
+  DEF 	check_alias	1221-1242	-	(self, alias)	
+  DEF 	add_annotation	1244-1254	-	(self, annotation, alias, select=True)	Add a single annotation expression to the Query.
+  DEF 	_subquery_fields_len	1257-1263	property	(self)	
+  DEF 	resolve_expression	1265-1293	-	(self, query, *args, **kwargs)	
+  DEF 	get_external_cols	1295-1301	-	(self)	
+  DEF 	get_group_by_cols	1303-1311	-	(self, wrapper=None)	
+  DEF 	as_sql	1313-1326	-	(self, compiler, connection)	
+  DEF 	resolve_lookup_value	1328-1347	-	(self, value, can_reuse, allow_joins, summarize=False)	
+  DEF 	solve_lookup_type	1349-1370	-	(self, lookup, summarize=False)	Solve the lookup type from the lookup (e.g.: 'foobar__id__icontains').
+  DEF 	check_query_object_type	1372-1382	-	(self, value, opts, field)	Check whether the object passed while querying is of the correct type.
+  DEF 	check_related_objects	1384-1405	-	(self, field, value, opts)	Check the type of object passed to query relations.
+  DEF 	check_filterable	1407-1418	-	(self, expression)	Raise an error if expression cannot be used in a WHERE clause.
+  DEF 	build_lookup	1420-1464	-	(self, lookups, lhs, rhs)	Try to extract transforms and lookup from given lhs.
+  DEF 	try_transform	1466-1491	-	(self, lhs, name, lookups=None)	Helper method for build_lookup(). Try to fetch and initialize
+  DEF 	build_filter	1493-1653	-	(self, filter_expr, branch_negated=False, current_negated=False, can_reuse=None, allow_joins=True, split_subq=True, check_filterable=True, summarize=False, update_join_types=True)	Build a WhereNode for a single filter clause but don't add it
+  DEF 	add_filter	1655-1656	-	(self, filter_lhs, filter_rhs)	
+  DEF 	add_q	1658-1679	-	(self, q_object, reuse_all=False)	A preprocessor for the internal _add_q(). Responsible for doing final
+  DEF 	build_where	1681-1682	-	(self, filter_expr)	
+  DEF 	clear_where	1684-1685	-	(self)	
+  DEF 	_add_q	1687-1726	-	(self, q_object, used_aliases, branch_negated=False, current_negated=False, allow_joins=True, split_subq=True, check_filterable=True, summarize=False, update_join_types=True)	Add a Q-object to the current filter.
+  DEF 	add_filtered_relation	1728-1768	-	(self, filtered_relation, alias)	
+  DEF 	names_to_path	1770-1884	-	(self, names, opts, allow_many=True, fail_on_missing=False)	Walk the list of names and turns them into PathInfo tuples. A single
+  DEF 	setup_joins	1886-2001	-	(self, names, opts, alias, can_reuse=None, allow_many=True)	Compute the necessary table joins for the passage through the fields
+  DEF 	trim_joins	2003-2033	-	(self, targets, joins, path)	The 'target' parameter is the final field being joined to, 'joins'
+  DEF 	_gen_cols	2036-2051	classmethod	(cls, exprs, include_external=False, resolve_refs=True)	
+  DEF 	_gen_col_aliases	2054-2055	classmethod	(cls, exprs)	
+  DEF 	resolve_ref	2057-2106	-	(self, name, allow_joins=True, reuse=None, summarize=False)	
+  DEF 	split_exclude	2108-2175	-	(self, filter_expr, can_reuse, names_with_path)	When doing an exclude against any kind of N-to-many relation, we need
+  DEF 	set_empty	2177-2180	-	(self)	
+  DEF 	is_empty	2182-2183	-	(self)	
+  DEF 	set_limits	2185-2206	-	(self, low=None, high=None)	Adjust the limits on the rows retrieved. Use low/high to set these,
+  DEF 	clear_limits	2208-2210	-	(self)	Clear any existing limits.
+  DEF 	is_sliced	2213-2214	property	(self)	
+  DEF 	has_limit_one	2216-2217	-	(self)	
+  DEF 	can_filter	2219-2226	-	(self)	Return True if adding filters to this instance is still possible.
+  DEF 	clear_select_clause	2228-2235	-	(self)	Remove all fields from SELECT clause.
+  DEF 	clear_select_fields	2237-2245	-	(self)	Clear the list of fields to select (but not extra_select columns).
+  DEF 	add_select_col	2247-2250	-	(self, col, name)	
+  DEF 	set_select	2252-2254	-	(self, cols)	
+  DEF 	add_distinct_fields	2256-2261	-	(self, *field_names)	Add and resolve the given fields to the query's "distinct on" clause.
+  DEF 	add_fields	2263-2320	-	(self, field_names, allow_m2m=True)	Add the given (model) fields to the select set. Add the field names in
+  DEF 	add_ordering	2322-2356	-	(self, *ordering)	Add items from the 'ordering' sequence to the query's "order by"
+  DEF 	clear_ordering	2358-2372	-	(self, force=False, clear_default=True)	Remove any ordering settings if the current query allows it without
+  DEF 	set_group_by	2374-2408	-	(self, allow_aliases=True)	Expand the GROUP BY clause required by the query.
+  DEF 	add_select_related	2410-2424	-	(self, fields)	Set up the select_related data structure so that we only select
+  DEF 	add_extra	2426-2457	-	(self, select, select_params, where, params, tables, order_by)	Add data to the various extra_* attributes for user-created additions
+  DEF 	clear_deferred_loading	2459-2461	-	(self)	Remove any fields from the deferred loading set.
+  DEF 	add_deferred_loading	2463-2486	-	(self, field_names)	Add the given list of model field names to the set of fields to
+  DEF 	add_immediate_loading	2488-2510	-	(self, field_names)	Add the given list of model field names to the set of fields to
+  DEF 	set_annotation_mask	2512-2529	-	(self, names)	Set the mask of annotations that will be returned by the SELECT.
+  DEF 	append_annotation_mask	2531-2533	-	(self, names)	
+  DEF 	set_extra_mask	2535-2544	-	(self, names)	Set the mask of extra select items that will be returned by SELECT.
+  DEF 	has_select_fields	2547-2548	property	(self)	
+  DEF 	set_values	2550-2616	-	(self, fields)	
+  DEF 	annotation_select	2619-2636	property	(self)	Return the dictionary of aggregate columns that are not masked and
+  DEF 	extra_select	2639-2650	property	(self)	
+  DEF 	trim_start	2652-2729	-	(self, names_with_path)	Trim joins from the start of the join path. The candidates for trim
+  DEF 	is_nullable	2731-2747	-	(self, field)	Check if the given field should be treated as nullable.

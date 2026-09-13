@@ -1,0 +1,4 @@
+{
+  "instrument": "bash -c cd /home/user/kaupamex-api && uv run pytest -n 4 -q --reuse-db 2>&1; echo EXIT=$?",
+  "started_at": "2026-09-11T10:11:29+00:00"
+}

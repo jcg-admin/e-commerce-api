@@ -246,7 +246,8 @@ def _supported_account_types():
     return ResPartnerBank.get_supported_account_types()
 
 
-class ResPartnerBank(models.Model):
+class ResPartnerBank(models.DefaultGetMixin, models.RecordLoaderMixin,
+                     models.CheckCompanyMixin, models.Model):
     """``res.partner.bank`` — cuenta bancaria de un contacto."""
 
     #: Los cuatro atributos de clase que la fuente declara

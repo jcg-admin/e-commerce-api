@@ -693,6 +693,7 @@ class TestCallBetweenTemplates:
             mode='primary', **kwargs,
         )
 
+    @helpers_built
     def test_the_call_grafts_the_children_of_the_called_descriptor(
             self, reporte_orden, orden_con_lineas):
         self.make_root()
@@ -715,6 +716,7 @@ class TestCallBetweenTemplates:
                            match='base.report_common_footer.*does not exist'):
             IrActionsReport._render(reporte_orden, [orden_con_lineas.pk])
 
+    @helpers_built
     def test_the_called_template_arrives_with_its_combined_arch(
             self, reporte_orden, orden_con_lineas):
         # El resolutor devuelve el arch COMBINADO, no el crudo: una extensión
@@ -735,6 +737,7 @@ class TestCallBetweenTemplates:
             reporte_orden, [orden_con_lineas.pk])
         assert 'Tel del pie' in texto_impreso(contenido)
 
+    @helpers_built
     def test_priority_breaks_the_tie_as_it_does_in_the_root(
             self, reporte_orden, orden_con_lineas):
         # El root resuelve por ``priority, id`` y el call tiene que usar el

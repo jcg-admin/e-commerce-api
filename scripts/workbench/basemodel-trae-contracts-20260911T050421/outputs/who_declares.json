@@ -1,0 +1,135 @@
+{
+  "__and__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "__bool__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "__deepcopy__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "rest_framework.fields.Field",
+    "drf.ModelSerializer": "rest_framework.fields.Field"
+  },
+  "__eq__": {
+    "django.Model": "django.db.models.base.Model",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "django.db.models.manager.BaseManager",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__ge__": {
+    "django.Model": "object (default del lenguaje)",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "object (default del lenguaje)",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__getitem__": {
+    "django.Model": "django.db.models.base.Model",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "rest_framework.serializers.Serializer",
+    "drf.ModelSerializer": "rest_framework.serializers.Serializer"
+  },
+  "__gt__": {
+    "django.Model": "object (default del lenguaje)",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "object (default del lenguaje)",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__hash__": {
+    "django.Model": "django.db.models.base.Model",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "django.db.models.manager.BaseManager",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__init__": {
+    "django.Model": "django.db.models.base.Model",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "django.db.models.manager.BaseManager",
+    "drf.Serializer": "rest_framework.serializers.BaseSerializer",
+    "drf.ModelSerializer": "rest_framework.serializers.BaseSerializer"
+  },
+  "__iter__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "rest_framework.serializers.Serializer",
+    "drf.ModelSerializer": "rest_framework.serializers.Serializer"
+  },
+  "__le__": {
+    "django.Model": "object (default del lenguaje)",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "object (default del lenguaje)",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__len__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "__lt__": {
+    "django.Model": "object (default del lenguaje)",
+    "django.QuerySet": "object (default del lenguaje)",
+    "django.Manager": "object (default del lenguaje)",
+    "drf.Serializer": "object (default del lenguaje)",
+    "drf.ModelSerializer": "object (default del lenguaje)"
+  },
+  "__or__": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "AUSENTE",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "__repr__": {
+    "django.Model": "django.db.models.base.Model",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "object (default del lenguaje)",
+    "drf.Serializer": "rest_framework.serializers.Serializer",
+    "drf.ModelSerializer": "rest_framework.serializers.Serializer"
+  },
+  "create": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "django.db.models.manager.BaseManagerFromQuerySet",
+    "drf.Serializer": "rest_framework.serializers.BaseSerializer",
+    "drf.ModelSerializer": "rest_framework.serializers.ModelSerializer"
+  },
+  "exists": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "django.db.models.manager.BaseManagerFromQuerySet",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "union": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "django.db.models.manager.BaseManagerFromQuerySet",
+    "drf.Serializer": "AUSENTE",
+    "drf.ModelSerializer": "AUSENTE"
+  },
+  "update": {
+    "django.Model": "AUSENTE",
+    "django.QuerySet": "django.db.models.query.QuerySet",
+    "django.Manager": "django.db.models.manager.BaseManagerFromQuerySet",
+    "drf.Serializer": "rest_framework.serializers.BaseSerializer",
+    "drf.ModelSerializer": "rest_framework.serializers.ModelSerializer"
+  }
+}

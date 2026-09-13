@@ -179,6 +179,7 @@ import datetime
 from collections import defaultdict
 
 import fields
+import api
 import models
 from django.apps import apps
 from django.db.models import Sum
@@ -194,7 +195,7 @@ from tools.translate import _
 ONGOING_EXCLUDED_STATES = ('done', 'cancel')
 
 
-class StockPackage(TimeStampedModel):
+class StockPackage(models.DefaultGetMixin, TimeStampedModel):
     """``stock.package`` — contenedor de existencias y/o de otros paquetes."""
 
     # Atributos de clase de modelo — los seis que la referencia declara
@@ -611,23 +612,32 @@ class StockPackage(TimeStampedModel):
 
     # -- create / write --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :278-287``).
 
         Dos normalizaciones de la referencia: ``complete_name`` recibido se
         interpreta como ``name`` (lo escribe el escáner de códigos), y sin
         nombre se pide el siguiente a la secuencia del tipo de paquete.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        if vals.get('complete_name'):
-            vals['name'] = vals.pop('complete_name')
-        if not vals.get('name'):
-            tipo = vals.get('package_type')
-            if tipo is not None:
-                vals['name'] = tipo._get_next_name_by_sequence()
-        paquete = cls.objects.create(**vals)
-        paquete.refresh_computed_fields()
-        return paquete
+        for vals in vals_list:
+            if vals.get('complete_name'):
+                vals['name'] = vals.pop('complete_name')
+            if not vals.get('name'):
+                tipo = vals.get('package_type')
+                if tipo is not None:
+                    vals['name'] = tipo._get_next_name_by_sequence()
+        packages = super().create(vals_list)
+        for package in packages:
+            package.refresh_computed_fields()
+        return packages
 
     def write(self, **vals):
         """≙ ``write`` (``odoo19c: :289-314``).

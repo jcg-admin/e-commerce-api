@@ -1,0 +1,13 @@
+  CharField          OK          _args__={'store': False, 'related': 'owner_id.label'}
+  TextField          OK          _args__={'store': False, 'related': 'owner_id.label'}
+  JSONField          OK          _args__={'store': False, 'related': 'owner_id.label'}
+  BooleanField       OK          _args__={'store': False, 'related': 'owner_id.label'}
+  IntegerField       OK          _args__={'store': False, 'related': 'owner_id.label'}
+  FloatField         OK          _args__={'store': False, 'related': 'owner_id.label'}
+  DecimalField       OK          _args__={'store': False, 'related': 'owner_id.label'}
+  BinaryField        OK          _args__={'store': False, 'related': 'owner_id.label'}
+  ImageField         OK          _args__={'store': False, 'related': 'owner_id.label'}
+  ForeignKey         OK          _args__={'store': False, 'related': 'owner_id.label'}
+  ManyToManyField    OK          _args__={'store': False, 'related': 'owner_id.label'}
+VEREDICTO vocabulario_por_tipo: OK (11 de 11)
+EXIT=0

@@ -1,0 +1,24 @@
+addons/stock/models/stock_location.py:652:        nueva = cls.create(name=partes[-1], location=padre)
+tests/unit/orm/test_default_get.py:243:            partner = ResPartner.create(name='Alta con contexto')
+tests/unit/orm/test_default_get.py:250:            partner = ResPartner.create(name='Alta', comment='explicito')
+tests/unit/orm/test_default_get.py:257:        partner = ResPartner.create(name='Alta con ir.default')
+tests/unit/base_iban/test_create_write_and_check.py:34:        account = ResPartnerBank.create(partner=partner,
+tests/unit/base_iban/test_create_write_and_check.py:45:        account = ResPartnerBank.create(partner=partner,
+tests/unit/base_iban/test_create_write_and_check.py:54:        account = ResPartnerBank.create(partner=partner,
+tests/unit/base_iban/test_create_write_and_check.py:66:        account = ResPartnerBank.create(partner=partner,
+tests/unit/base_iban/test_create_write_and_check.py:78:        account = ResPartnerBank.create(partner=partner,
+tests/unit/base_iban/test_create_write_and_check.py:90:        account = ResPartnerBank.create(partner=partner,
+tests/unit/utm/test_utm.py:232:        ``UNIQUE(name)`` impide un segundo ``.create(name='Direct')``
+tests/unit/utm/test_utm.py:284:        ``UNIQUE(name)`` impide un segundo ``.create(name='Referral')``
+tests/unit/html_editor/test_html_field_history.py:126:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:136:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:145:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:151:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:158:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:173:        record = UnversionableProbe.create(body='uno')
+tests/unit/html_editor/test_html_field_history.py:180:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/html_editor/test_html_field_history.py:187:        record = HistoryProbe.create(body='<p>uno</p>')
+tests/unit/stock/test_stock_picking.py:319:    picking = StockPicking.create(picking_type=tipo, company=company)
+tests/unit/stock/test_stock_picking.py:326:    picking = StockPicking.create(picking_type=picking_type, company=company)
+tests/unit/stock/test_stock_picking.py:373:    picking = StockPicking.create(picking_type=tipo_a, company=company)
+EXIT=0

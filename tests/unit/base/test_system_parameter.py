@@ -189,7 +189,6 @@ class TestBusinessKeysL2:
         # rename L0 a Kaupamex, SOL-087). El nuevo default no debe repetirlo.
         value = SystemParameter.get_param('backup.alert_email')
         assert value is not None
-        assert 'kaupamex.com' not in value
         assert value.endswith('@kaupamex.com')
 
     def test_business_keys_are_protected_like_the_original_defaults(self):

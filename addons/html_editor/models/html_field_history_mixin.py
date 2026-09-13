@@ -88,6 +88,7 @@ los atributos de vista, y ``ir_qweb_fields.IrQwebFieldHtml.attributes`` lee
 cuatro de esas banderas).
 """
 import fields
+import api
 import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -101,7 +102,7 @@ from addons.html_editor.models.diff_utils import (
 )
 
 
-class HtmlFieldHistoryMixin(models.Model):
+class HtmlFieldHistoryMixin(models.DefaultGetMixin, models.Model):
     """≙ ``HtmlFieldHistoryMixin`` (``odoo19c: :9``).
 
     Los tres atributos de clase que la fuente declara van verbatim; no declara
@@ -159,24 +160,26 @@ class HtmlFieldHistoryMixin(models.Model):
                     history_metadata[field_name].append(metadata)
         return history_metadata
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``:42-46``).
 
         La fuente descarta el ``html_field_history`` que llegue en los valores
         antes de delegar en ``super().create``: nadie puede sembrar un
-        historial falso al crear. Aquí ocurre lo mismo, y el ``INSERT`` lo hace
-        el camino de Django — que vuelve a pasar por :meth:`save`, cuya rama de
-        creación repite el descarte para el llamador que use
+        historial falso al crear. Aquí ocurre lo mismo, y :meth:`save`, por el
+        que la fila pasa, repite el descarte para el llamador que use
         ``objects.create(...)`` directamente.
 
-        La fuente recibe ``vals_list`` porque su ``create`` es
-        ``@api.model_create_multi``; aquí la firma es la del árbol
-        (``**vals``, un registro), como en ``stock.location`` y
-        ``base_iban``. Crear N registros es llamar N veces.
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        vals.pop('html_field_history', None)
-        return cls.objects.create(**vals)
+        for vals in vals_list:
+            vals.pop('html_field_history', None)
+        return super().create(vals_list)
 
     def write(self, **vals):
         """≙ ``write`` (``:48-108``).

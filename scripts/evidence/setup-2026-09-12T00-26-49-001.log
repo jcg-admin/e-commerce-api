@@ -1,0 +1,6 @@
+ensure_field_setup: OK
+street        related=partner.street             store=False  inverse=SI
+city          related=partner.city               store=False  inverse=SI
+country       related=partner.country            store=False  inverse=SI
+country_code  related=partner.country.code       store=False  inverse=NO
+EXIT=0

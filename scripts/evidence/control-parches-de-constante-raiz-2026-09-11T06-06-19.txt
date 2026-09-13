@@ -1,0 +1,47 @@
+TASK-GEN-0245 (#981) — barrer los tests que parchan constantes de modulo
+fecha (date -u): 2026-09-11T06:06:19
+arbol: kaupamex-api @ a872f4ae
+
+== 1. universo, con el comando de partida que la tarea declara ==
+$ grep -rn "monkeypatch.setattr(.*'[A-Z_]*ROOT" tests/ --include=*.py
+tests/unit/scripts/test_check_no_lazy_imports.py:102:        monkeypatch.setattr(gate, 'DEFAULT_ROOTS', ('raiz-que-no-existe',))
+tests/unit/website/test_website_configurator_feature.py:136:    monkeypatch.setattr(wcf_module, '_ADDON_ROOTS', (tmp_path,))
+
+== 2. universo ancho: cualquier constante MAYUS parchada ==
+tests/unit/scripts/test_check_no_lazy_imports.py:102:        monkeypatch.setattr(gate, 'DEFAULT_ROOTS', ('raiz-que-no-existe',))
+tests/unit/scripts/test_check_model_class_attributes.py:259:    monkeypatch.setattr(gate, 'BASELINE', tmp_path / 'no-existe.txt')
+tests/unit/scripts/test_check_model_class_attributes.py:266:    monkeypatch.setattr(gate, 'BASELINE', baseline)
+tests/unit/scripts/test_check_model_class_attributes.py:282:    monkeypatch.setattr(gate, 'BASELINE', tmp_path / 'vacio.txt')
+tests/unit/scripts/test_check_model_class_attributes.py:293:    monkeypatch.setattr(gate, 'BASELINE', tmp_path / 'vacio.txt')
+tests/unit/scripts/test_check_model_class_attributes.py:305:    monkeypatch.setattr(gate, 'BASELINE', destination)
+tests/unit/scripts/test_check_mirrored_roots.py:141:    monkeypatch.setattr(gate, 'BASELINE_PATH', baseline_file)
+tests/unit/scripts/test_check_mirrored_roots.py:147:    monkeypatch.setattr(gate, 'BASELINE_PATH', tmp_path / 'missing.txt')
+tests/unit/scripts/test_check_mirrored_roots.py:216:    monkeypatch.setattr(gate, 'REPO', repo)
+tests/unit/base/test_ir_cron_trigger_progress.py:89:    monkeypatch.setattr(modulo_ir_cron, 'NOTIFY_CRON_CHANGES', False)
+tests/unit/base/test_ir_cron_trigger_progress.py:105:    monkeypatch.setattr(modulo_ir_cron, 'NOTIFY_CRON_CHANGES', True)
+tests/unit/base/test_ir_cron_trigger_progress.py:120:    monkeypatch.setattr(modulo_ir_cron, 'NOTIFY_CRON_CHANGES', True)
+
+== 3. vigencia: el simbolo parchado se consulta EN LLAMADA ==
+check_no_lazy_imports.py:44 DEFAULT_ROOTS ; :70 'for nombre in DEFAULT_ROOTS' -> llamada
+website_configurator_feature.py:55 _ADDON_ROOTS ; :196 'for root in _ADDON_ROOTS' -> llamada
+
+== 4. control de discriminancia (sub-patron D) ==
+linea 102 de test_check_no_lazy_imports.py  -> 'pass  # CONTROL'
+linea 136 de test_website_configurator_feature.py -> 'pass  # CONTROL'
+ANTES  : 18 passed
+ANULADO: 2 failed, 16 passed
+  FAILED tests/unit/website/test_website_configurator_feature.py::test_process_svg_replaces_colors_and_images
+  FAILED tests/unit/scripts/test_check_no_lazy_imports.py::TestTheGateDiscriminates::test_an_empty_audit_refuses_instead_of_reporting_clean
+RESTAURADO: git diff --stat vacio ; 18 passed
+Caen EXACTAMENTE los dos que dependen del parche: ni uno mas, ni uno menos.
+
+== 5. peligro latente medido, NO cubierto por el control ==
+scripts/check_mirrored_roots.py consume REPO por DOS vias:
+  :138-147 FIXED_MIRRORED_ROOTS  -> construida EN IMPORT (el parche no la gobierna)
+  :169     addons_dir = REPO / 'addons' dentro de addon_roots() -> EN LLAMADA
+El unico parche de REPO (test:216) ejercita addon_roots(), la via de llamada.
+Latente, no vivo: ningun test parcha REPO y luego ejercita la via de import.
+
+Metrica: setattr de constante MAYUS en tests/, mas el sitio de consulta del simbolo en el modulo bajo prueba.
+Ciega a: el parche que no pasa por monkeypatch.setattr (mock.patch, fixture que reasigna, variable de entorno),
+        y a la constante cuyo nombre no es MAYUS.

@@ -380,7 +380,8 @@ def _add_interval(dt, number, interval_type):
     return avanzar(dt, number)
 
 
-class IrCron(models.DefaultGetMixin, models.Model):
+class IrCron(models.DefaultGetMixin, models.RecordLoaderMixin,
+             models.CheckCompanyMixin, models.Model):
     """``ir.cron`` — registro de horario de una tarea programada + runner.
 
     El registro de horario (qué ejecutar + cada cuánto + próxima corrida)

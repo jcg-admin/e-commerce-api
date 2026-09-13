@@ -1,0 +1,24 @@
+== recién construidos: lo escrito contra lo conservado ==
+   Char(compute=)                 NonStored   _args__=None
+                                  escrito=['compute'] perdido=['compute']
+   Char(inverse=, recursive=)     CharField   _args__={}
+                                  escrito=['inverse', 'recursive'] perdido=['inverse', 'recursive']
+   Char(max_length=, readonly=)   CharField   _args__={'max_length': 9, 'editable': False}
+                                  escrito=['max_length', 'readonly'] perdido=['readonly']
+
+== ya instalados en clases reales ==
+   base  DisplayNameMixin         NonStored   _args__=None
+                                  escrito=['compute', 'search'] perdido=['compute', 'search']
+   override TestOrmCategory       CharField   _args__={}
+                                  escrito=['inverse', 'recursive'] perdido=['inverse', 'recursive']
+
+== el veredicto — por CONTENIDO ==
+   casos que conservan su declaración : 0 de 5
+   se puede fusionar por declaración  : False
+
+   Métrica: claves presentes en `_args__` contra las que el autor
+            escribió, por caso.
+   Ciega a: el VALOR de una clave conservada (sólo compara claves),
+            y a una clave que la fachada renombre antes de delegar
+            —`readonly` sale como `editable`, y ahí el conjunto
+            acusa la pérdida aunque el dato viaje con otro nombre.

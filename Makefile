@@ -117,11 +117,11 @@ check-catalog-ci:
 	@python3 scripts/check_catalog_declaration.py
 
 check-canon:
-	python3 $$(ls -d ../kaupamex-docs ../docs 2>/dev/null | head -1)/scripts/check_canon_idioma.py --repo-root .. --soft
+	python3 $$(ls -d ../kaupamex-docs ../docs 2>/dev/null | head -1)/scripts/check_canon_language.py --repo-root .. --soft
 
 # Canon-idioma estricto — exit != 0 si hay literales ES fuera del allowlist.
 check-canon-ci:
-	python3 $$(ls -d ../kaupamex-docs ../docs 2>/dev/null | head -1)/scripts/check_canon_idioma.py --repo-root ..
+	python3 $$(ls -d ../kaupamex-docs ../docs 2>/dev/null | head -1)/scripts/check_canon_language.py --repo-root ..
 
 test:
 	pytest

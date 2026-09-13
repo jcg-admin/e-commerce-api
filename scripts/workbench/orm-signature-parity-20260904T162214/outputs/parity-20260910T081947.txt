@@ -1,0 +1,244 @@
+=== paridad de firma: odoo/orm <-> src/orm ===
+
+archivo                       comp  igual  difiere  sin portar  ambiguo
+commands.py                      7      0        7           0        0
+decorators.py                   12     12        0           4        0
+domains.py                      62     57        5           2       20
+environments.py                 68     60        8           0        7
+fields.py                       20     15        5          58        6
+fields_binary.py                 0      0        0          14        5
+fields_misc.py                   0      0        0           8        3
+fields_numeric.py                0      0        0          15        6
+fields_properties.py            28     21        7           1        8
+fields_reference.py              0      0        0           7        1
+fields_relational.py             1      0        1          26       26
+fields_selection.py              0      0        0          12        0
+fields_temporal.py               1      1        0           8        6
+fields_textual.py                8      8        0          28        6
+identifiers.py                   7      7        0           0        0
+model_classes.py                 9      9        0           7        0
+models.py                       69     42       27         140       12
+models_transient.py              3      0        3           0        0
+registry.py                     45     43        2           0       14
+table_objects.py                 4      4        0           0        7
+types.py                         0      0        0           0        0
+utils.py                         8      8        0           0        0
+
+firmas comparables: 352 · identicas: 287 (81.5 %) · divergentes: 65
+(alcance medido: 22 archivo(s) con contraparte; 330 simbolo(s) sin portar quedan FUERA — los mide el censo)
+
+divergencias por tipo: varargs_divergente 3 · renombre 38 · parametro_ausente 11 · parametro_extra 8 · default_anadido 5
+FUERA de la comparacion por nombre declarado mas de una vez: 83 nombre(s) distinto(s). No se comparan: el par seria arbitrario. Su cierre exige calificar por clase, que este arbol no puede en models.py — BaseModel no existe aqui como clase.
+
+--- commands.py ---
+  parametro_ausente      delete
+      ref  (cls, id)
+      aqui (obj)
+  renombre               clear
+      ref  (cls)
+      aqui (manager)
+  renombre               link
+      ref  (cls, id)
+      aqui (manager, obj)
+  renombre               set
+      ref  (cls, ids)
+      aqui (manager, objs)
+  renombre               unlink
+      ref  (cls, id)
+      aqui (manager, obj)
+  varargs_divergente     create
+      ref  (cls, values)
+      aqui (manager, **values)
+  varargs_divergente     update
+      ref  (cls, id, values)
+      aqui (obj, **values)
+
+--- domains.py ---
+  default_anadido        optimize
+      ref  (self, model)
+      aqui (self, model=)
+  default_anadido        optimize_full
+      ref  (self, model)
+      aqui (self, model=)
+  parametro_ausente      _value_to_date
+      ref  (value, env, iso_only=)
+      aqui (value, iso_only=)
+  parametro_ausente      _value_to_datetime
+      ref  (value, env, iso_only=)
+      aqui (value, iso_only=)
+  renombre               custom
+      ref  (*, to_sql, predicate=)
+      aqui (*, to_q, predicate=)
+
+--- environments.py ---
+  default_anadido        __new__
+      ref  (cls, cr, uid, context, su=)
+      aqui (cls, cr=, uid=, context=, su=)
+  parametro_extra        invalidate_field_data
+      ref  (self)
+      aqui (self, spec=)
+  renombre               add_to_compute
+      ref  (self, field, records)
+      aqui (self, field, record_ids)
+  renombre               is_protected
+      ref  (self, field, record)
+      aqui (self, field, record_id)
+  renombre               is_to_compute
+      ref  (self, field, record)
+      aqui (self, field, record_id)
+  renombre               not_to_compute
+      ref  (self, field, records)
+      aqui (self, field, record_ids)
+  renombre               protecting
+      ref  (self, what, records=)
+      aqui (self, fields, records=)
+  renombre               remove_to_compute
+      ref  (self, field, records)
+      aqui (self, field, record_ids)
+
+--- fields.py ---
+  renombre               __set__
+      ref  (self, records, value)
+      aqui (self, instance, value)
+  renombre               check_inequality
+      ref  (rec)
+      aqui (record)
+  renombre               convert_to_display_name
+      ref  (self, value, record)
+      aqui (field, value, record)
+  renombre               determine_domain
+      ref  (self, records, operator, value)
+      aqui (field, records, operator, value)
+  renombre               determine_inverse
+      ref  (self, records)
+      aqui (field, records)
+
+--- fields_properties.py ---
+  default_anadido        _setup_definition_attrs
+      ref  (self, model_class)
+      aqui (self, model_class=)
+  parametro_ausente      _add_default_values
+      ref  (self, env, values)
+      aqui (self, values, model=, using=)
+  parametro_ausente      _parse_json_types
+      ref  (cls, values_list, env, res_ids_per_model)
+      aqui (cls, values_list, res_ids_per_model)
+  parametro_extra        convert_to_read_multi
+      ref  (self, values, records, use_display_name=)
+      aqui (self, values, records, use_display_name=, using=)
+  renombre               _add_display_name
+      ref  (cls, values_list, env, value_keys=)
+      aqui (cls, values_list, using=, value_keys=)
+  renombre               _get_res_ids_per_model
+      ref  (self, env, values_list)
+      aqui (self, values_list, using=)
+  renombre               _validate_properties_definition
+      ref  (self, properties_definition, env)
+      aqui (self, properties_definition, record)
+
+--- fields_relational.py ---
+  default_anadido        _additional_domain
+      ref  (self, env)
+      aqui (self, env=)
+
+--- models.py ---
+  parametro_ausente      _add_precomputed_values
+      ref  (self, vals_list)
+      aqui (self)
+  parametro_ausente      _load_records
+      ref  (self, data_list, update=)
+      aqui (cls, data_list, update=, using=)
+  parametro_ausente      _load_records_create
+      ref  (self, vals_list)
+      aqui (cls, vals_list, using=)
+  parametro_ausente      load
+      ref  (self, fields, data)
+      aqui (cls, fields, data, using=)
+  parametro_extra        _check_access
+      ref  (self, operation)
+      aqui (self, operation, user=)
+  parametro_extra        _filtered_access
+      ref  (self, operation)
+      aqui (self, operation, user=)
+  parametro_extra        _get_redirect_suggested_company
+      ref  (self)
+      aqui (self, user=)
+  parametro_extra        check_access
+      ref  (self, operation)
+      aqui (self, operation, user=)
+  parametro_extra        copy_data
+      ref  (self, default=)
+      aqui (self, default=, seen=)
+  parametro_extra        has_access
+      ref  (self, operation)
+      aqui (self, operation, user=)
+  renombre               _add_missing_default_values
+      ref  (self, values)
+      aqui (cls, values)
+  renombre               _check_company_domain
+      ref  (self, companies)
+      aqui (cls, companies)
+  renombre               _convert_records
+      ref  (self, records, *, log=, savepoint)
+      aqui (cls, records, *, log=, savepoint)
+  renombre               _extract_records
+      ref  (self, field_paths, data, log=, limit=)
+      aqui (cls, field_paths, data, log=, limit=)
+  renombre               _init_column
+      ref  (self, column_name)
+      aqui (cls, column_name)
+  renombre               _search_display_name
+      ref  (self, operator, value)
+      aqui (cls, operator, value)
+  renombre               _sql_error_to_message
+      ref  (self, exc)
+      aqui (cls, exc)
+  renombre               _table_has_rows
+      ref  (self)
+      aqui (cls)
+  renombre               avoid
+      ref  (field)
+      aqui (name)
+  renombre               check_companies_domain_parent_of
+      ref  (self, companies)
+      aqui (cls, companies)
+  renombre               check_company_domain_parent_of
+      ref  (self, companies)
+      aqui (cls, companies)
+  renombre               default_get
+      ref  (self, fields)
+      aqui (cls, fields)
+  renombre               get_columns_from_sql_diagnostics
+      ref  (cr, diagnostics, *, check_registry=)
+      aqui (connection, diagnostics, *, check_registry=)
+  renombre               name_create
+      ref  (self, name)
+      aqui (cls, name)
+  renombre               name_search
+      ref  (self, name=, domain=, operator=, limit=)
+      aqui (cls, name=, domain=, operator=, limit=)
+  renombre               write
+      ref  (self, vals)
+      aqui (self, values)
+  varargs_divergente     create
+      ref  (self, vals_list)
+      aqui (cls, **values)
+
+--- models_transient.py ---
+  renombre               _transient_clean_old_rows
+      ref  (self, max_count)
+      aqui (cls, max_count)
+  renombre               _transient_clean_rows_older_than
+      ref  (self, seconds)
+      aqui (cls, seconds)
+  renombre               _transient_vacuum
+      ref  (self)
+      aqui (cls)
+
+--- registry.py ---
+  parametro_ausente      clear_all_caches
+      ref  (self)
+      aqui ()
+  parametro_ausente      clear_cache
+      ref  (self, *cache_names)
+      aqui (*cache_names)

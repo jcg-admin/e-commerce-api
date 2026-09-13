@@ -1,0 +1,26 @@
+{
+  "question": "¿Cuántos de los símbolos que el censo de la raíz llama «ausentes» están portados bajo el prefijo de disolución de este árbol?",
+  "instrument": "scripts/workbench/orm-rename-resolution-20260910T083919/resolve_renames.py",
+  "metric": "símbolos de la lista de ausentes que el CENSO publica por archivo, resueltos contra los símbolos declarados por AST en el mismo archivo de src/orm/ bajo uno de DISSOLUTION_PREFIXES ('_field_', '_model_', '_registry_'). El universo es el del censo, heredado a propósito.",
+  "blind_to": "el método portado con OTRO nombre (traducción, sinónimo) — el prefijo es una convención declarada, no un detector de renombres; y el CUERPO, igual que el censo: que `_field_read` exista no dice que haga lo que `Field.read` hace. Y ciega a los 9 archivos de la referencia sin lista de ausentes en el censo.",
+  "control": "anulación del mecanismo de prefijo (dejando sólo el literal): caen EXACTAMENTE 2 de 6 aserciones — las dos que dependen de él — y sobreviven las cuatro que miden el literal, el rechazo del sufijo y los prefijos declarados. Un emparejador laxo daría verde en las seis.",
+  "corrected_premise": {
+    "decia": "el censo publica «272 ausentes en src/orm» y la iniciativa lee esa cifra como símbolos sin portar (OE-1 del alcance)",
+    "mide": "29 de los 256 ausentes con lista publicada están portados bajo `_field_`, concentrados en fields.py (29 de sus 40). Otros 2 son desacuerdo de universo entre los dos instrumentos. Ausentes tras descontar ambos: 225.",
+    "consecuencia": "`src/orm/fields.py` no tiene clase `Field`: la fuente declara UNA clase con 72 métodos y este árbol la disolvió en 91 funciones de módulo instaladas sobre el Field de Django. El censo, que compara por nombre literal, cuenta cada método disuelto como ausente. La cifra del censo es una COTA SUPERIOR de lo que falta, no la medida."
+  },
+  "reproducible": "python3 scripts/workbench/orm-rename-resolution-20260910T083919/resolve_renames.py",
+  "source": [
+    "odoo19c: odoo/orm/fields.py — class Field, 72 métodos, 1937 líneas",
+    "src/orm/fields.py — 0 clases Field, 91 funciones de módulo, 4225 líneas",
+    "scripts/workbench/orm-root-census-20260902T203712/census_orm_root.py --detalle"
+  ],
+  "tasks": [
+    "#211",
+    "#365"
+  ],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/ — corrige la lectura de OE-1 en alcance-completar-raiz-orm.rst",
+  "measured_at": "2026-09-10T08:41:02",
+  "api_head": "27277510",
+  "odoo_tools_head": "abe4040ec1"
+}

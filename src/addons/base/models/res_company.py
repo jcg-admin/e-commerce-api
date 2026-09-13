@@ -131,9 +131,11 @@ from datetime import date
 
 from zeep.cache import Base as ZeepCache
 
+import api
 import fields
 import models
 from exceptions import ValidationError
+from orm.environments import sudo
 from tools import date_utils, zeep
 from tools.cache import ormcache
 from tools.translate import _
@@ -474,96 +476,182 @@ class ResCompany(TimeStampedModel):
         return getattr(self.partner, 'image_1920', None)
 
     # === Dirección: compute + inverse =====================================
+    #
+    # ≙ ``odoo19c: base/models/res_company.py:69-79`` — los seis campos de
+    # dirección son ``compute='_compute_address'`` con un ``inverse`` nombrado.
+    # **Eran seis ``@property`` con su ``setter``**, y esa forma tenía un
+    # defecto que no era de estilo: un ``@property`` no vive en ``_meta``, así
+    # que ninguna cadena ``related=`` puede navegarlo. Medido antes de
+    # corregirlo: ``SiteConfigSettings.company_country_code`` y
+    # ``company_country_group_codes`` —las dos cadenas que pasan por
+    # ``company.country``— rompían con *falta ResCompany.country*, con un solo
+    # eslabón ausente para las dos (TASK-API-0412).
+    #
+    # Los nombres **no llevan el sufijo** ``_id`` de la fuente: es la
+    # convención de este árbol para un ``Many2one`` (``partner``, ``currency``,
+    # ``parent``), y el mapa a la fuente lo lleva el ``help_text`` de cada uno.
 
-    def _address_get(self, fname):
-        return getattr(self.partner, fname, None)
+    #: ≙ ``_get_company_address_field_names`` (``:121-124``), con su docstring:
+    #: *"Return a list of fields coming from the address partner to match on
+    #: company address fields. Fields are labeled same on both models."*
+    #: Ese *"labeled same"* es lo que hace que el compute y los seis inversos
+    #: puedan ser un solo ``getattr``/``setattr`` por nombre.
+    ADDRESS_FIELD_NAMES = ('street', 'street2', 'city', 'zip', 'state',
+                           'country')
 
-    def _address_set(self, fname, value):
-        """El *inverse* de la fuente: escribir en la compañía escribe el partner.
+    street = fields.Char(compute='_compute_address', inverse='_inverse_street',
+                         help_text='Odoo street.')
+    street2 = fields.Char(compute='_compute_address',
+                          inverse='_inverse_street2',
+                          help_text='Odoo street2.')
+    #: El ``if name == 'state'`` de ``orm/fields.py`` fija ``copy=False`` sobre
+    #: este campo porque su nombre es ``state``; allá la regla no lo toca
+    #: porque el campo se llama ``state_id``. El resultado es el mismo: un
+    #: calculado sin columna ya sale ``copy=False`` por el bloque de
+    #: ``compute``, así que la coincidencia de nombre no cambia nada.
+    zip = fields.Char(compute='_compute_address', inverse='_inverse_zip',
+                      help_text='Odoo zip.')
+    city = fields.Char(compute='_compute_address', inverse='_inverse_city',
+                       help_text='Odoo city.')
+    state = fields.Many2one(
+        ResCountryState, compute='_compute_address',
+        inverse='_inverse_state', verbose_name='Fed. State',
+        help_text='Odoo state_id.')
+    country = fields.Many2one(
+        ResCountry, compute='_compute_address',
+        inverse='_inverse_country', verbose_name='Country',
+        help_text='Odoo country_id.')
+    #: ≙ ``country_code`` (``:79``), que allá es
+    #: ``fields.Char(related='country_id.code', depends=['country_id'])``.
+    #: Era un ``@property`` y por eso la cadena de ``SiteConfigSettings`` no
+    #: podía navegarlo.
+    country_code = fields.Char(related='country.code', depends=['country'])
 
-        **Y lo PERSISTE.** Hasta este commit el cuerpo era sólo el ``setattr``,
-        así que la escritura vivía en la instancia en memoria y se perdía al
-        releer: la compañía se guardaba, su partner no. Medido con una sonda
-        antes de corregirlo::
+    @classmethod
+    def _get_company_address_field_names(cls):
+        """Los campos que se copian del partner — ≙ ``:121-124``.
 
-            c.country = mexico; c.save()
-            c.country                        -> Mexico     (en memoria)
-            ResCompany.objects.get(pk=c.pk).country -> None (releído)
+        **Divergencia de mecanismo declarada: aquí es un método de clase.** La
+        fuente lo declara de instancia y lo llama desde el ``lambda`` de
+        ``@api.depends`` (``:135``), donde ``self`` es el recordset vacío del
+        modelo — una cosa que es instancia y modelo a la vez. En este stack el
+        lector de dependencias invoca ``deps(model)`` con la **clase**
+        (``orm/fields.py:4158``), así que un método de instancia revienta con
+        *missing 1 required positional argument*. Medido antes de corregirlo:
+        ``scripts/evidence/aceptacion-0412-2026-09-12T08-55-*.log``.
+        """
+        return list(cls.ADDRESS_FIELD_NAMES)
 
-        La fuente no tiene ese hueco porque su ``inverse`` escribe por el ORM,
-        que persiste por construcción (``odoo19c: base/models/res_company.py``,
-        los ``_inverse_*`` de dirección). Aquí la property tiene que hacerlo
-        explícito.
+    def _get_company_address_update(self, partner):
+        """≙ ``_get_company_address_update`` (``:126-128``), verbatim salvo el
+        acceso: allá ``partner[fname]`` sobre un recordset, aquí ``getattr``
+        sobre la fila."""
+        return {fname: getattr(partner, fname)
+                for fname in self._get_company_address_field_names()}
+
+    @api.depends(lambda self: [f'partner.{fname}'
+                               for fname in
+                               self._get_company_address_field_names()])
+    def _compute_address(self):
+        """La dirección se LEE del partner — ≙ ``_compute_address`` (``:136-141``).
+
+        La fuente no toma los campos del partner directamente: pide su
+        dirección de contacto con ``address_get(adr_pref=['contact'])``, que es
+        una **búsqueda en profundidad** por los hijos dentro de la frontera de
+        empresa. Una compañía con una sucursal de tipo ``contact`` colgada usa
+        la dirección de la sucursal, no la del titular; un ``getattr`` plano
+        sobre ``self.partner`` daría la del titular y sería otro dato.
+
+        Divergencias de mecanismo, las de siempre en este árbol: el bucle
+        ``for company in self.filtered(...)`` se colapsa a una fila, y
+        ``company.update(...)`` —que allá escribe sobre el recordset— es aquí
+        el ``setattr`` por nombre. La elevación la aporta el alcance de
+        ``orm.environments.sudo``, no un recordset elevado.
+
+        **Sin partner no computa, y eso es FIEL, no un recorte.** La fuente
+        abre con ``for company in self.filtered(lambda company: company.partner_id)``
+        (``:138``): una compañía sin partner sale del bucle y su dirección
+        queda sin tocar. El ``return`` temprano de aquí es esa misma conducta
+        sobre una fila.
+
+        **Dos guardas que la fuente NO tiene, declaradas:**
+
+        - ``address_data.get('contact')`` contra su ``if address_data['contact']``
+          (``:140``). La fuente confía en que la clave exista; aquí un
+          ``address_get`` que no la devuelva da ``None`` en vez de ``KeyError``.
+        - ``if source is None: return``. La fuente hace ``browse(id)``, que
+          nunca devuelve ``None`` — un id inexistente allá revienta con
+          ``MissingError`` al leerlo. Aquí un ``contact`` colgado apuntando a
+          una fila borrada deja la dirección sin computar **en silencio**, que
+          es menos ruidoso que la fuente. Su sucesor es **TASK-GEN-0633**.
+        """
+        partner = self.partner if self.partner_id else None
+        if partner is None:
+            return
+        with sudo():
+            address_data = partner.address_get(adr_pref=['contact'])
+            contact_id = address_data.get('contact')
+            if not contact_id:
+                return
+            source = (partner if contact_id == partner.pk
+                      else type(partner).objects.filter(pk=contact_id).first())
+            if source is None:
+                return
+            for fname, value in self._get_company_address_update(source).items():
+                setattr(self, fname, value)
+
+    def _inverse_street(self):
+        """≙ ``_inverse_street`` (``:143-145``)."""
+        self._write_address_to_partner('street')
+
+    def _inverse_street2(self):
+        """≙ ``_inverse_street2`` (``:147-149``)."""
+        self._write_address_to_partner('street2')
+
+    def _inverse_zip(self):
+        """≙ ``_inverse_zip`` (``:151-153``)."""
+        self._write_address_to_partner('zip')
+
+    def _inverse_city(self):
+        """≙ ``_inverse_city`` (``:155-157``)."""
+        self._write_address_to_partner('city')
+
+    def _inverse_state(self):
+        """≙ ``_inverse_state`` (``:159-161``)."""
+        self._write_address_to_partner('state')
+
+    def _inverse_country(self):
+        """≙ ``_inverse_country`` (``:163-165``)."""
+        self._write_address_to_partner('country')
+
+    def _write_address_to_partner(self, fname):
+        """El cuerpo común de los seis inversos — ``partner_id.<f> = self.<f>``.
+
+        Los seis de la fuente son la misma línea con otro nombre de campo
+        (``:143-165``); aquí se factoriza porque además hay que **persistir**,
+        que es la divergencia de mecanismo: allá la asignación sobre el
+        recordset ya escribe —el caché del ORM es su canal de escritura— y
+        aquí una asignación de Django no emite SQL.
 
         Se guarda el partner ENTERO, no ``update_fields=[fname]``: cambiar un
         campo de dirección debe disparar ``ResPartner.save`` completo, que es
-        quien propaga la dirección a los hijos (``_fields_sync``) y recalcula
-        las columnas derivadas. Acotar los campos saltaría esa propagación —
-        el mismo efecto que la fuente sí produce al escribir.
+        quien propaga la dirección a los hijos (``_fields_sync``). Acotar los
+        campos saltaría esa propagación, que la fuente sí produce.
+
+        **El ``return`` sin partner es FIEL — medido, no supuesto.** La fuente
+        escribe ``company.partner_id.street = company.street`` (``:145``) sin
+        guarda: sobre un ``partner_id`` vacío eso llega a ``Field.__set__``
+        (``odoo19c: odoo/orm/fields.py:1807-1841``), que reparte ``records._ids``
+        en tres cubos y, con la tupla vacía, no entra en ninguno — **no-op
+        silencioso**, no excepción. La guarda de aquí produce el mismo
+        desenlace de forma explícita.
         """
-        setattr(self.partner, fname, value)
-        if self.partner.pk:
-            self.partner.save()
-
-    @property
-    def street(self):
-        return self._address_get('street')
-
-    @street.setter
-    def street(self, value):
-        """≙ ``_inverse_street`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('street', value)
-
-    @property
-    def street2(self):
-        return self._address_get('street2')
-
-    @street2.setter
-    def street2(self, value):
-        """≙ ``_inverse_street2`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('street2', value)
-
-    @property
-    def zip(self):
-        return self._address_get('zip')
-
-    @zip.setter
-    def zip(self, value):
-        """≙ ``_inverse_zip`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('zip', value)
-
-    @property
-    def city(self):
-        return self._address_get('city')
-
-    @city.setter
-    def city(self, value):
-        """≙ ``_inverse_city`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('city', value)
-
-    @property
-    def state(self):
-        return self._address_get('state')
-
-    @state.setter
-    def state(self, value):
-        """≙ ``_inverse_state`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('state', value)
-
-    @property
-    def country(self):
-        return self._address_get('country')
-
-    @country.setter
-    def country(self, value):
-        """≙ ``_inverse_country`` (``odoo19c: base/models/res_company.py``)."""
-        self._address_set('country', value)
-
-    @property
-    def country_code(self):
-        """``related='country_id.code'``."""
-        country = self.country
-        return getattr(country, 'code', '') if country else ''
+        partner = self.partner if self.partner_id else None
+        if partner is None:
+            return
+        setattr(partner, fname, getattr(self, fname))
+        if partner.pk:
+            partner.save()
 
     # === Jerarquía ========================================================
 

@@ -1,0 +1,33 @@
+{
+  "question": "¿Puede la regla de compatibilidad de tipo de _get_attrs (isinstance(self, type(field))) dispararse alguna vez entre un campo con columna y uno sin ella, tal como esta fachada los construye?",
+  "instrument": "scripts/workbench/costura-de-fusion-de-campo-20260911T172315/probe_merge_seam.py",
+  "metric": "la clase que fields.Char(...) devuelve con y sin store=False, el veredicto de isinstance en las dos direcciones, y los ancestros comunes de las dos clases.",
+  "blind_to": "las demás parejas de tipos (sólo mide Char con y sin columna); el caso en que la fachada enrute por otra vía —related=, company_dependent=—; y si la regla de la fuente se dispara o no en SU árbol, que este instrumento no ejecuta.",
+  "destination": [
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/",
+    "TASK-API-0416 — la costura de fusión, cuyo alcance esta medición corrigió"
+  ],
+  "reproducible": "PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python scripts/workbench/costura-de-fusion-de-campo-20260911T172315/probe_merge_seam.py",
+  "outputs": [
+    "outputs/veredicto-20260911T172315.txt"
+  ],
+  "source": [
+    "odoo19c: odoo/orm/fields.py:414-430 — _get_attrs y su regla attrs.clear() por incompatibilidad de tipo",
+    "odoo19c: odoo/orm/model_classes.py:411-415 — Field = type(fields_[-1]): el override más derivado decide la clase",
+    "src/orm/fields.py:1105-1128 — el merge ya portado verbatim, incluida la regla",
+    "src/orm/fields_nonstored.py — NonStored, la clase que la fachada devuelve sin columna"
+  ],
+  "control": "la sonda mide la MISMA declaración en las dos formas (con y sin store=False). Si la fachada no enrutara, las dos darían la misma clase y el isinstance sería True — el resultado no discriminaría. Medido: CharField contra NonStored, ancestros comunes ['object'], isinstance False en ambos sentidos.",
+  "corrected_premise": {
+    "decia": "la fusión se cablea con un recorrido del MRO desde _field_contribute_to_class",
+    "mide": "grep -rn _base_fields__ $ODOO19C/odoo/orm/ da UN solo sitio de población — model_classes.py:415 — en la fase de registro, con la jerarquía ya resuelta; no en la contribución del campo",
+    "consecuencia": "el recorrido del MRO desde el campo habría sido invención (señal 5 de la lección 2026-09-03). El alcance real es portar la recolección de definiciones por clase, que depende de MetaModel y _setup — TASK-API-0416."
+  },
+  "tasks": [
+    "TASK-API-0416",
+    "TASK-API-0415"
+  ],
+  "measured_at": "2026-09-11T17:48:26",
+  "api_head": "82bb1443",
+  "odoo_tools_head": "abe4040ec1"
+}

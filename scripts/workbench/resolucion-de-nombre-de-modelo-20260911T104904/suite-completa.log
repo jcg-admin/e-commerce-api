@@ -1,0 +1,558 @@
+bringing up nodes...
+bringing up nodes...
+
+........................................................................ [  0%]
+.............sssssssss.sssssssss..ssssssss.............................. [  1%]
+........................................................................ [  2%]
+........................................................................ [  2%]
+........................................................................ [  3%]
+........................................................................ [  4%]
+........................................................................ [  4%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  8%]
+........................................................................ [  9%]
+........................................................................ [ 10%]
+........................................................................ [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+........................................................................ [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+........................................................................ [ 34%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 40%]
+........................................................................ [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+...................................................................E.EE. [ 45%]
+.E..E..E.E...E.E.E....................................................... [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 49%]
+........................................................................ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 51%]
+........................................................................ [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 53%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 56%]
+......................................................................... [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 62%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 64%]
+..................................................F...F................. [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+........................................................................ [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 73%]
+........................................................................ [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+.........................................x.............................. [ 77%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+.....................................................s.................. [ 81%]
+...............s........................................................ [ 82%]
+........................................................................ [ 82%]
+.....................................F........F......................... [ 83%]
+......................s................................................. [ 84%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 92%]
+..........Exception ignored in: <function Transport.__del__ at 0x7f1d890f4040>
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/zeep/transports.py", line 170, in __del__
+.    self.session.close()
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'object' object has no attribute 'close'
+.Exception ignored in: <function Transport.__del__ at 0x7f1d890f4040>
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/zeep/transports.py", line 170, in __del__
+    self.session.close()
+    ^^^^^^^^^^^^^^^^^^
+AttributeError: 'object' object has no attribute 'close'
+............................................................ [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+.............................................................F.......... [ 97%]
+........................................................................ [ 98%]
+.................................FF..................................... [ 99%]
+........................................................................ [ 99%]
+.......................                                                  [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of TestTheFarDependencyWalksBackwards.test_touching_the_owner_marks_the_probe _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestTheFarDependencyWalksBackwards.test_an_owner_without_probes_marks_nothing _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestTheFarDependencyWalksBackwards.test_only_the_probes_of_that_owner_are_marked _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestCreateSkipsTheManyToOneReturn.test_on_create_the_backward_walk_is_skipped _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestCreateSkipsTheManyToOneReturn.test_without_create_the_same_call_does_mark _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestRecompute.test_the_recordset_variant_computes_only_its_rows _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestRecompute.test_the_model_variant_computes_every_pending_row _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestRecompute.test_a_field_with_nothing_pending_is_a_no_op _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestTheEngineClosesTheCircle.test_the_marked_field_reaches_the_column_on_flush _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+_ ERROR at setup of TestTheEngineClosesTheCircle.test_without_the_flush_the_column_keeps_the_old_value _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   psycopg.errors.DuplicateTable: relation "orm_engine_owner" already exists
+
+The above exception was the direct cause of the following exception:
+tests/unit/orm/test_modified_engine.py:100: in tables
+    editor.create_model(model)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:513: in create_model
+    self.execute(sql, params or None)
+.venv/lib/python3.12/site-packages/django/db/backends/postgresql/schema.py:45: in execute
+    return super().execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/base/schema.py:205: in execute
+    cursor.execute(sql, params)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:79: in execute
+    return self._execute_with_wrappers(
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:92: in _execute_with_wrappers
+    return executor(sql, params, many, context)
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:100: in _execute
+    with self.db.wrap_database_errors:
+.venv/lib/python3.12/site-packages/django/db/utils.py:94: in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+.venv/lib/python3.12/site-packages/django/db/backends/utils.py:103: in _execute
+    return self.cursor.execute(sql)
+.venv/lib/python3.12/site-packages/psycopg/cursor.py:117: in execute
+    raise ex.with_traceback(None)
+E   django.db.utils.ProgrammingError: relation "orm_engine_owner" already exists
+=================================== FAILURES ===================================
+_ TestCollectSystemCheckSummary.test_current_tree_has_zero_dangling_fk_errors __
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/orm/test_checks_irresolvable_fk.py:121: in test_current_tree_has_zero_dangling_fk_errors
+    assert resumen.dangling_fk_errors() == []
+E   assert [<Error: leve...fields.E304'>] == []
+E     Left contains 2 more items, first extra item: <Error: level=40, msg="Reverse accessor 'ResUsers.testormdiscussion_set' for 'test_orm.TestOrmDiscussion.moderator' cl...t_orm.TestOrmDiscussion.participants'.", obj=<django.db.models.fields.related.ForeignKey: moderator>, id='fields.E304'>
+E     Use -v to get more diff
+___ TestCollectSystemCheckSummary.test_run_checks_or_raise_passes_clean_tree ___
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/orm/test_checks_irresolvable_fk.py:124: in test_run_checks_or_raise_passes_clean_tree
+    resumen = run_checks_or_raise()
+src/orm/checks.py:249: in run_checks_or_raise
+    raise SystemExit(1)
+E   SystemExit: 1
+----------------------------- Captured stderr call -----------------------------
+FAIL: 4 error(es) de system checks (alcance medido: 424 modelos registrados)
+  fields.E304: 2
+  models.E022: 2
+
+  2 de esos son FK irresolubles (fields.E300/E307) — ver H-API-584.
+
+  [fields.E304] test_orm.TestOrmDiscussion.moderator: Reverse accessor 'ResUsers.testormdiscussion_set' for 'test_orm.TestOrmDiscussion.moderator' clashes with reverse accessor for 'test_orm.TestOrmDiscussion.participants'.
+  [fields.E304] test_orm.TestOrmDiscussion.participants: Reverse accessor 'ResUsers.testormdiscussion_set' for 'test_orm.TestOrmDiscussion.participants' clashes with reverse accessor for 'test_orm.TestOrmDiscussion.moderator'.
+  [models.E022] <function _flush_sentinels at 0x7fdb6b8772e0>: <function _flush_sentinels at 0x7fdb6b8772e0> contains a lazy reference to migrations.migration, but app 'migrations' isn't installed.
+  [models.E022] <function _flush_sentinels at 0x7fdb6b8772e0>: <function _flush_sentinels at 0x7fdb6b8772e0> contains a lazy reference to stock.stockmovelineprobe, but app 'stock' doesn't provide model 'stockmovelineprobe'.
+_ TestUniversalAdoption.test_none_declares_it_as_something_other_than_the_field _
+[gw0] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/orm/test_display_name.py:71: in test_none_declares_it_as_something_other_than_the_field
+    assert not_a_field() == []
+E   AssertionError: assert ['test_orm.Te...display_name'] == []
+E     Left contains one more item: 'test_orm.TestOrmCategory.display_name es FieldDescriptor declarado en TestOrmCategory, no el campo NonStored del mixin — el cómputo va en _compute_display_name'
+E     Use -v to get more diff
+_ TestTheGateDiscriminates.test_it_names_a_model_that_declares_display_name_as_a_property _
+[gw0] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/orm/test_display_name.py:182: in test_it_names_a_model_that_declares_display_name_as_a_property
+    assert not_a_field() == []
+E   AssertionError: assert ['test_orm.Te...display_name'] == []
+E     Left contains one more item: 'test_orm.TestOrmCategory.display_name es FieldDescriptor declarado en TestOrmCategory, no el campo NonStored del mixin — el cómputo va en _compute_display_name'
+E     Use -v to get more diff
+_ TestTheBaselineAbsorbsTheInheritedDebtAndOnlyThat.test_every_offender_measured_today_is_in_the_baseline _
+[gw3] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/scripts/test_check_fk_naming.py:99: in test_every_offender_measured_today_is_in_the_baseline
+    assert fresh == []
+E   AssertionError: assert ['src/addons/...on.moderator'] == []
+E     Left contains 2 more items, first extra item: 'src/addons/test_orm/models/test_orm.py::TestOrmCategory.parent'
+E     Use -v to get more diff
+_____________________ test_cron_command_una_pasada_sale_0 ______________________
+[gw1] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/base/test_ir_cron_runner.py:301: in test_cron_command_una_pasada_sale_0
+    assert proc.returncode == 0, f'stdout={salida!r} stderr={error!r}'
+E   AssertionError: stdout='' stderr="SystemCheckError: System check identified some issues:\n\nERRORS:\ntest_orm.TestOrmDiscussion.moderator: (fields.E304) Reverse accessor 'ResUsers.testormdiscussion_set' for 'test_orm.TestOrmDiscussion.moderator' clashes with reverse accessor for 'test_orm.TestOrmDiscussion.participants'.\n\tHINT: Add or change a related_name argument to the definition for 'test_orm.TestOrmDiscussion.moderator' or 'test_orm.TestOrmDiscussion.participants'.\ntest_orm.TestOrmDiscussion.participants: (fields.E304) Reverse accessor 'ResUsers.testormdiscussion_set' for 'test_orm.TestOrmDiscussion.participants' clashes with reverse accessor for 'test_orm.TestOrmDiscussion.moderator'.\n\tHINT: Add or change a related_name argument to the definition for 'test_orm.TestOrmDiscussion.participants' or 'test_orm.TestOrmDiscussion.moderator'.\n\nWARNINGS:\nbase.PropertiesBaseDefinition.properties_field: (fields.W342) Setting unique=True on a ForeignKey has the same effect as using a OneToOneField.\n\tHINT: ForeignKey(unique=True) is usually better served by a OneToOneField.\nfleet.FleetVehicleLogServices.account_move_line: (fields.W342) Setting unique=True on a ForeignKey has the same effect as using a OneToOneField.\n\tHINT: ForeignKey(unique=True) is usually better served by a OneToOneField.\ntest_orm.TestOrmDiscussion.history: (fields.E010) JSONField default should be a callable instead of an instance so that it's not shared between all field instances.\n\tHINT: Use a callable instead, e.g., use `dict` instead of `{}`.\n"
+E   assert 1 == 0
+E    +  where 1 = <Popen: returncode: 1 args: ['/home/user/kaupamex-api/.venv/bin/python', 'ma...>.returncode
+__________________ test_cron_command_sale_limpio_ante_sigterm __________________
+[gw1] linux -- Python 3.12.3 /home/user/kaupamex-api/.venv/bin/python
+tests/unit/base/test_ir_cron_runner.py:313: in test_cron_command_sale_limpio_ante_sigterm
+    _wait_until_it_handles_signals(proc)
+tests/unit/base/test_ir_cron_runner.py:279: in _wait_until_it_handles_signals
+    pytest.fail('cron termino solo antes de estar listo '
+E   Failed: cron termino solo antes de estar listo (returncode=1, stdout='')
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+tests/unit/orm/test_fields_related.py::TestResolveDepends::test_it_resolves_a_declared_chain_to_its_fields
+  /home/user/kaupamex-api/src/orm/fields.py:3510: UserWarning: Field base.ResPartner.name should be declared with recursive=True
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_checks_irresolvable_fk.py::TestCollectSystemCheckSummary::test_current_tree_has_zero_dangling_fk_errors
+FAILED tests/unit/orm/test_checks_irresolvable_fk.py::TestCollectSystemCheckSummary::test_run_checks_or_raise_passes_clean_tree
+FAILED tests/unit/orm/test_display_name.py::TestUniversalAdoption::test_none_declares_it_as_something_other_than_the_field
+FAILED tests/unit/orm/test_display_name.py::TestTheGateDiscriminates::test_it_names_a_model_that_declares_display_name_as_a_property
+FAILED tests/unit/scripts/test_check_fk_naming.py::TestTheBaselineAbsorbsTheInheritedDebtAndOnlyThat::test_every_offender_measured_today_is_in_the_baseline
+FAILED tests/unit/base/test_ir_cron_runner.py::test_cron_command_una_pasada_sale_0
+FAILED tests/unit/base/test_ir_cron_runner.py::test_cron_command_sale_limpio_ante_sigterm
+ERROR tests/unit/orm/test_modified_engine.py::TestTheFarDependencyWalksBackwards::test_touching_the_owner_marks_the_probe
+ERROR tests/unit/orm/test_modified_engine.py::TestTheFarDependencyWalksBackwards::test_an_owner_without_probes_marks_nothing
+ERROR tests/unit/orm/test_modified_engine.py::TestTheFarDependencyWalksBackwards::test_only_the_probes_of_that_owner_are_marked
+ERROR tests/unit/orm/test_modified_engine.py::TestCreateSkipsTheManyToOneReturn::test_on_create_the_backward_walk_is_skipped
+ERROR tests/unit/orm/test_modified_engine.py::TestCreateSkipsTheManyToOneReturn::test_without_create_the_same_call_does_mark
+ERROR tests/unit/orm/test_modified_engine.py::TestRecompute::test_the_recordset_variant_computes_only_its_rows
+ERROR tests/unit/orm/test_modified_engine.py::TestRecompute::test_the_model_variant_computes_every_pending_row
+ERROR tests/unit/orm/test_modified_engine.py::TestRecompute::test_a_field_with_nothing_pending_is_a_no_op
+ERROR tests/unit/orm/test_modified_engine.py::TestTheEngineClosesTheCircle::test_the_marked_field_reaches_the_column_on_flush
+ERROR tests/unit/orm/test_modified_engine.py::TestTheEngineClosesTheCircle::test_without_the_flush_the_column_keeps_the_old_value
+7 failed, 10490 passed, 30 skipped, 1 xfailed, 6 warnings, 10 errors in 348.02s (0:05:48)
+EXIT=1

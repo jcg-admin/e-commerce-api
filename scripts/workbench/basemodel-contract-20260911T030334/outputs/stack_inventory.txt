@@ -1,0 +1,201 @@
+django 6.0.5 · contrato 194 nombres
+nivel 1 — el stack lo trae hecho          : 21
+          nuestro arbol YA lo colgo        : 14
+nivel 2 — hay que construirlo              : 159
+
+STACK   	create	Manager,QuerySet
+STACK   	exists	Manager,QuerySet
+STACK   	__init__	Model,ModelBase,Manager,QuerySet
+STACK   	update	Manager,QuerySet
+STACK   	__bool__	QuerySet
+STACK   	__len__	QuerySet
+STACK   	__iter__	QuerySet
+STACK   	__and__	QuerySet
+STACK   	__or__	Model,ModelBase,Manager,QuerySet
+STACK   	union	Manager,QuerySet
+STACK   	__eq__	Model,ModelBase,Manager,QuerySet
+STACK   	__lt__	Model,ModelBase,Manager,QuerySet
+STACK   	__le__	Model,ModelBase,Manager,QuerySet
+STACK   	__gt__	Model,ModelBase,Manager,QuerySet
+STACK   	__ge__	Model,ModelBase,Manager,QuerySet
+STACK   	__repr__	Model,ModelBase,Manager,QuerySet
+STACK   	__hash__	Model,ModelBase,Manager,QuerySet
+STACK   	__deepcopy__	QuerySet
+STACK   	__getitem__	QuerySet
+STACK   	__getitem__	QuerySet
+STACK   	__getitem__	QuerySet
+
+COLGADO 	_validate_fields	Model
+COLGADO 	_init_column	Model
+COLGADO 	_table_has_rows	Model
+COLGADO 	_add_precomputed_values	Model
+COLGADO 	flush_model	Model,QuerySet
+COLGADO 	flush_recordset	Model,QuerySet
+COLGADO 	_flush	Model,QuerySet
+COLGADO 	__setitem__	Model
+COLGADO 	modified	Model,QuerySet
+COLGADO 	_modified	Model,QuerySet
+COLGADO 	_modified_triggers	Model,QuerySet
+COLGADO 	_recompute_model	Model,QuerySet
+COLGADO 	_recompute_recordset	Model,QuerySet
+COLGADO 	_recompute_field	Model,QuerySet
+
+CONSTRUIR	_valid_field_parameter
+CONSTRUIR	_post_model_setup__
+CONSTRUIR	_table_sql
+CONSTRUIR	_constraint_methods
+CONSTRUIR	_ondelete_methods
+CONSTRUIR	_onchange_methods
+CONSTRUIR	_is_an_ordinary_table
+CONSTRUIR	__ensure_xml_id
+CONSTRUIR	_export_rows
+CONSTRUIR	export_data
+CONSTRUIR	load
+CONSTRUIR	_extract_records
+CONSTRUIR	_convert_records
+CONSTRUIR	default_get
+CONSTRUIR	_rec_name_fallback
+CONSTRUIR	search_count
+CONSTRUIR	search
+CONSTRUIR	search_fetch
+CONSTRUIR	_compute_display_name
+CONSTRUIR	_search_display_name
+CONSTRUIR	name_create
+CONSTRUIR	name_search
+CONSTRUIR	_add_missing_default_values
+CONSTRUIR	_read_grouping_sets
+CONSTRUIR	_read_group
+CONSTRUIR	_read_group_select
+CONSTRUIR	_read_group_groupby
+CONSTRUIR	_read_group_having
+CONSTRUIR	_read_group_orderby
+CONSTRUIR	_read_group_empty_value
+CONSTRUIR	_read_group_postprocess_groupby
+CONSTRUIR	_read_group_postprocess_aggregate
+CONSTRUIR	_read_group_expand_full
+CONSTRUIR	_read_group_fill_results
+CONSTRUIR	_read_group_fill_temporal
+CONSTRUIR	_read_group_format_result
+CONSTRUIR	_read_group_format_result_properties
+CONSTRUIR	read_group
+CONSTRUIR	_traverse_related_sql
+CONSTRUIR	_field_to_sql
+CONSTRUIR	_read_group_groupby_properties
+CONSTRUIR	get_property_definition
+CONSTRUIR	_parent_store_compute
+CONSTRUIR	_check_removed_columns
+CONSTRUIR	_auto_init
+CONSTRUIR	init
+CONSTRUIR	_check_parent_path
+CONSTRUIR	_add_sql_constraints
+CONSTRUIR	_sql_error_to_message
+CONSTRUIR	_sql_error_to_message_generic
+CONSTRUIR	fields_get
+CONSTRUIR	_has_field_access
+CONSTRUIR	_check_field_access
+CONSTRUIR	check_field_access_rights
+CONSTRUIR	read
+CONSTRUIR	update_field_translations
+CONSTRUIR	_update_field_translations
+CONSTRUIR	get_field_translations
+CONSTRUIR	_get_base_lang
+CONSTRUIR	_read_format
+CONSTRUIR	_fetch_field
+CONSTRUIR	fetch
+CONSTRUIR	_determine_fields_to_fetch
+CONSTRUIR	_fetch_query
+CONSTRUIR	get_metadata
+CONSTRUIR	get_base_url
+CONSTRUIR	_check_company_domain
+CONSTRUIR	_check_company
+CONSTRUIR	check_access
+CONSTRUIR	has_access
+CONSTRUIR	_filtered_access
+CONSTRUIR	_check_access
+CONSTRUIR	check_access_rights
+CONSTRUIR	check_access_rule
+CONSTRUIR	_filter_access_rules
+CONSTRUIR	_filter_access_rules_python
+CONSTRUIR	unlink
+CONSTRUIR	write
+CONSTRUIR	_write
+CONSTRUIR	_write_multi
+CONSTRUIR	_prepare_create_values
+CONSTRUIR	_create
+CONSTRUIR	_compute_field_value
+CONSTRUIR	_parent_store_create
+CONSTRUIR	_parent_store_update_prepare
+CONSTRUIR	_parent_store_update
+CONSTRUIR	_clean_properties
+CONSTRUIR	_validate_properties_definition
+CONSTRUIR	_additional_allowed_keys_properties_definition
+CONSTRUIR	_convert_to_cache_properties_definition
+CONSTRUIR	_convert_to_column_properties_definition
+CONSTRUIR	_load_records_write
+CONSTRUIR	_load_records_create
+CONSTRUIR	_load_records
+CONSTRUIR	_check_qorder
+CONSTRUIR	_order_to_sql
+CONSTRUIR	_order_field_to_sql
+CONSTRUIR	_search
+CONSTRUIR	_as_query
+CONSTRUIR	copy_data
+CONSTRUIR	copy_translations
+CONSTRUIR	copy
+CONSTRUIR	lock_for_update
+CONSTRUIR	try_lock_for_update
+CONSTRUIR	_has_cycle
+CONSTRUIR	_check_recursion
+CONSTRUIR	_check_m2m_recursion
+CONSTRUIR	_get_external_ids
+CONSTRUIR	get_external_id
+CONSTRUIR	is_transient
+CONSTRUIR	search_read
+CONSTRUIR	toggle_active
+CONSTRUIR	action_archive
+CONSTRUIR	action_unarchive
+CONSTRUIR	_register_hook
+CONSTRUIR	_unregister_hook
+CONSTRUIR	_get_redirect_suggested_company
+CONSTRUIR	_can_return_content
+CONSTRUIR	browse
+CONSTRUIR	ids
+CONSTRUIR	_cr
+CONSTRUIR	_uid
+CONSTRUIR	_context
+CONSTRUIR	ensure_one
+CONSTRUIR	with_env
+CONSTRUIR	sudo
+CONSTRUIR	with_user
+CONSTRUIR	with_company
+CONSTRUIR	with_context
+CONSTRUIR	with_prefetch
+CONSTRUIR	_update_cache
+CONSTRUIR	_convert_to_record
+CONSTRUIR	_convert_to_write
+CONSTRUIR	mapped
+CONSTRUIR	mapped
+CONSTRUIR	mapped
+CONSTRUIR	filtered
+CONSTRUIR	grouped
+CONSTRUIR	grouped
+CONSTRUIR	grouped
+CONSTRUIR	filtered_domain
+CONSTRUIR	sorted
+CONSTRUIR	_sorted_order_to_function
+CONSTRUIR	new
+CONSTRUIR	_origin
+CONSTRUIR	__reversed__
+CONSTRUIR	__contains__
+CONSTRUIR	__add__
+CONSTRUIR	concat
+CONSTRUIR	__sub__
+CONSTRUIR	__int__
+CONSTRUIR	_cache
+CONSTRUIR	invalidate_model
+CONSTRUIR	invalidate_recordset
+CONSTRUIR	_invalidate_cache
+CONSTRUIR	_has_onchange
+CONSTRUIR	_apply_onchange_methods
+CONSTRUIR	onchange
+CONSTRUIR	_get_placeholder_filename

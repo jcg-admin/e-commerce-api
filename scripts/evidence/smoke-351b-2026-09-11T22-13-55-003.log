@@ -1,0 +1,5 @@
+src/addons/base/models/res_users.py:431:        # Equivalente del punto en que ``super().create()`` retorna en la
+src/addons/base/models/res_partner.py:1787:        partner = cls.create(**create_values)
+addons/base_iban/models/res_partner_bank.py:240:    que este método **es** el alta, no un envoltorio. El ``super().create(...)``
+addons/base_iban/models/res_partner_bank.py:290:    y persiste. Es el mismo ``return super().create(...)`` de la referencia.
+EXIT=0

@@ -1,0 +1,17 @@
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_code should be searchable. This is necessary to determine which records to recompute when base.ResCountry.code is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_group_codes should be searchable. This is necessary to determine which records to recompute when base.ResCountry.country_group_codes is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+setup_ran: OK
+our_descriptor_on_attname: OK
+django_descriptor_on_name: OK
+assign_by_name_chains_into_ours: OK
+assign_by_attname_hits_ours: OK
+setup_count: 5674
+ranuras: {'country': 'ForwardManyToOneDescriptor', 'country_id': 'ComputedFieldDescriptor', 'partner': 'ForwardManyToOneDescriptor', 'partner_id': 'ForeignKeyDeferredAttribute'}
+descriptor base disponible: FieldDescriptor
+asignar por nombre   (company.country    = None): {'forward': 1, 'computed': 1} | error: None
+asignar por attname  (company.country_id = None): {'forward': 0, 'computed': 1} | error: None
+VEREDICTO la_asignacion_por_nombre_alcanza_nuestro_descriptor: OK
+limpieza del partner: EXC TypeError: argument of type 'NoneType' is not iterable
+EXIT=0

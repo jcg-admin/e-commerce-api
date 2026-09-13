@@ -1,0 +1,7 @@
+AbstractBase.__slots__   : ['env', '_ids', '_prefetch_ids']
+descriptor id en Sujeto  : IdFromIds
+instancia tiene __dict__ : True
+  _ids=()           -> .id = False
+  _ids=(7,)         -> .id = 7
+  _ids=(7, 18)      -> .id = ValueError: Expected singleton: ids=(7, 18)
+  fila de Django (sin _ids) -> .id = 99

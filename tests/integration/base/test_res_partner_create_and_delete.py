@@ -27,7 +27,7 @@ from django.contrib.auth import get_user_model
 from addons.base.models.res_country import ResCountry
 from addons.base.models.res_partner import ResPartner
 from exceptions import RedirectWarning, ValidationError
-from orm.environments import context_scope
+from orm.environments import context_scope, sudo
 from tools.mail import parse_contact_from_email
 
 User = get_user_model()
@@ -35,6 +35,16 @@ User = get_user_model()
 pytestmark = pytest.mark.integration
 
 PASSWORD = 'CrearYBorrar123!'
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 class TestParseContactFromEmail:

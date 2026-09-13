@@ -19,9 +19,8 @@ from django.db import models
 from orm.fields_company_dependent import make_dispatcher
 from orm.fields_nonstored import (
     _UNSET,
-    NonStored,
     annotate_related,
-    projection_or_none,
+    apply_source_defaults,
 )
 
 __all__ = ['Boolean', 'Json']
@@ -47,13 +46,13 @@ def Json(*args, store=_UNSET, related=None, **kwargs):
     """
     if store is not _UNSET:
         kwargs['store'] = store
-    projection, related_attrs = projection_or_none(related, kwargs)
-    if projection is not None:
-        return projection
-    if not related_attrs['store']:
-        field = NonStored(*args, **kwargs)
-    else:
-        field = models.JSONField(*args, **kwargs)
+    related_attrs = apply_source_defaults(related, kwargs)
+    #: El tipo se construye SIEMPRE, con columna o sin ella: ``store`` es un
+    #: atributo del campo, no una clase distinta
+    #: (``odoo19c: odoo/orm/fields.py:455``). La forma sin columna la resuelve
+    #: la costura —``contribute_to_class`` con ``private_only``— no el
+    #: enrutado de esta fachada.
+    field = models.JSONField(*args, **kwargs)
     return annotate_related(field, related, related_attrs)
 
 

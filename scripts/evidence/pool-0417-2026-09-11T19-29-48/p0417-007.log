@@ -1,0 +1,62 @@
+480:def apply_source_defaults(related, kwargs, many_to_many=False):
+481-    """El bloque ``attrs`` de la fuente: lo que ``compute=`` y ``related=``
+482-    implican sin declararse.
+483-
+484-    ≙ ``odoo19c: odoo/orm/fields.py:443-465`` — tres bloques secuenciales sobre
+485-    el mismo diccionario, en este orden: ``compute``, ``related``,
+486-    ``precompute``. Se portan los tres.
+487-
+488-    El de ``related``, verbatim::
+489-
+490-        if attrs.get('related'):
+491-            attrs['store'] = store = attrs.get('store', False)
+492-            attrs['compute_sudo'] = attrs.get('compute_sudo',
+493-                                              attrs.get('related_sudo', True))
+494-            attrs['copy'] = attrs.get('copy', False)
+495-            attrs['readonly'] = attrs.get('readonly', True)
+496-
+497-    Los otros dos viven en :func:`_apply_compute_block` y
+498-    :func:`_apply_precompute_block`, cada uno con su cita.
+499-
+500-    ``store`` es el atributo que explica la forma del corpus: por defecto es
+501-    ``True`` en un campo cualquiera y **``False``** tanto en un related como en
+502-    un calculado. Medido sobre 3330 archivos ``models/*.py`` de ``odoo19c``: de
+503-    las **3641** declaraciones con ``compute=``, **2368** no piden columna. El
+504-    reparto de related lo publica ``scripts/census_related_fields.py``.
+505-
+506-    **Se llamaba ``apply_related_defaults``.** El nombre describía la mitad que
+507-    portaba; con las tres, mentiría.
+508-    """
+509-    declared = _declared_source_vocabulary(kwargs, related)
+510-    attrs = {'related_declared': bool(related),
+511-             'declared_keys': declared['declared_keys']}
+512-
+513-    #: Orden de la fuente: ``compute``, luego ``related``, luego
+514-    #: ``precompute``. Importa: los dos primeros escriben ``store`` y el
+515-    #: segundo pisa al primero, que es lo que hace que un ``related=`` con
+516-    #: ``compute=`` acabe con la forma del related.
+517-    attrs = _apply_compute_block(declared, attrs)
+518-
+519-    if related:
+520-        related_sudo = (True if declared['related_sudo'] is _UNSET
+521-                        else declared['related_sudo'])
+522-        attrs.update({
+523-            'store': (False if declared['store'] is _UNSET
+524-                      else declared['store']),
+525-            'compute_sudo': (related_sudo if declared['compute_sudo'] is _UNSET
+526-                             else declared['compute_sudo']),
+527-            'copy': False if declared['copy'] is _UNSET else declared['copy'],
+528-            'readonly': (True if declared['readonly'] is _UNSET
+529-                         else declared['readonly']),
+530-        })
+531-    elif not declared['compute']:
+532-        attrs['store'] = (True if declared['store'] is _UNSET
+533-                          else declared['store'])
+534-        if declared['compute_sudo'] is not _UNSET:
+535-            attrs['compute_sudo'] = declared['compute_sudo']
+536-        if declared['readonly'] is not _UNSET:
+537-            attrs['readonly'] = declared['readonly']
+538-
+539-    attrs = _apply_precompute_block(declared, attrs, many_to_many)
+540-
+EXIT=0

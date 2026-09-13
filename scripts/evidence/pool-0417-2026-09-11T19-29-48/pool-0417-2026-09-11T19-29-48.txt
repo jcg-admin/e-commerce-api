@@ -1,0 +1,7 @@
+cd /home/user/kaupamex-api && python3 scripts/check_no_lazy_imports.py
+cd /home/user/kaupamex-api && python3 scripts/check_silent_oks.py
+cd /home/user/kaupamex-api && make check-canon
+cd /home/user/kaupamex-api && python3 scripts/check_identifier_language.py
+cd /home/user/kaupamex-api && grep -rn "NonStored" --include=*.py src addons scripts tests | grep -v "^tests/" | sort
+cd /home/user/kaupamex-api && grep -rn "make_dispatcher\|projection_or_none\|def Char\|def Json\|def Monetary" --include=*.py src/fields src/orm | sort
+cd /home/user/kaupamex-api && grep -n "def apply_source_defaults" -A 60 src/orm/fields_nonstored.py

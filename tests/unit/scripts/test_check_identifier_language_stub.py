@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-SCRIPTS = Path(__file__).resolve().parents[2] / 'scripts'
+SCRIPTS = Path(__file__).resolve().parents[3] / 'scripts'
 STUB = SCRIPTS / 'check_identifier_language.py'
 sys.path.insert(0, str(SCRIPTS))
 
@@ -34,12 +34,14 @@ class TestStubResolvesTheProvider:
         gate = stub.thyrox_gate()
         assert gate is not None
         assert gate.name == 'check_identifier_language.py'
-        assert gate.parent.name == 'gates'
+        # `src/verify/`, no `src/gates/`: el mecanismo se mudo al cerrar
+        # TASK-API-0301 y el stub ya lo apunta ahi (`:51`, `:55`).
+        assert gate.parent.name == 'verify'
 
     def test_a_declared_thyrox_root_wins(self, tmp_path, monkeypatch):
         """La variable declarada gana sobre el hermano — mismo criterio que
         el resto del multi-repo (`THYROX_ROOT` en `lint_agents.py`)."""
-        fake_gate = tmp_path / 'src' / 'gates' / 'check_identifier_language.py'
+        fake_gate = tmp_path / 'src' / 'verify' / 'check_identifier_language.py'
         fake_gate.parent.mkdir(parents=True)
         fake_gate.write_text('# stand-in\n')
         monkeypatch.setenv('THYROX_ROOT', str(tmp_path))

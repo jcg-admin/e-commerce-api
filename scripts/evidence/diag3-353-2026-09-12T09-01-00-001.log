@@ -1,0 +1,199 @@
+........................................................................ [  3%]
+.........F..........................FFF...............F.FF.............. [  6%]
+........................................................................ [  9%]
+..............................................F........F..........FF.... [ 13%]
+.............F.......................................................... [ 16%]
+........................................................................ [ 19%]
+........................................................................ [ 22%]
+........................................................................ [ 26%]
+.......................FFFF...FFF....................................... [ 29%]
+..................FFFFFF................................................ [ 32%]
+.....................................................F.................. [ 35%]
+................................................FF..........F........... [ 39%]
+...........................................................FFF.......... [ 42%]
+.........................F...F....F.................................F... [ 45%]
+........................................................................ [ 48%]
+........................................................................ [ 52%]
+........................................................................ [ 55%]
+........................................................................ [ 58%]
+.................................F...................................... [ 62%]
+...........................................F............................ [ 65%]
+............................................................F........... [ 68%]
+........................................................................ [ 71%]
+........................................................................ [ 75%]
+........................................................................ [ 78%]
+........................................................................ [ 81%]
+.................................................................FFFFF.. [ 84%]
+FF...................................................................... [ 88%]
+..................................................F...F..F.............F [ 91%]
+.......FFFFFFFFF.FF......F.F......F..............x...................... [ 94%]
+........................................................................ [ 97%]
+..............................................                           [100%]
+=================================== FAILURES ===================================
+/usr/lib/python3.12/contextlib.py:105: RecursionError: maximum recursion depth exceeded
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente Sin Correo.display_name
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente.display_name
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign Cliente Con Nombre.display_name
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign clave.uno.display_name
+/home/user/kaupamex-api/tests/unit/orm/test_display_name.py:120: AttributeError: __delete__
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign grupo #2.display_name
+/home/user/kaupamex-api/src/addons/base/models/res_partner.py:1222: django.core.exceptions.ValidationError: ['Another partner already has this barcode']
+/home/user/kaupamex-api/tests/unit/orm/test_field_search_method.py:97: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_field_search_method.py:180: AttributeError: <orm.fields.ComputedFieldDescriptor object at 0x7f50ce658f50> has no attribute 'search'
+/home/user/kaupamex-api/tests/unit/orm/test_field_search_method.py:189: AttributeError: <orm.fields.ComputedFieldDescriptor object at 0x7f50ce658f50> has no attribute 'search'
+/home/user/kaupamex-api/src/tools/sql.py:338: AttributeError: 'NoneType' object has no attribute 'isidentifier'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:143: AttributeError: 'ForeignKey' object has no attribute 'resolve_related'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:150: AttributeError: 'One2many' object has no attribute 'resolve_related'
+/home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:47: AssertionError: assert 'Banco original' == 'Banco corregido'
+/home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:53: AssertionError: assert 'ORIGMXMM' == 'FIXDMXMM'
+/home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:136: assert False
+/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py:206: AttributeError: 'NoneType' object has no attribute 'split'
+/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py:206: AttributeError: 'NoneType' object has no attribute 'split'
+/home/user/kaupamex-api/tests/unit/orm/test_bare_store_false_declaration.py:40: AssertionError: Html
+/home/user/kaupamex-api/tests/unit/orm/test_bare_store_false_declaration.py:40: AssertionError: Binary
+/home/user/kaupamex-api/tests/unit/orm/test_bare_store_false_declaration.py:40: AssertionError: Image
+/home/user/kaupamex-api/tests/unit/orm/test_bare_store_false_declaration.py:40: AssertionError: PropertiesDefinition
+/home/user/kaupamex-api/src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+/home/user/kaupamex-api/tests/unit/orm/test_bare_store_false_declaration.py:52: AssertionError: Properties
+/home/user/kaupamex-api/tests/unit/orm/test_company_dependent.py:38: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_company_dependent.py:326: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_company_dependent.py:329: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_compute_declaration.py:98: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_declared_source_vocabulary.py:178: AssertionError: compute ya no viaja en attrs: el control de no-estampado dejó de medirlo
+/home/user/kaupamex-api/tests/unit/orm/test_declared_source_vocabulary.py:178: AssertionError: inverse ya no viaja en attrs: el control de no-estampado dejó de medirlo
+/home/user/kaupamex-api/tests/unit/orm/test_declared_source_vocabulary.py:178: AssertionError: precompute ya no viaja en attrs: el control de no-estampado dejó de medirlo
+/home/user/kaupamex-api/tests/unit/orm/test_display_name.py:71: AssertionError: assert ['base.IrModu...ay_name', ...] == []
+/home/user/kaupamex-api/tests/unit/orm/test_display_name.py:103: assert False
+/home/user/kaupamex-api/tests/unit/orm/test_display_name.py:182: AssertionError: assert ['base.IrModu...ay_name', ...] == []
+/home/user/kaupamex-api/tests/unit/orm/test_domain_in_required.py:492: AssertionError: 122 discrepancias en base, se esperaban 27. Es evidencia fechada al portar #247; si cambia, se re-mide y se actualiza con su razón — no se relaja la aserción
+/home/user/kaupamex-api/tests/unit/orm/test_field_conversion.py:256: AssertionError: assert 2 == 0
+/home/user/kaupamex-api/tests/unit/orm/test_field_to_sql.py:100: AssertionError: assert {'created_at'...ield_id', ...} == {'created_at'... 'updated_at'}
+/home/user/kaupamex-api/tests/unit/orm/test_fields_char_signature_aliases.py:126: AssertionError: assert not True
+/home/user/kaupamex-api/src/orm/fields.py:1593: ValueError: Compute method failed to assign ComputeDispatchProbe object (None).label
+/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:123: AttributeError: 'CharField' object has no attribute '__get__'. Did you mean: '__ge__'?
+/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:123: AttributeError: 'CharField' object has no attribute '__get__'. Did you mean: '__ge__'?
+/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:130: AssertionError: CharField
+/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:137: AttributeError: 'CharField' object has no attribute '__get__'. Did you mean: '__ge__'?
+/home/user/kaupamex-api/src/orm/fields.py:1610: AttributeError: 'ComputeDispatchProbe' object has no attribute 'default_get'
+/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py:165: AttributeError: 'CharField' object has no attribute '__get__'. Did you mean: '__ge__'?
+/home/user/kaupamex-api/tests/unit/orm/test_related_field_declaration.py:40: AssertionError: CharField
+/home/user/kaupamex-api/tests/unit/orm/test_related_field_declaration.py:70: AssertionError: Boolean
+/home/user/kaupamex-api/tests/unit/orm/test_related_field_declaration.py:170: AssertionError: ResBank.country_code tomó columna
+/home/user/kaupamex-api/src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Many2one devolvió ForeignKey
+/home/user/kaupamex-api/src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: One2many devolvió One2many
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Binary devolvió Binary
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Image devolvió Image
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Html devolvió Html
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Monetary devolvió DecimalField
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Json devolvió JSONField
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:60: AssertionError: Properties devolvió Properties
+/home/user/kaupamex-api/src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:68: AttributeError: 'One2many' object has no attribute 'store'
+/home/user/kaupamex-api/tests/unit/orm/test_related_in_every_field_type.py:78: assert False
+/home/user/kaupamex-api/src/orm/fields_relational.py:530: TypeError: ManyToManyField.__init__() missing 1 required positional argument: 'to'
+/home/user/kaupamex-api/tests/unit/orm/test_related_write_reaches_the_far_end.py:179: AssertionError: assert False
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+tests/unit/orm/test_check_company.py: 1 warning
+tests/unit/orm/test_environments_pooling_and_flush.py: 1 warning
+tests/unit/orm/test_modified_engine.py: 12 warnings
+tests/unit/orm/test_one2many.py: 1 warning
+tests/unit/orm/test_registry_load_axis.py: 1 warning
+tests/unit/orm/test_related_field_declaration.py: 1 warning
+tests/unit/orm/test_compute_wiring.py: 2 warnings
+tests/unit/orm/test_field_triggers.py: 14 warnings
+tests/unit/orm/test_nonstored_compute_dispatch.py: 1 warning
+tests/unit/orm/test_registry_field_axis.py: 1 warning
+  /home/user/kaupamex-api/src/orm/fields.py:4068: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_code should be searchable. This is necessary to determine which records to recompute when base.ResCountry.code is modified. You should either make the field searchable, or simplify the field dependency.
+    warnings.warn(
+
+tests/unit/orm/test_check_company.py: 1 warning
+tests/unit/orm/test_environments_pooling_and_flush.py: 1 warning
+tests/unit/orm/test_modified_engine.py: 12 warnings
+tests/unit/orm/test_one2many.py: 1 warning
+tests/unit/orm/test_registry_load_axis.py: 1 warning
+tests/unit/orm/test_related_field_declaration.py: 1 warning
+tests/unit/orm/test_compute_wiring.py: 2 warnings
+tests/unit/orm/test_field_triggers.py: 14 warnings
+tests/unit/orm/test_nonstored_compute_dispatch.py: 1 warning
+tests/unit/orm/test_registry_field_axis.py: 1 warning
+  /home/user/kaupamex-api/src/orm/fields.py:4068: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_group_codes should be searchable. This is necessary to determine which records to recompute when base.ResCountry.country_group_codes is modified. You should either make the field searchable, or simplify the field dependency.
+    warnings.warn(
+
+tests/unit/orm/test_fields_related.py::TestResolveDepends::test_it_resolves_a_declared_chain_to_its_fields
+  /home/user/kaupamex-api/src/orm/fields.py:4042: UserWarning: Field base.ResPartner.name should be declared with recursive=True
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/orm/test_create.py::TestTheStepsOfTheSource::test_without_a_user_the_acl_denies
+FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_without_an_email_in_the_name_the_context_one_lands
+FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_with_an_email_in_the_name_the_guard_shields_the_context
+FAILED tests/unit/orm/test_default_get.py::TestNameCreateGuardIsObservable::test_name_create_writes_through_rec_name
+FAILED tests/unit/orm/test_display_name.py::TestTheFieldAdmitsAssignment::test_it_reads_the_computed_value
+FAILED tests/unit/orm/test_display_name.py::TestTheFieldAdmitsAssignment::test_deleting_it_falls_back_to_the_computed_value
+FAILED tests/unit/orm/test_display_name.py::TestTheComputeFallsBackToTheDottedName::test_a_model_without_rec_name_gets_the_dotted_form
+FAILED tests/unit/orm/test_field_lifecycle_methods.py::TestCompanyDependentFallback::test_it_returns_the_default_that_ir_default_holds
+FAILED tests/unit/orm/test_field_search_method.py::TestFieldResolutionReachesTheNonStored::test_the_non_stored_display_name_resolves
+FAILED tests/unit/orm/test_field_search_method.py::TestTheFallbackLadder::test_a_search_that_only_knows_equality_is_decomposed_for_in
+FAILED tests/unit/orm/test_field_search_method.py::TestTheFallbackLadder::test_a_search_that_supports_nothing_raises_naming_the_field
+FAILED tests/unit/orm/test_field_update_db.py::TestUpdateDb::test_a_field_without_column_is_left_alone
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestTheChainResolvesForEachShape::test_a_many2one_chain_gives_the_instance_at_the_end
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestTheChainResolvesForEachShape::test_a_one2many_chain_gives_the_manager_at_the_end
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestTheWriteReachesTheEndOfTheChain::test_writing_bank_name_renames_the_bank
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestTheWriteReachesTheEndOfTheChain::test_writing_bank_bic_reaches_the_bank_too
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestTheRelationalShape::test_writing_a_manager_end_uses_the_django_api
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestResCompanyBankIds::test_the_company_reads_the_accounts_of_its_partner
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestResCompanyBankIds::test_writing_from_the_company_reaches_the_partner
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_a_bare_store_false_has_no_column[Html]
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_a_bare_store_false_has_no_column[Binary]
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_a_bare_store_false_has_no_column[Image]
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_a_bare_store_false_has_no_column[PropertiesDefinition]
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_the_many_to_many_does_not_need_its_comodel
+FAILED tests/unit/orm/test_bare_store_false_declaration.py::TestTheRouterReadsTheResolvedStore::test_the_properties_field_has_no_column_either
+FAILED tests/unit/orm/test_company_dependent.py::TestDispatcher::test_store_false_is_still_non_stored
+FAILED tests/unit/orm/test_company_dependent.py::TestABareStoreFalseGivesANonStoredField::test_integer_with_store_false_is_non_stored
+FAILED tests/unit/orm/test_company_dependent.py::TestABareStoreFalseGivesANonStoredField::test_float_with_store_false_is_non_stored
+FAILED tests/unit/orm/test_compute_declaration.py::TestTheDefaultsFollowTheSource::test_a_computed_field_has_no_column_by_default
+FAILED tests/unit/orm/test_declared_source_vocabulary.py::TestTheClassDefaultIsNotStamped::test_the_universe_of_the_control_is_the_measured_one[compute]
+FAILED tests/unit/orm/test_declared_source_vocabulary.py::TestTheClassDefaultIsNotStamped::test_the_universe_of_the_control_is_the_measured_one[inverse]
+FAILED tests/unit/orm/test_declared_source_vocabulary.py::TestTheClassDefaultIsNotStamped::test_the_universe_of_the_control_is_the_measured_one[precompute]
+FAILED tests/unit/orm/test_display_name.py::TestUniversalAdoption::test_none_declares_it_as_something_other_than_the_field
+FAILED tests/unit/orm/test_display_name.py::TestTheFieldAdmitsAssignment::test_the_descriptor_is_the_one_of_the_mixin
+FAILED tests/unit/orm/test_display_name.py::TestTheGateDiscriminates::test_it_names_a_model_that_declares_display_name_as_a_property
+FAILED tests/unit/orm/test_domain_in_required.py::TestTheThirdConsumerAsksTheSameQuestion::test_the_count_over_a_fixed_population
+FAILED tests/unit/orm/test_field_conversion.py::test_column_order_of_a_field_without_column_is_zero
+FAILED tests/unit/orm/test_field_to_sql.py::TestFieldsRegistry::test_it_maps_concrete_field_names
+FAILED tests/unit/orm/test_fields_char_signature_aliases.py::TestTheAliasesComposeAsTheSourceDeclaresThem::test_size_and_store_false_do_not_meet
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestTheDeclaredComputeIsDispatched::test_the_read_returns_what_the_compute_produces
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestTheDeclaredComputeIsDispatched::test_the_value_tracks_the_compute_and_not_a_constant[uno]
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestTheDeclaredComputeIsDispatched::test_the_value_tracks_the_compute_and_not_a_constant[otro distinto]
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestTheDeclaredComputeIsDispatched::test_the_facade_routes_a_bare_compute_to_the_descriptor
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestTheDeclaredComputeIsDispatched::test_a_callable_compute_is_dispatched_too
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestWhatTheBranchDoesNotChange::test_a_field_without_compute_still_reads_its_default
+FAILED tests/unit/orm/test_nonstored_compute_dispatch.py::TestWhatTheBranchDoesNotChange::test_a_field_with_neither_reads_none
+FAILED tests/unit/orm/test_related_field_declaration.py::TestTheConstructorAcceptsTheDeclaration::test_a_related_is_not_stored_by_default
+FAILED tests/unit/orm/test_related_field_declaration.py::TestTheConstructorAcceptsTheDeclaration::test_the_dispatcher_family_accepts_it_too
+FAILED tests/unit/orm/test_related_field_declaration.py::TestTheFourDeclaredInResBank::test_none_of_the_four_took_a_column
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_the_constructor_takes_related[Many2many-arguments1]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Many2one-arguments0]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Many2many-arguments1]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[One2many-arguments2]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Binary-arguments3]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Image-arguments4]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Html-arguments5]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Monetary-arguments6]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Json-arguments7]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_without_store_the_carrier_is_the_non_stored_one[Properties-arguments8]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_the_four_defaults_of_the_source_apply[Many2many-arguments1]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestEveryConstructorAcceptsTheKey::test_the_four_defaults_of_the_source_apply[One2many-arguments2]
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestTheRelationalArgumentsBecomeOptional::test_many2one_needs_no_comodel_when_it_is_a_projection
+FAILED tests/unit/orm/test_related_in_every_field_type.py::TestTheRelationalArgumentsBecomeOptional::test_many2many_needs_no_comodel_either
+FAILED tests/unit/orm/test_related_write_reaches_the_far_end.py::TestResCompanyBankIds::test_it_took_no_column
+64 failed, 2141 passed, 1 xfailed, 72 warnings in 18.03s
+EXIT=1

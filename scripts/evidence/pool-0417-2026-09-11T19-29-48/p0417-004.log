@@ -1,0 +1,174 @@
+FAIL — 163 identificador(es) en español fuera del baseline:
+
+  src/_monkeypatches/pytz.py:86  Cuba   →  cuba
+  src/addons/base/data/res_lang_data.py:44  thousands_sep   →  sep
+  src/addons/base/models/ir_field_converters.py:116  mes   →  mes
+  src/addons/base/models/ir_field_converters.py:116  semana   →  semana
+  src/addons/base/models/ir_field_converters.py:117  hora   →  hora
+  src/addons/base/models/ir_field_converters.py:117  minuto   →  minuto
+  src/addons/base/models/ir_field_converters.py:117  segundo   →  segundo
+  src/addons/base/models/ir_sequence.py:396  doy   →  doy
+  src/scripts/generate_oja_csv.py:33  enseres   →  enseres
+  src/tools/barcode.py:103  sscc   →  sscc
+  tests/integration/base/test_ir_model_ondelete.py:144  x_nulo   →  nulo
+  tests/integration/base/test_ir_model_ondelete.py:153  x_cascada   →  cascada
+  tests/integration/base/test_ir_model_ondelete.py:161  x_defecto   →  defecto
+  tests/integration/base/test_ir_model_ondelete.py:170  x_valor   →  valor
+  tests/integration/base/test_ir_model_ondelete.py:184  x_invocable   →  invocable
+  tests/integration/base/test_ir_model_ondelete.py:212  x_a_mano   →  mano
+  tests/integration/base/test_ir_model_ondelete.py:224  x_intacto   →  intacto
+  tests/integration/base/test_ir_model_ondelete.py:243  x_uno   →  uno
+  tests/integration/base/test_ir_model_ondelete.py:246  x_dos   →  dos
+  tests/integration/base/test_res_bank.py:90  bbva   →  bbva
+  tests/integration/base/test_res_bank.py:91  banorte   →  banorte
+  tests/integration/base/test_res_groups_port.py:297  group_con_ajuste   →  ajuste, con
+  tests/integration/bus/test_bus_poll.py:48  texto   →  texto
+  tests/integration/config/test_site_settings_api.py:57  iva_rate   →  iva
+  tests/unit/base/test_descriptor_vocabulary_built_on_dtl.py:53  vacio   →  vacio
+  tests/unit/base/test_descriptor_vocabulary_built_on_dtl.py:251  uno   →  uno
+  tests/unit/base/test_descriptor_vocabulary_built_on_dtl.py:251  dos   →  dos
+  tests/unit/base/test_descriptor_vocabulary_built_on_dtl.py:264  fin   →  fin
+  tests/unit/base/test_field_converter_substrate.py:84  formatea   →  formatea
+  tests/unit/base/test_field_converter_substrate.py:84  hereda   →  hereda
+  tests/unit/base/test_field_converter_substrate.py:84  delega   →  delega
+  tests/unit/base/test_ir_default.py:212  campo_a   →  campo
+  tests/unit/base/test_ir_default.py:212  campo_b   →  campo
+  tests/unit/base/test_ir_default.py:218  mio   →  mio
+  tests/unit/base/test_ir_default.py:282  campo   →  campo
+  tests/unit/base/test_site_config_settings_form.py:75  iva_rate   →  iva
+  tests/unit/base/test_stack_inventory_without_qweb.py:77  TRAE   →  trae
+  tests/unit/base/test_stack_inventory_without_qweb.py:77  CONSTRUYE   →  construye
+  tests/unit/base/test_stack_inventory_without_qweb.py:77  EXCLUIDO   →  excluido
+  tests/unit/base/test_the_directives_land_where_the_split_says.py:117  divergencia   →  divergencia
+  tests/unit/base/test_the_directives_land_where_the_split_says.py:295  importe   →  importe
+  tests/unit/base/test_the_directives_land_where_the_split_says.py:208  nombre   →  nombre
+  tests/unit/base/test_the_directives_land_where_the_split_says.py:219  vacio   →  vacio
+  tests/unit/base/test_who_formats_on_the_paper_path.py:108  importe   →  importe
+  tests/unit/base/test_who_formats_on_the_paper_path.py:108  moneda   →  moneda
+  tests/unit/base/test_xml_template_substrate.py:111  pedido   →  pedido
+  tests/unit/base/test_xml_template_substrate.py:112  numero   →  numero
+  tests/unit/base/test_xml_template_substrate.py:112  emisor   →  emisor
+  tests/unit/base/test_xml_template_substrate.py:123  lineas   →  lineas
+  tests/unit/base/test_xml_template_substrate.py:112  nombre   →  nombre
+  tests/unit/base/test_xml_template_substrate.py:111  folio   →  folio
+  tests/unit/base/test_xml_template_substrate.py:111  empresa   →  empresa
+  tests/unit/base_geolocalize/test_base_geolocalize.py:174  sin   →  sin
+  tests/unit/bus/test_bus.py:146  texto   →  texto
+  tests/unit/hr/test_hr_departure_reason.py:96  Despedido   →  despedido
+  tests/unit/hr/test_hr_departure_reason.py:96  Renunció   →  renunci
+  tests/unit/hr/test_hr_departure_reason.py:96  Jubilado   →  jubilado
+  tests/unit/html_editor/test_tools.py:111  otro   →  otro
+  tests/unit/http_routing/test_lang_routing.py:38  en_US   →  en
+  tests/unit/orm/test_determine_inverse.py:116  llamado   →  llamado
+  tests/unit/orm/test_extension_tardia_por_nombre.py:202  campo_de_prueba   →  campo, de, prueba
+  tests/unit/orm/test_extension_tardia_por_nombre.py:204  metodo_de_prueba   →  de, metodo, prueba
+  tests/unit/orm/test_extension_tardia_por_nombre.py:205  propiedad_de_prueba   →  de, propiedad, prueba
+  tests/unit/orm/test_extension_tardia_por_nombre.py:223  campo_idempotente   →  campo
+  tests/unit/orm/test_fields_properties.py:364  sobra   →  sobra
+  tests/unit/orm/test_fields_properties.py:447  marca   →  marca
+  tests/unit/orm/test_fields_properties.py:221  inventada   →  inventada
+  tests/unit/orm/test_level_one_symbols.py:436  en_US   →  en
+  tests/unit/orm/test_registry_load_axis.py:156  clave   →  clave
+  tests/unit/scripts/test_graph_centrality.py:36  izq   →  izq
+  tests/unit/scripts/test_graph_centrality.py:37  puente   →  puente
+  tests/unit/scripts/test_graph_ordering.py:24  medio   →  medio
+  tests/unit/scripts/test_graph_ordering.py:25  hoja   →  hoja
+  tests/unit/scripts/test_graph_ordering.py:25  suelto   →  suelto
+  tests/unit/scripts/test_graph_ordering.py:38  libre   →  libre
+  tests/unit/tools/test_func_ported_symbols.py:85  nunca_declarado   →  declarado, nunca
+  tests/unit/tools/test_profiler.py:291  directiva   →  directiva
+  tests/unit/tools/test_safe_eval.py:221  entrada   →  entrada
+  tests/unit/web/test_models_onchange.py:156  no_existe   →  existe
+  tests/unit/website/test_website_configurator_feature.py:140  desconocida   →  desconocida
+  tests/unit/website/test_website_resolution.py:413  categoria   →  categoria
+  addons/account/controllers/serializers.py:67  codigo_error   →  codigo
+  addons/account/controllers/views.py:61  codigo_error   →  codigo
+  addons/account/models/chart_template.py:1205  caba   →  caba
+  addons/account/models/ir_actions_report.py:144  nombre   →  nombre
+  addons/account_check_printing/controllers/views.py:87  codigo_error   →  codigo
+  addons/account_debit_note/controllers/views.py:52  codigo_error   →  codigo
+  addons/account_edi_ubl_cii/models/account_edi_xml_cii_facturx.py:119  igic_tax_rate   →  igic
+  addons/account_edi_ubl_cii/models/account_edi_xml_ubl_xrechnung.py:37  bis3_de_supplier_telephone_required   →  de
+  addons/account_edi_ubl_cii/models/account_edi_xml_ubl_xrechnung.py:38  bis3_de_supplier_electronic_mail_required   →  de
+  addons/account_edi_ubl_cii/models/account_move.py:101  ubl_cii_xml_file   →  cii
+  addons/account_edi_ubl_cii/models/account_move.py:107  ubl_cii_xml_id   →  cii
+  addons/account_edi_ubl_cii/models/account_tax.py:173  ubl_cii_tax_category_code   →  cii
+  addons/account_edi_ubl_cii/models/account_tax.py:180  ubl_cii_tax_exemption_reason_code   →  cii
+  addons/account_qr_code_emv/const.py:26  MXN   →  mxn
+  addons/account_qr_code_emv/const.py:35  ZAR   →  zar
+  addons/account_qr_code_emv/const.py:50  EUR   →  eur
+  addons/account_tax_python/models/account_tax_extensions.py:95  nombre   →  nombre
+  addons/account_tax_python/tools/formula_utils.py:111  nombre   →  nombre
+  addons/account_test/controllers/views.py:100  codigo_error   →  codigo
+  addons/account_update_tax_tags/controllers/views.py:65  codigo_error   →  codigo
+  addons/authz/controllers/admin_main.py:175  codigo_error   →  codigo
+  addons/authz/controllers/main.py:150  codigo_error   →  codigo
+  addons/authz/exceptions.py:25  codigo_error   →  codigo
+  addons/authz_ldap/models/res_company_ldap.py:341  codigo_error   →  codigo
+  addons/authz_oauth/controllers/main.py:98  codigo_error   →  codigo
+  addons/authz_passkey/controllers/main.py:184  codigo_error   →  codigo
+  addons/authz_signup/controllers/main.py:75  codigo_error   →  codigo
+  addons/authz_timeout/controllers/main.py:140  codigo_error   →  codigo
+  addons/authz_timeout/controllers/serializers.py:41  codigo_error   →  codigo
+  addons/authz_timeout/exceptions.py:73  codigo_error   →  codigo
+  addons/authz_totp/controllers/main.py:216  codigo_error   →  codigo
+  addons/authz_totp_mail/controllers/main.py:78  codigo_error   →  codigo
+  addons/auto_backup/controllers/main.py:126  codigo_error   →  codigo
+  addons/base_address_extended/controllers/main.py:70  codigo_error   →  codigo
+  addons/bus/controllers/main.py:56  codigo_error   →  codigo
+  addons/crm/controllers/main.py:69  codigo_error   →  codigo
+  addons/delivery/controllers/main.py:272  codigo_error   →  codigo
+  addons/delivery/controllers/serializers.py:91  codigo_error   →  codigo
+  addons/delivery/controllers/webhooks.py:111  codigo_error   →  codigo
+  addons/helpdesk/controllers/main.py:620  codigo_error   →  codigo
+  addons/helpdesk/controllers/main.py:142  valores_validos   →  validos, valores
+  addons/helpdesk/controllers/serializers.py:60  codigo_error   →  codigo
+  addons/html_editor/controllers/main.py:1132  codigo_error   →  codigo
+  addons/l10n_mx/models/template_mx.py:198  cuenta115_01   →  cuenta
+  addons/loyalty/controllers/admin_main.py:209  codigo_error   →  codigo
+  addons/loyalty/controllers/referral.py:92  codigo_error   →  codigo
+  addons/mail/controllers/main.py:353  codigo_error   →  codigo
+  addons/mass_mailing/controllers/campaign.py:62  codigo_error   →  codigo
+  addons/mass_mailing/controllers/subscribers.py:98  codigo_error   →  codigo
+  addons/payment/controllers/portal.py:108  codigo_error   →  codigo
+  addons/payment_mercado_pago/gateway.py:187  oxxo   →  oxxo
+  addons/payment_mercado_pago/gateway.py:189  banamex   →  banamex
+  addons/payment_mercado_pago/gateway.py:190  serfin   →  serfin
+  addons/payment_mercado_pago/gateway.py:191  bancomer   →  bancomer
+  addons/payment_mercado_pago/gateway.py:192  clabe   →  clabe
+  addons/payment_mercado_pago/management/commands/mp_sandbox_charge.py:54  APRO   →  apro
+  addons/payment_mercado_pago/management/commands/mp_sandbox_charge.py:58  SECU   →  secu
+  addons/payment_paypal/gateway.py:305  auth_algo   →  algo
+  addons/portal/controllers/main.py:113  codigo_error   →  codigo
+  addons/rating/controllers/main.py:539  codigo_error   →  codigo
+  addons/sale/controllers/main.py:152  codigo_error   →  codigo
+  addons/sale_management/controllers/admin_views.py:146  codigo_error   →  codigo
+  addons/sale_subscription/controllers/views.py:131  codigo_error   →  codigo
+  addons/stock/models/stock_picking.py:2217  origen   →  origen
+  addons/stock/models/stock_picking.py:2217  nueva   →  nueva
+  addons/stock/models/stock_picking.py:2217  vieja   →  vieja
+  addons/web/controllers/binary.py:287  codigo_error   →  codigo
+  addons/web/controllers/database.py:228  codigo_error   →  codigo
+  addons/web/controllers/domain.py:117  codigo_error   →  codigo
+  addons/web/controllers/export.py:899  codigo_error   →  codigo
+  addons/web/controllers/pivot.py:89  codigo_error   →  codigo
+  addons/web/controllers/session.py:274  codigo_error   →  codigo
+  addons/web/controllers/vcard.py:89  codigo_error   →  codigo
+  addons/web/controllers/webmanifest.py:373  codigo_error   →  codigo
+  addons/website/controllers/main.py:144  codigo_error   →  codigo
+  addons/website/controllers/static_content.py:51  codigo_error   →  codigo
+  addons/website_mass_mailing/controllers/confirm.py:50  codigo_error   →  codigo
+  addons/website_mass_mailing/controllers/unsubscribe.py:52  codigo_error   →  codigo
+  addons/website_sale/controllers/cart.py:211  codigo_error   →  codigo
+  addons/website_sale/controllers/main.py:216  codigo_error   →  codigo
+  addons/website_sale/controllers/payment.py:90  codigo_error   →  codigo
+  addons/website_sale_wishlist/controllers/main.py:124  codigo_error   →  codigo
+
+Los identificadores van en INGLÉS; los comentarios y docstrings, en
+español. Traducir el nombre, no buscarle un sinónimo más evocador:
+  Modelo → Model (no Probe) · _Base se queda _Base.
+OJO: un modelo CONCRETO no puede empezar ni terminar en guion bajo
+  (Django models.E023). Lo vigila check_model_name_lookup.py.
+
+Medido: 2604 archivos. Deuda heredada congelada: 3531 (tarea #147).
+EXIT=1

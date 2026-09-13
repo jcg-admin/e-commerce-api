@@ -1,0 +1,4474 @@
+[
+  {
+    "file": "src/orm/checks.py",
+    "reference_file": null,
+    "classes": 1,
+    "functions": 8,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "SystemCheckSummary",
+      "__init__",
+      "_bootstrap_django",
+      "call_command_with_checks",
+      "collect_system_check_summary",
+      "dangling_fk_errors",
+      "main",
+      "render",
+      "run_checks_or_raise"
+    ]
+  },
+  {
+    "file": "src/orm/commands.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/commands.py",
+    "classes": 4,
+    "functions": 10,
+    "stubs": 0,
+    "reference_symbols": 8,
+    "matched": 8,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "create",
+        "ours": "create",
+        "line": 18,
+        "signature_reference": {
+          "params": [
+            "values"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "manager"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "values"
+        }
+      },
+      {
+        "reference": "update",
+        "ours": "update",
+        "line": 28,
+        "signature_reference": {
+          "params": [
+            "id",
+            "values"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "obj"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "values"
+        }
+      },
+      {
+        "reference": "delete",
+        "ours": "delete",
+        "line": 53,
+        "signature_reference": {
+          "params": [
+            "id"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "obj"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "unlink",
+        "ours": "unlink",
+        "line": 48,
+        "signature_reference": {
+          "params": [
+            "id"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "manager",
+            "obj"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "link",
+        "ours": "link",
+        "line": 23,
+        "signature_reference": {
+          "params": [
+            "id"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "manager",
+            "obj"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "clear",
+        "ours": "clear",
+        "line": 63,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "manager"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "set",
+        "ours": "set",
+        "line": 58,
+        "signature_reference": {
+          "params": [
+            "ids"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "manager",
+            "objs"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "ManyToManyLink",
+      "ManyToManySet",
+      "One2manyChild",
+      "__eq__",
+      "__init__",
+      "__repr__"
+    ]
+  },
+  {
+    "file": "src/orm/decorators.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/decorators.py",
+    "classes": 0,
+    "functions": 13,
+    "stubs": 0,
+    "reference_symbols": 11,
+    "matched": 11,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "constrains",
+        "ours": "constrains",
+        "line": 71,
+        "signature_reference": {
+          "params": [
+            "func"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "depends",
+        "ours": "depends",
+        "line": 41,
+        "signature_reference": {
+          "params": [
+            "func"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_mark",
+      "returns"
+    ]
+  },
+  {
+    "file": "src/orm/domains.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/domains.py",
+    "classes": 9,
+    "functions": 142,
+    "stubs": 5,
+    "reference_symbols": 88,
+    "matched": 83,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "__eq__",
+        "ours": "__eq__",
+        "line": 392
+      },
+      {
+        "reference": "__hash__",
+        "ours": "__hash__",
+        "line": 395
+      },
+      {
+        "reference": "_as_predicate",
+        "ours": "_as_predicate",
+        "line": 467
+      },
+      {
+        "reference": "INVERSE",
+        "ours": "INVERSE",
+        "line": 667
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "custom",
+        "ours": "custom",
+        "line": 331,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [
+            "to_sql",
+            "predicate"
+          ],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [
+            "to_q",
+            "predicate"
+          ],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "optimize",
+        "ours": "optimize",
+        "line": 427,
+        "signature_reference": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "optimize_full",
+        "ours": "optimize_full",
+        "line": 441,
+        "signature_reference": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_value_to_date",
+        "ours": "_value_to_date",
+        "line": 1838,
+        "signature_reference": {
+          "params": [
+            "value",
+            "env",
+            "iso_only"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value",
+            "iso_only"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_value_to_datetime",
+        "ours": "_value_to_datetime",
+        "line": 1918,
+        "signature_reference": {
+          "params": [
+            "value",
+            "env",
+            "iso_only"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value",
+            "iso_only"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "NOT",
+      "_any_to_q",
+      "_block_matches_field_types",
+      "_django_path",
+      "_field_search_related",
+      "_non_stored_field",
+      "_normalized",
+      "_to_q",
+      "to_q"
+    ]
+  },
+  {
+    "file": "src/orm/environments.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/environments.py",
+    "classes": 4,
+    "functions": 113,
+    "stubs": 0,
+    "reference_symbols": 78,
+    "matched": 78,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "__new__",
+        "ours": "__new__",
+        "line": 809,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "uid",
+            "context",
+            "su"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cr",
+            "uid",
+            "context",
+            "su"
+          ],
+          "has_default": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "is_protected",
+        "ours": "is_protected",
+        "line": 1351,
+        "signature_reference": {
+          "params": [
+            "field",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "record_id"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "protecting",
+        "ours": "protecting",
+        "line": 1366,
+        "signature_reference": {
+          "params": [
+            "what",
+            "records"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "fields",
+            "records"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "is_to_compute",
+        "ours": "is_to_compute",
+        "line": 1395,
+        "signature_reference": {
+          "params": [
+            "field",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "record_id"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "not_to_compute",
+        "ours": "not_to_compute",
+        "line": 1399,
+        "signature_reference": {
+          "params": [
+            "field",
+            "records"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "record_ids"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "add_to_compute",
+        "ours": "add_to_compute",
+        "line": 1404,
+        "signature_reference": {
+          "params": [
+            "field",
+            "records"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "record_ids"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "remove_to_compute",
+        "ours": "remove_to_compute",
+        "line": 1408,
+        "signature_reference": {
+          "params": [
+            "field",
+            "records"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "record_ids"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 434,
+        "signature_reference": {
+          "params": [
+            "registry"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "invalidate_field_data",
+        "ours": "invalidate_field_data",
+        "line": 483,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "spec"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "__enter__",
+      "__exit__",
+      "_clear_connection_transaction",
+      "_connection_transaction",
+      "_discard_connection_transaction",
+      "_live_envs",
+      "_wrap_cursor_cut",
+      "activate_companies",
+      "company_id",
+      "company_scope",
+      "context",
+      "context_scope",
+      "cr",
+      "env",
+      "get_context",
+      "get_current_companies",
+      "get_current_company",
+      "get_current_tz",
+      "get_current_uid",
+      "get_current_user",
+      "get_transaction",
+      "is_su",
+      "set_current_company",
+      "set_current_uid",
+      "su",
+      "sudo",
+      "transaction",
+      "transaction_scope",
+      "uid",
+      "user_scope"
+    ]
+  },
+  {
+    "file": "src/orm/fields.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields.py",
+    "classes": 5,
+    "functions": 100,
+    "stubs": 1,
+    "reference_symbols": 75,
+    "matched": 62,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "setup_nonrelated",
+        "ours": "_field_setup_nonrelated",
+        "line": 3016
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 2038,
+        "signature_reference": {
+          "params": [
+            "string"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "kwargs"
+        },
+        "signature_ours": {
+          "params": [
+            "prefix",
+            "attribute_name"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "resolve_depends",
+        "ours": "_field_resolve_depends",
+        "line": 3347,
+        "signature_reference": {
+          "params": [
+            "registry"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "registry_module"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_to_display_name",
+        "ours": "convert_to_display_name",
+        "line": 452,
+        "signature_reference": {
+          "params": [
+            "value",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "value",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__get__",
+        "ours": "__get__",
+        "line": 1274,
+        "signature_reference": {
+          "params": [
+            "record",
+            "owner"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "instance",
+            "cls"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__set__",
+        "ours": "__set__",
+        "line": 1421,
+        "signature_reference": {
+          "params": [
+            "records",
+            "value"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "instance",
+            "value"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "determine_inverse",
+        "ours": "determine_inverse",
+        "line": 3583,
+        "signature_reference": {
+          "params": [
+            "records"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "records"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "determine_domain",
+        "ours": "determine_domain",
+        "line": 3606,
+        "signature_reference": {
+          "params": [
+            "records",
+            "operator",
+            "value"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field",
+            "records",
+            "operator",
+            "value"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "FieldDescriptor",
+      "SqlILike",
+      "SqlLike",
+      "_ComputedUnlessAssigned",
+      "_DerivedFromPrefix",
+      "_cache_computed_values",
+      "_char_column_type",
+      "_comodel_of",
+      "_expression_getter",
+      "_field_condition_to_q",
+      "_field_condition_to_q_body",
+      "_field_condition_to_q_company",
+      "_field_contribute_to_class",
+      "_field_convert_to_display_name",
+      "_field_deconstruct_without_copy",
+      "_field_get_db_prep_save",
+      "_field_init_with_copy",
+      "_field_setup_attrs",
+      "_field_to_sql_expression",
+      "_filter_function",
+      "_filter_not_equal_ids",
+      "_has_context_buckets",
+      "_install_field_descriptor",
+      "_invoke_compute_method",
+      "_is_many_to_one",
+      "_is_one_to_many",
+      "_is_persisted",
+      "_like_regex_parts",
+      "_model_init_marking_the_load",
+      "_type_key",
+      "_value_left_by_compute",
+      "as_sql",
+      "condition_to_q",
+      "falsy_value",
+      "global_seq",
+      "install_class_attribute_overrides",
+      "type_for",
+      "walk_related_chain"
+    ]
+  },
+  {
+    "file": "src/orm/fields_binary.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_binary.py",
+    "classes": 2,
+    "functions": 6,
+    "stubs": 0,
+    "reference_symbols": 17,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "__init__",
+      "__new__",
+      "deconstruct"
+    ]
+  },
+  {
+    "file": "src/orm/fields_company_dependent.py",
+    "reference_file": null,
+    "classes": 2,
+    "functions": 17,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "CompanyDependent",
+      "_CompanyDependentAttribute",
+      "__get__",
+      "__init__",
+      "__set__",
+      "contribute_to_class",
+      "deconstruct",
+      "get_attname",
+      "get_company_dependent_fallback",
+      "get_company_dependent_fallback_sql",
+      "get_prep_value",
+      "make_dispatcher",
+      "pre_save",
+      "raw_company_values",
+      "set_attributes_from_name",
+      "set_for_company",
+      "sql_cast_type",
+      "value_for_current_company",
+      "value_from_object"
+    ]
+  },
+  {
+    "file": "src/orm/fields_misc.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_misc.py",
+    "classes": 0,
+    "functions": 4,
+    "stubs": 0,
+    "reference_symbols": 13,
+    "matched": 1,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "Json",
+        "ours": "Json",
+        "line": 30,
+        "signature_reference": null,
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "store",
+            "related"
+          ],
+          "kwarg": "kwargs"
+        }
+      }
+    ],
+    "ours_only": [
+      "_boolean_convert_to_column",
+      "_id_convert_to_column",
+      "_json_convert_to_column"
+    ]
+  },
+  {
+    "file": "src/orm/fields_nonstored.py",
+    "reference_file": null,
+    "classes": 2,
+    "functions": 23,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "NonStored",
+      "_RegistryCache",
+      "__delete__",
+      "__get__",
+      "__init__",
+      "__set__",
+      "__set_name__",
+      "_apply_compute_block",
+      "_apply_precompute_block",
+      "_bind_search_related",
+      "_declared_source_vocabulary",
+      "annotate_related",
+      "apply_source_defaults",
+      "contribute_to_class",
+      "get",
+      "invalidate",
+      "inverse_related",
+      "non_stored_fields",
+      "projection_or_none",
+      "put",
+      "resolve_default",
+      "resolve_related",
+      "traverse_related",
+      "update_db"
+    ]
+  },
+  {
+    "file": "src/orm/fields_numeric.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_numeric.py",
+    "classes": 0,
+    "functions": 4,
+    "stubs": 0,
+    "reference_symbols": 24,
+    "matched": 1,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "Monetary",
+        "ours": "Monetary",
+        "line": 57,
+        "signature_reference": null,
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "store",
+            "help",
+            "related"
+          ],
+          "kwarg": "kwargs"
+        }
+      }
+    ],
+    "ours_only": [
+      "_decimal_convert_to_column",
+      "_float_convert_to_column",
+      "_integer_convert_to_column"
+    ]
+  },
+  {
+    "file": "src/orm/fields_properties.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_properties.py",
+    "classes": 3,
+    "functions": 50,
+    "stubs": 0,
+    "reference_symbols": 37,
+    "matched": 36,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "_setup_definition_attrs",
+        "ours": "_setup_definition_attrs",
+        "line": 187,
+        "signature_reference": {
+          "params": [
+            "model_class"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "model_class"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_to_read_multi",
+        "ours": "convert_to_read_multi",
+        "line": 636,
+        "signature_reference": {
+          "params": [
+            "values",
+            "records",
+            "use_display_name"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values",
+            "records",
+            "use_display_name",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_get_res_ids_per_model",
+        "ours": "_get_res_ids_per_model",
+        "line": 688,
+        "signature_reference": {
+          "params": [
+            "env",
+            "values_list"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values_list",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_add_default_values",
+        "ours": "_add_default_values",
+        "line": 467,
+        "signature_reference": {
+          "params": [
+            "env",
+            "values"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values",
+            "model",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_add_display_name",
+        "ours": "_add_display_name",
+        "line": 731,
+        "signature_reference": {
+          "params": [
+            "values_list",
+            "env",
+            "value_keys"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values_list",
+            "using",
+            "value_keys"
+          ],
+          "has_default": [
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_parse_json_types",
+        "ours": "_parse_json_types",
+        "line": 776,
+        "signature_reference": {
+          "params": [
+            "values_list",
+            "env",
+            "res_ids_per_model"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values_list",
+            "res_ids_per_model"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 183,
+        "signature_reference": {
+          "params": [
+            "values",
+            "field",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "definition",
+            "store"
+          ],
+          "kwarg": "kwargs"
+        }
+      },
+      {
+        "reference": "_validate_properties_definition",
+        "ours": "_validate_properties_definition",
+        "line": 1307,
+        "signature_reference": {
+          "params": [
+            "properties_definition",
+            "env"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "properties_definition",
+            "record"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "__new__",
+      "_model_of",
+      "_write_cache",
+      "condition_to_q",
+      "contribute_to_class",
+      "deconstruct",
+      "get_prep_value",
+      "pre_save"
+    ]
+  },
+  {
+    "file": "src/orm/fields_reference.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_reference.py",
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 10,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/orm/fields_relational.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_relational.py",
+    "classes": 3,
+    "functions": 33,
+    "stubs": 2,
+    "reference_symbols": 50,
+    "matched": 11,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "__get__",
+        "ours": "__get__",
+        "line": 361,
+        "signature_reference": {
+          "params": [
+            "records",
+            "owner"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "instance",
+            "owner"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "get_comodel_domain",
+        "ours": "get_comodel_domain",
+        "line": 280,
+        "signature_reference": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "model"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "Many2one",
+        "ours": "Many2one",
+        "line": 540,
+        "signature_reference": null,
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "store",
+            "company_dependent",
+            "check_company",
+            "related"
+          ],
+          "kwarg": "kwargs"
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 224,
+        "signature_reference": {
+          "params": [
+            "comodel_name",
+            "string"
+          ],
+          "has_default": [
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "kwargs"
+        },
+        "signature_ours": {
+          "params": [
+            "comodel_name",
+            "inverse_name"
+          ],
+          "has_default": [
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [
+            "copy",
+            "string",
+            "domain",
+            "context",
+            "bypass_search_access",
+            "related"
+          ],
+          "kwarg": "_ignored"
+        }
+      },
+      {
+        "reference": "_additional_domain",
+        "ours": "_additional_domain",
+        "line": 261,
+        "signature_reference": {
+          "params": [
+            "env"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "env"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "Many2many",
+        "ours": "Many2many",
+        "line": 484,
+        "signature_reference": null,
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "check_company",
+            "store",
+            "related"
+          ],
+          "kwarg": "kwargs"
+        }
+      }
+    ],
+    "ours_only": [
+      "__new__",
+      "__repr__",
+      "__set__",
+      "__set_name__",
+      "_comodel_label",
+      "_deletes_the_leftover",
+      "_description_relation_field",
+      "_inverse_field",
+      "_many2one_convert_to_cache",
+      "_many2one_convert_to_column",
+      "_many2one_convert_to_display_name",
+      "_many2one_join",
+      "_many2one_update_inverse",
+      "_mark_check_company",
+      "_relational_multi_convert_to_display_name",
+      "_relational_multi_update_cache",
+      "_relational_multi_update_inverse",
+      "_relational_update_inverse",
+      "bypass_search_access",
+      "contribute_to_class",
+      "single_record_id"
+    ]
+  },
+  {
+    "file": "src/orm/fields_selection.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_selection.py",
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 13,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/orm/fields_temporal.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_temporal.py",
+    "classes": 0,
+    "functions": 21,
+    "stubs": 0,
+    "reference_symbols": 17,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_attach_base_date",
+      "_base_date_convert_to_column",
+      "_base_date_expression_getter",
+      "_base_date_expression_property_getter",
+      "_base_date_property_to_sql",
+      "_date_context_today",
+      "_date_convert_to_cache",
+      "_date_convert_to_display_name",
+      "_date_convert_to_export",
+      "_date_to_date",
+      "_date_to_string",
+      "_date_today",
+      "_datetime_context_timestamp",
+      "_datetime_convert_to_cache",
+      "_datetime_convert_to_display_name",
+      "_datetime_convert_to_export",
+      "_datetime_expression_getter",
+      "_datetime_now",
+      "_datetime_to_datetime",
+      "_datetime_to_string",
+      "_datetime_today"
+    ]
+  },
+  {
+    "file": "src/orm/fields_textual.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/fields_textual.py",
+    "classes": 2,
+    "functions": 16,
+    "stubs": 0,
+    "reference_symbols": 45,
+    "matched": 12,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 104,
+        "signature_reference": {
+          "params": [
+            "string"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "kwargs"
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "company_dependent",
+            "related",
+            "store"
+          ],
+          "kwarg": "kwargs"
+        }
+      },
+      {
+        "reference": "Char",
+        "ours": "Char",
+        "line": 123,
+        "signature_reference": null,
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": "args",
+          "kwonly": [
+            "store",
+            "required",
+            "translate",
+            "help",
+            "size",
+            "company_dependent",
+            "related"
+          ],
+          "kwarg": "kwargs"
+        }
+      }
+    ],
+    "ours_only": [
+      "__new__",
+      "_falls_back",
+      "_textual_convert_to_cache",
+      "_textual_convert_to_column",
+      "deconstruct"
+    ]
+  },
+  {
+    "file": "src/orm/identifiers.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/identifiers.py",
+    "classes": 1,
+    "functions": 7,
+    "stubs": 0,
+    "reference_symbols": 8,
+    "matched": 8,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/orm/inherits.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 3,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_delegable_field_names",
+      "apply_inherits",
+      "ensure_inherits"
+    ]
+  },
+  {
+    "file": "src/orm/method_chain.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 8,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_already_in_chain",
+      "_previous_of",
+      "chain_method",
+      "extend_list",
+      "first_truthy",
+      "keep_previous",
+      "merge_dict",
+      "wrap_method"
+    ]
+  },
+  {
+    "file": "src/orm/model_classes.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/model_classes.py",
+    "classes": 0,
+    "functions": 38,
+    "stubs": 0,
+    "reference_symbols": 16,
+    "matched": 9,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_adopt_access_manager_on_prepared",
+      "_adopt_base_url_on_prepared",
+      "_adopt_display_name_on_prepared",
+      "_inherits_field",
+      "_init_class_attributes_on_prepared",
+      "_is_computed_surface",
+      "_resolve_rec_name_on_prepared",
+      "add_field_if_absent",
+      "add_meta_index",
+      "adopt_access_manager",
+      "adopt_base_url",
+      "adopt_display_name",
+      "check_model_bases",
+      "check_ondelete_policies",
+      "ensure_access_managers",
+      "ensure_base_urls",
+      "ensure_display_names",
+      "ensure_model_class_attributes",
+      "ensure_rec_names",
+      "extend_model",
+      "extend_property",
+      "extend_selection_choices",
+      "inherits_children",
+      "inherits_of",
+      "is_abstract",
+      "is_transient",
+      "model_key",
+      "parent_name_of",
+      "resolve_rec_name"
+    ]
+  },
+  {
+    "file": "src/orm/models.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/models.py",
+    "classes": 13,
+    "functions": 114,
+    "stubs": 2,
+    "reference_symbols": 202,
+    "matched": 71,
+    "hole": [
+      {
+        "reference": "copy_translations",
+        "ours": "copy_translations",
+        "line": 1312
+      }
+    ],
+    "fidelity": [
+      {
+        "reference": "_validate_properties_definition",
+        "ours": "_validate_properties_definition",
+        "line": 1971
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 3885,
+        "signature_reference": {
+          "params": [
+            "name",
+            "bases",
+            "attrs"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "record"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "load",
+        "ours": "load",
+        "line": 2465,
+        "signature_reference": {
+          "params": [
+            "fields",
+            "data"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "fields",
+            "data",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "check_access",
+        "ours": "check_access",
+        "line": 256,
+        "signature_reference": {
+          "params": [
+            "operation"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "operation",
+            "user"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "has_access",
+        "ours": "has_access",
+        "line": 269,
+        "signature_reference": {
+          "params": [
+            "operation"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "operation",
+            "user"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_filtered_access",
+        "ours": "_filtered_access",
+        "line": 273,
+        "signature_reference": {
+          "params": [
+            "operation"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "operation",
+            "user"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_check_access",
+        "ours": "_check_access",
+        "line": 223,
+        "signature_reference": {
+          "params": [
+            "operation"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "operation",
+            "user"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "write",
+        "ours": "write",
+        "line": 2057,
+        "signature_reference": {
+          "params": [
+            "vals"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "values"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "create",
+        "ours": "create",
+        "line": 678,
+        "signature_reference": {
+          "params": [
+            "vals_list"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": "values"
+        }
+      },
+      {
+        "reference": "_add_precomputed_values",
+        "ours": "_add_precomputed_values",
+        "line": 3715,
+        "signature_reference": {
+          "params": [
+            "vals_list"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_load_records_create",
+        "ours": "_load_records_create",
+        "line": 2247,
+        "signature_reference": {
+          "params": [
+            "vals_list"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "vals_list",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_load_records",
+        "ours": "_load_records",
+        "line": 2659,
+        "signature_reference": {
+          "params": [
+            "data_list",
+            "update"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "data_list",
+            "update",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "copy_data",
+        "ours": "copy_data",
+        "line": 1224,
+        "signature_reference": {
+          "params": [
+            "default"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "default",
+            "seen"
+          ],
+          "has_default": [
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_get_redirect_suggested_company",
+        "ours": "_get_redirect_suggested_company",
+        "line": 287,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "user"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__contains__",
+        "ours": "__contains__",
+        "line": 3890,
+        "signature_reference": {
+          "params": [
+            "item"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "name"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__getitem__",
+        "ours": "__getitem__",
+        "line": 3896,
+        "signature_reference": {
+          "params": [
+            "key"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "name"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "get_columns_from_sql_diagnostics",
+        "ours": "get_columns_from_sql_diagnostics",
+        "line": 173,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "diagnostics"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [
+            "check_registry"
+          ],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "connection",
+            "diagnostics"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [
+            "check_registry"
+          ],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "AbstractModel",
+      "AccessQuerySet",
+      "BaseUrlMixin",
+      "CheckCompanyMixin",
+      "CopyMixin",
+      "DefaultGetMixin",
+      "DisplayNameMixin",
+      "FieldSqlMixin",
+      "OrderMixin",
+      "OriginMixin",
+      "RecordLoaderMixin",
+      "_acting_user",
+      "_allowed_groups_message",
+      "_ancestor_company_ids",
+      "_attach_explicit_values",
+      "_check_company_fields",
+      "_company_ids",
+      "_company_inconsistencies",
+      "_company_inconsistency_message",
+      "_copy_blacklist",
+      "_corecords",
+      "_create_row_from_values",
+      "_delegated_origin",
+      "_display_name_default",
+      "_explicit_value_names",
+      "_field_names",
+      "_first_field_name",
+      "_flush_m2m",
+      "_group_written_inverses",
+      "_inherits_parent",
+      "_inverse_accessor",
+      "_is_plumbing_default",
+      "_load_records_apply_relational",
+      "_load_records_coerce_vals",
+      "_load_records_split_relational",
+      "_model_description",
+      "_model_getitem",
+      "_model_of_records",
+      "_model_setitem",
+      "_new_records",
+      "_precomputable_fields",
+      "_records_pointing_at",
+      "_run_ondelete_checks",
+      "_run_ondelete_on_delete",
+      "_run_precompute",
+      "_run_precompute_field",
+      "_stack_explicit_values",
+      "_traverse_inverse",
+      "_write_rows_skipping_save",
+      "copy_children",
+      "save",
+      "search_display_name"
+    ]
+  },
+  {
+    "file": "src/orm/models_transient.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/models_transient.py",
+    "classes": 1,
+    "functions": 3,
+    "stubs": 0,
+    "reference_symbols": 4,
+    "matched": 4,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/orm/registry.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/registry.py",
+    "classes": 12,
+    "functions": 132,
+    "stubs": 2,
+    "reference_symbols": 56,
+    "matched": 54,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "acquire",
+        "ours": "acquire",
+        "line": 1431
+      },
+      {
+        "reference": "release",
+        "ours": "release",
+        "line": 1434
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "__getitem__",
+        "ours": "__getitem__",
+        "line": 694,
+        "signature_reference": {
+          "params": [
+            "model_name"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "field"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "get_trigger_tree",
+        "ours": "get_trigger_tree",
+        "line": 1243,
+        "signature_reference": {
+          "params": [
+            "fields",
+            "select"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "fields_changed",
+            "select"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 633,
+        "signature_reference": {
+          "params": [
+            "root"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": "args",
+          "kwonly": [],
+          "kwarg": "kwargs"
+        },
+        "signature_ours": {
+          "params": [
+            "marker"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_ComputedGrouper",
+      "_ConstraintMethods",
+      "_DerivedCollector",
+      "_DerivedContextCollector",
+      "_FieldInversesProxy",
+      "_MarkedMethodCollector",
+      "_OnchangeMethods",
+      "_OndeleteMethods",
+      "_TriggerRegistry",
+      "__call__",
+      "__contains__",
+      "_alias",
+      "_build",
+      "_build_inverses",
+      "_build_triggers",
+      "_children_of",
+      "_declared_by_the_field",
+      "_ensure_seeded",
+      "_has_ordinary_schema",
+      "_index_shape",
+      "_is_relational",
+      "_is_round_trip",
+      "_marked",
+      "_reflect_all",
+      "_reflect_foreign_key",
+      "_register",
+      "_register_name",
+      "_resolve",
+      "_warn_about_declared_names",
+      "_warn_inconsistencies",
+      "_wrap",
+      "cache_invalidated_names",
+      "cache_of",
+      "check_table_matches_name",
+      "clear",
+      "clear_field_depends",
+      "clear_marked_methods",
+      "discard_triggers",
+      "field_triggers",
+      "has_inverses",
+      "has_trigram",
+      "has_unaccent",
+      "is_not_null",
+      "many2one_company_dependents",
+      "model_by_key",
+      "model_by_name",
+      "name_of",
+      "not_null_fields",
+      "pop",
+      "register_abstract",
+      "registrants_without_table",
+      "reset_invalidation_record",
+      "resolve_model_key",
+      "signaling_table_names",
+      "unaccent",
+      "unaccent_python"
+    ]
+  },
+  {
+    "file": "src/orm/routers.py",
+    "reference_file": null,
+    "classes": 2,
+    "functions": 9,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "CompanyContextRequired",
+      "CompanyDatabaseRouter",
+      "_has_company_databases",
+      "_is_control_plane",
+      "_route",
+      "_target",
+      "allow_migrate",
+      "allow_relation",
+      "company_db_alias",
+      "db_for_read",
+      "db_for_write"
+    ]
+  },
+  {
+    "file": "src/orm/table_objects.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/table_objects.py",
+    "classes": 6,
+    "functions": 33,
+    "stubs": 4,
+    "reference_symbols": 11,
+    "matched": 9,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "get_definition",
+        "ours": "get_definition",
+        "line": 211
+      },
+      {
+        "reference": "apply_to_database",
+        "ours": "apply_to_database",
+        "line": 236
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 82,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "definition"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [
+            "name",
+            "violation_error_message"
+          ],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "RawConstraint",
+      "RawIndex",
+      "__eq__",
+      "__hash__",
+      "__new__",
+      "__repr__",
+      "_raw_definition",
+      "_table_of",
+      "constraint_sql",
+      "create_sql",
+      "deconstruct",
+      "remove_sql",
+      "to_django",
+      "validate"
+    ]
+  },
+  {
+    "file": "src/orm/types.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/types.py",
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/orm/utils.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/orm/utils.py",
+    "classes": 2,
+    "functions": 16,
+    "stubs": 0,
+    "reference_symbols": 9,
+    "matched": 9,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "FieldRegistryDescriptor",
+      "__get__",
+      "as_record_list",
+      "browse",
+      "display_name_of",
+      "model_field_registry",
+      "model_of",
+      "model_of_field",
+      "record_ids"
+    ]
+  },
+  {
+    "file": "src/tools/_vendor/useragents.py",
+    "reference_file": null,
+    "classes": 1,
+    "functions": 3,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "UserAgentParser",
+      "__call__",
+      "__init__",
+      "parse_user_agent"
+    ]
+  },
+  {
+    "file": "src/tools/barcode.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/barcode.py",
+    "classes": 0,
+    "functions": 5,
+    "stubs": 0,
+    "reference_symbols": 5,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "image_to_png",
+      "render_barcode_image",
+      "render_barcode_png"
+    ]
+  },
+  {
+    "file": "src/tools/cache.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/cache.py",
+    "classes": 3,
+    "functions": 16,
+    "stubs": 0,
+    "reference_symbols": 14,
+    "matched": 14,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "log_ormcache_stats",
+        "ours": "log_ormcache_stats",
+        "line": 239,
+        "signature_reference": {
+          "params": [
+            "sig",
+            "frame"
+          ],
+          "has_default": [
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [],
+          "has_default": [],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_get_context",
+      "_tx_lookups"
+    ]
+  },
+  {
+    "file": "src/tools/config.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/config.py",
+    "classes": 0,
+    "functions": 11,
+    "stubs": 0,
+    "reference_symbols": 56,
+    "matched": 1,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "bin_path",
+      "database_whitelist",
+      "db_encoding",
+      "db_template",
+      "dbfilter",
+      "dev_mode",
+      "maintenance_db",
+      "management_enabled",
+      "pg_path",
+      "test_enable"
+    ]
+  },
+  {
+    "file": "src/tools/constants.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/constants.py",
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/convert.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/convert.py",
+    "classes": 2,
+    "functions": 33,
+    "stubs": 0,
+    "reference_symbols": 28,
+    "matched": 26,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "_get_eval_context",
+        "ours": "_get_eval_context",
+        "line": 156,
+        "signature_reference": {
+          "params": [
+            "env",
+            "model_str"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "model_str"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "_eval_xml",
+        "ours": "_eval_xml",
+        "line": 196,
+        "signature_reference": {
+          "params": [
+            "node",
+            "env"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "node",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 396,
+        "signature_reference": {
+          "params": [
+            "env",
+            "module",
+            "idref",
+            "mode",
+            "noupdate",
+            "xml_filename"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "module",
+            "idref",
+            "mode",
+            "noupdate",
+            "xml_filename",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_file",
+        "ours": "convert_file",
+        "line": 975,
+        "signature_reference": {
+          "params": [
+            "env",
+            "module",
+            "filename",
+            "idref",
+            "mode",
+            "noupdate",
+            "kind",
+            "pathname"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "env_module",
+            "filename",
+            "idref",
+            "mode",
+            "noupdate",
+            "pathname",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_sql_import",
+        "ours": "convert_sql_import",
+        "line": 1005,
+        "signature_reference": {
+          "params": [
+            "env",
+            "fp"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "fp",
+            "using"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_csv_import",
+        "ours": "convert_csv_import",
+        "line": 1012,
+        "signature_reference": {
+          "params": [
+            "env",
+            "module",
+            "fname",
+            "csvcontent",
+            "idref",
+            "mode",
+            "noupdate"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "module",
+            "fname",
+            "csvcontent",
+            "idref",
+            "mode",
+            "noupdate",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "convert_xml_import",
+        "ours": "convert_xml_import",
+        "line": 1081,
+        "signature_reference": {
+          "params": [
+            "env",
+            "module",
+            "xmlfile",
+            "idref",
+            "mode",
+            "noupdate",
+            "report"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "module",
+            "xmlfile",
+            "idref",
+            "mode",
+            "noupdate",
+            "using"
+          ],
+          "has_default": [
+            false,
+            false,
+            true,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "XmlImport",
+      "_coerce",
+      "_has_field",
+      "_is_html_field",
+      "_is_model_method",
+      "_is_reference_field",
+      "_model_of",
+      "_search",
+      "_tag_record_inner"
+    ]
+  },
+  {
+    "file": "src/tools/date_utils.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/date_utils.py",
+    "classes": 0,
+    "functions": 23,
+    "stubs": 0,
+    "reference_symbols": 20,
+    "matched": 20,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "parse_date",
+        "ours": "parse_date",
+        "line": 256,
+        "signature_reference": {
+          "params": [
+            "value",
+            "env"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_current_timezone",
+      "_current_week_start",
+      "_tz_key"
+    ]
+  },
+  {
+    "file": "src/tools/facade.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/facade.py",
+    "classes": 4,
+    "functions": 7,
+    "stubs": 0,
+    "reference_symbols": 8,
+    "matched": 8,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/float_utils.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/float_utils.py",
+    "classes": 0,
+    "functions": 6,
+    "stubs": 0,
+    "reference_symbols": 10,
+    "matched": 5,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "float_round",
+        "ours": "float_round",
+        "line": 76,
+        "signature_reference": {
+          "params": [
+            "value",
+            "precision_digits",
+            "rounding_method"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value",
+            "precision_digits",
+            "precision_rounding",
+            "rounding_method"
+          ],
+          "has_default": [
+            false,
+            true,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "float_is_zero",
+        "ours": "float_is_zero",
+        "line": 153,
+        "signature_reference": {
+          "params": [
+            "value",
+            "precision_digits"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value",
+            "precision_digits",
+            "precision_rounding"
+          ],
+          "has_default": [
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "float_compare",
+        "ours": "float_compare",
+        "line": 173,
+        "signature_reference": {
+          "params": [
+            "value1",
+            "value2",
+            "precision_digits"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value1",
+            "value2",
+            "precision_digits",
+            "precision_rounding"
+          ],
+          "has_default": [
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_round_half_away"
+    ]
+  },
+  {
+    "file": "src/tools/func.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/func.py",
+    "classes": 4,
+    "functions": 97,
+    "stubs": 0,
+    "reference_symbols": 98,
+    "matched": 98,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/gc.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/gc.py",
+    "classes": 0,
+    "functions": 5,
+    "stubs": 0,
+    "reference_symbols": 5,
+    "matched": 5,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/i18n.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/i18n.py",
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 2,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/image.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/image.py",
+    "classes": 1,
+    "functions": 21,
+    "stubs": 0,
+    "reference_symbols": 22,
+    "matched": 22,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/intervals.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/intervals.py",
+    "classes": 1,
+    "functions": 14,
+    "stubs": 0,
+    "reference_symbols": 15,
+    "matched": 15,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/json.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/json.py",
+    "classes": 2,
+    "functions": 5,
+    "stubs": 0,
+    "reference_symbols": 7,
+    "matched": 7,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/log_scrubber.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_redact_kv",
+      "scrub"
+    ]
+  },
+  {
+    "file": "src/tools/logging_context.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 4,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "clear_correlation_id",
+      "get_correlation_id",
+      "new_correlation_id",
+      "set_correlation_id"
+    ]
+  },
+  {
+    "file": "src/tools/logging_handlers.py",
+    "reference_file": null,
+    "classes": 1,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "DatabaseLogHandler",
+      "emit",
+      "install_runbot_level"
+    ]
+  },
+  {
+    "file": "src/tools/lru.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/lru.py",
+    "classes": 1,
+    "functions": 12,
+    "stubs": 0,
+    "reference_symbols": 12,
+    "matched": 12,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/mail.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/mail.py",
+    "classes": 0,
+    "functions": 11,
+    "stubs": 0,
+    "reference_symbols": 37,
+    "matched": 11,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "_normalize_email",
+        "ours": "_normalize_email",
+        "line": 236,
+        "signature_reference": {
+          "params": [
+            "email"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "email_address"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/misc.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/misc.py",
+    "classes": 10,
+    "functions": 68,
+    "stubs": 7,
+    "reference_symbols": 106,
+    "matched": 51,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "__delitem__",
+        "ours": "__delitem__",
+        "line": 654
+      },
+      {
+        "reference": "__setitem__",
+        "ours": "__setitem__",
+        "line": 657
+      },
+      {
+        "reference": "clear",
+        "ours": "clear",
+        "line": 660
+      },
+      {
+        "reference": "pop",
+        "ours": "pop",
+        "line": 663
+      },
+      {
+        "reference": "popitem",
+        "ours": "popitem",
+        "line": 666
+      },
+      {
+        "reference": "setdefault",
+        "ours": "setdefault",
+        "line": 669
+      },
+      {
+        "reference": "update",
+        "ours": "update",
+        "line": 672
+      }
+    ],
+    "diverged": [
+      {
+        "reference": "split_every",
+        "ours": "split_every",
+        "line": 495,
+        "signature_reference": {
+          "params": [
+            "n",
+            "iterable"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "n",
+            "iterable",
+            "piece_maker"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 165,
+        "signature_reference": {
+          "params": [],
+          "has_default": [],
+          "vararg": "loggers",
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "data"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__getitem__",
+        "ours": "__getitem__",
+        "line": 171,
+        "signature_reference": {
+          "params": [
+            "item"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "key"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "__contains__",
+        "ours": "__contains__",
+        "line": 168,
+        "signature_reference": {
+          "params": [
+            "elem"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "key"
+          ],
+          "has_default": [
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "get_lang",
+        "ours": "get_lang",
+        "line": 1022,
+        "signature_reference": {
+          "params": [
+            "env",
+            "lang_code"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "lang_code"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "parse_date",
+        "ours": "parse_date",
+        "line": 978,
+        "signature_reference": {
+          "params": [
+            "env",
+            "value",
+            "lang_code"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "value",
+            "lang_code"
+          ],
+          "has_default": [
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "format_amount",
+        "ours": "format_amount",
+        "line": 1143,
+        "signature_reference": {
+          "params": [
+            "env",
+            "amount",
+            "currency",
+            "lang_code",
+            "trailing_zeroes"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "amount",
+            "currency",
+            "lang_code",
+            "trailing_zeroes"
+          ],
+          "has_default": [
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "hmac",
+        "ours": "hmac",
+        "line": 211,
+        "signature_reference": {
+          "params": [
+            "env",
+            "scope",
+            "message",
+            "hash_function"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "scope",
+            "message",
+            "hash_function"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "_addons_paths",
+      "_file_open_tmp_paths"
+    ]
+  },
+  {
+    "file": "src/tools/osutil.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/osutil.py",
+    "classes": 0,
+    "functions": 3,
+    "stubs": 0,
+    "reference_symbols": 3,
+    "matched": 3,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/parse_version.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/parse_version.py",
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 2,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/pdf/gen_font_c.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "emitir",
+      "main"
+    ]
+  },
+  {
+    "file": "src/tools/profiler.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/profiler.py",
+    "classes": 10,
+    "functions": 57,
+    "stubs": 3,
+    "reference_symbols": 40,
+    "matched": 38,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "start",
+        "ours": "start",
+        "line": 202
+      },
+      {
+        "reference": "stop",
+        "ours": "stop",
+        "line": 205
+      }
+    ],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/pycompat.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/pycompat.py",
+    "classes": 0,
+    "functions": 3,
+    "stubs": 0,
+    "reference_symbols": 3,
+    "matched": 3,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/query.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/query.py",
+    "classes": 1,
+    "functions": 25,
+    "stubs": 0,
+    "reference_symbols": 24,
+    "matched": 24,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_execute_query"
+    ]
+  },
+  {
+    "file": "src/tools/safe_eval.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/safe_eval.py",
+    "classes": 1,
+    "functions": 12,
+    "stubs": 0,
+    "reference_symbols": 13,
+    "matched": 13,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/set_expression.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/set_expression.py",
+    "classes": 6,
+    "functions": 63,
+    "stubs": 13,
+    "reference_symbols": 36,
+    "matched": 23,
+    "hole": [],
+    "fidelity": [
+      {
+        "reference": "is_empty",
+        "ours": "is_empty",
+        "line": 248
+      },
+      {
+        "reference": "is_universal",
+        "ours": "is_universal",
+        "line": 253
+      },
+      {
+        "reference": "invert_intersect",
+        "ours": "invert_intersect",
+        "line": 258
+      },
+      {
+        "reference": "matches",
+        "ours": "matches",
+        "line": 266
+      },
+      {
+        "reference": "key",
+        "ours": "key",
+        "line": 272
+      },
+      {
+        "reference": "__and__",
+        "ours": "__and__",
+        "line": 277
+      },
+      {
+        "reference": "__or__",
+        "ours": "__or__",
+        "line": 281
+      },
+      {
+        "reference": "__invert__",
+        "ours": "__invert__",
+        "line": 285
+      },
+      {
+        "reference": "__eq__",
+        "ours": "__eq__",
+        "line": 289
+      },
+      {
+        "reference": "__le__",
+        "ours": "__le__",
+        "line": 293
+      },
+      {
+        "reference": "__lt__",
+        "ours": "__lt__",
+        "line": 297
+      },
+      {
+        "reference": "__hash__",
+        "ours": "__hash__",
+        "line": 301
+      },
+      {
+        "reference": "__bool__",
+        "ours": "__bool__",
+        "line": 433
+      }
+    ],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/speedscope.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/speedscope.py",
+    "classes": 1,
+    "functions": 10,
+    "stubs": 0,
+    "reference_symbols": 11,
+    "matched": 11,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/sql.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/sql.py",
+    "classes": 1,
+    "functions": 36,
+    "stubs": 0,
+    "reference_symbols": 50,
+    "matched": 34,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [
+      {
+        "reference": "__init__",
+        "ours": "__init__",
+        "line": 216,
+        "signature_reference": {
+          "params": [
+            "code"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": "args",
+          "kwonly": [
+            "to_flush"
+          ],
+          "kwarg": "kwargs"
+        },
+        "signature_ours": {
+          "params": [
+            "code"
+          ],
+          "has_default": [
+            true
+          ],
+          "vararg": "args",
+          "kwonly": [
+            "to_flush",
+            "output_field"
+          ],
+          "kwarg": "kwargs"
+        }
+      },
+      {
+        "reference": "table_exists",
+        "ours": "table_exists",
+        "line": 432,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "tablename"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cursor",
+            "table_name",
+            "schema"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "table_columns",
+        "ours": "table_columns",
+        "line": 465,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "tablename"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cursor",
+            "table_name",
+            "schema"
+          ],
+          "has_default": [
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "column_exists",
+        "ours": "column_exists",
+        "line": 450,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "tablename",
+            "columnname"
+          ],
+          "has_default": [
+            false,
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cursor",
+            "table_name",
+            "column_name",
+            "schema"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "index_exists",
+        "ours": "index_exists",
+        "line": 500,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "indexname"
+          ],
+          "has_default": [
+            false,
+            false
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cursor",
+            "table_name",
+            "index_name",
+            "schema"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      },
+      {
+        "reference": "create_index",
+        "ours": "create_index",
+        "line": 776,
+        "signature_reference": {
+          "params": [
+            "cr",
+            "indexname",
+            "tablename",
+            "expressions",
+            "method",
+            "where"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [
+            "comment",
+            "unique"
+          ],
+          "kwarg": null
+        },
+        "signature_ours": {
+          "params": [
+            "cr",
+            "indexname",
+            "tablename",
+            "expressions",
+            "method",
+            "where"
+          ],
+          "has_default": [
+            false,
+            false,
+            false,
+            false,
+            true,
+            true
+          ],
+          "vararg": null,
+          "kwonly": [],
+          "kwarg": null
+        }
+      }
+    ],
+    "ours_only": [
+      "execute_sql",
+      "resolve_expression",
+      "sql_order_by_type"
+    ]
+  },
+  {
+    "file": "src/tools/template_inheritance.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/template_inheritance.py",
+    "classes": 0,
+    "functions": 5,
+    "stubs": 0,
+    "reference_symbols": 5,
+    "matched": 5,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/translate.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/translate.py",
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 90,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "_",
+      "_translate_and_format"
+    ]
+  },
+  {
+    "file": "src/tools/urls.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/urls.py",
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 2,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/which.py",
+    "reference_file": "/home/user/odoo-tools/19.x/odoo-19.0/odoo-19.0/odoo-19.0/odoo/tools/which.py",
+    "classes": 0,
+    "functions": 2,
+    "stubs": 0,
+    "reference_symbols": 2,
+    "matched": 2,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/zeep/client.py",
+    "reference_file": null,
+    "classes": 3,
+    "functions": 25,
+    "stubs": 3,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": [
+      "Client",
+      "ReadOnlyMethodNamespace",
+      "SerialProxy",
+      "__check",
+      "__class__",
+      "__delattr__",
+      "__delitem__",
+      "__getitem__",
+      "__init__",
+      "__iter__",
+      "__repr__",
+      "__serialize_object",
+      "__serialize_object_wrapper",
+      "__setattr__",
+      "__setitem__",
+      "__str__",
+      "bind",
+      "create_service",
+      "get_type",
+      "items",
+      "keys",
+      "service",
+      "type_factory",
+      "values"
+    ]
+  },
+  {
+    "file": "src/tools/zeep/exceptions.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/zeep/helpers.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/zeep/ns.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/zeep/wsa.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  },
+  {
+    "file": "src/tools/zeep/wsdl/utils.py",
+    "reference_file": null,
+    "classes": 0,
+    "functions": 0,
+    "stubs": 0,
+    "reference_symbols": 0,
+    "matched": 0,
+    "hole": [],
+    "fidelity": [],
+    "diverged": [],
+    "ours_only": []
+  }
+]

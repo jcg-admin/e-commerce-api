@@ -1,0 +1,24 @@
+can_return_rows_from_bulk_insert: True
+bulk_pks: [1, 2, 3]
+bulk_pks_all_int: True
+bulk_pks_increasing: True
+bulk_same_objects: True
+bulk_ids_triple: [(None,), (None,), (None,)]
+bulk_state_adding: [False, False, False]
+adopters: ['base.IrCron', 'base.IrSequenceDateRange', 'base.ProbeBulk', 'base.ResPartner', 'base.ResUsers', 'hr.HrEmployee']
+mro:base.ResUsers: {'_from_ids': None, 'browse': None, 'check_access': None, '_check_field_access': 'FieldSqlMixin', '_has_field_access': 'FieldSqlMixin', '_load_records_split_relational': 'RecordLoaderMixin', '_load_records_apply_relational': 'RecordLoaderMixin', '_load_records_coerce_vals': 'RecordLoaderMixin', 'write': 'ResUsers', '_check_company': 'CheckCompanyMixin', '_check_company_auto': 'CheckCompanyMixin', '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': 'FieldSqlMixin', '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'DefaultGetMixin', '_inherits': 'ResUsers', '_inherits_fields': 'ResUsers', 'objects': 'ResUsers'}
+is_basemodel:base.ResUsers: False
+mro:base.IrSequenceDateRange: {'_from_ids': None, 'browse': None, 'check_access': None, '_check_field_access': 'FieldSqlMixin', '_has_field_access': 'FieldSqlMixin', '_load_records_split_relational': 'RecordLoaderMixin', '_load_records_apply_relational': 'RecordLoaderMixin', '_load_records_coerce_vals': 'RecordLoaderMixin', 'write': 'RecordLoaderMixin', '_check_company': 'CheckCompanyMixin', '_check_company_auto': 'CheckCompanyMixin', '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': 'FieldSqlMixin', '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'IrSequenceDateRange', '_inherits': None, '_inherits_fields': None, 'objects': 'IrSequenceDateRange'}
+is_basemodel:base.IrSequenceDateRange: False
+mro:base.IrCron: {'_from_ids': None, 'browse': None, 'check_access': None, '_check_field_access': None, '_has_field_access': None, '_load_records_split_relational': None, '_load_records_apply_relational': None, '_load_records_coerce_vals': None, 'write': None, '_check_company': None, '_check_company_auto': None, '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': None, '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'IrCron', '_inherits': 'IrCron', '_inherits_fields': 'IrCron', 'objects': 'IrCron'}
+is_basemodel:base.IrCron: False
+mro:base.ResPartner: {'_from_ids': None, 'browse': None, 'check_access': None, '_check_field_access': 'FieldSqlMixin', '_has_field_access': 'FieldSqlMixin', '_load_records_split_relational': 'RecordLoaderMixin', '_load_records_apply_relational': 'RecordLoaderMixin', '_load_records_coerce_vals': 'RecordLoaderMixin', 'write': 'ResPartner', '_check_company': 'CheckCompanyMixin', '_check_company_auto': 'ResPartner', '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': 'FieldSqlMixin', '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'ResPartner', '_inherits': None, '_inherits_fields': None, 'objects': 'ResPartner'}
+is_basemodel:base.ResPartner: False
+mro:base.ProbeBulk: {'_from_ids': 'BaseModel', 'browse': 'BaseModel', 'check_access': None, '_check_field_access': None, '_has_field_access': None, '_load_records_split_relational': None, '_load_records_apply_relational': None, '_load_records_coerce_vals': None, 'write': None, '_check_company': None, '_check_company_auto': 'BaseModel', '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': 'BaseModel', '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'DefaultGetMixin', '_inherits': 'BaseModel', '_inherits_fields': None, 'objects': 'ProbeBulk'}
+is_basemodel:base.ProbeBulk: True
+mro:hr.HrEmployee: {'_from_ids': None, 'browse': None, 'check_access': None, '_check_field_access': 'FieldSqlMixin', '_has_field_access': 'FieldSqlMixin', '_load_records_split_relational': 'RecordLoaderMixin', '_load_records_apply_relational': 'RecordLoaderMixin', '_load_records_coerce_vals': 'RecordLoaderMixin', 'write': 'RecordLoaderMixin', '_check_company': 'CheckCompanyMixin', '_check_company_auto': 'CheckCompanyMixin', '_add_precomputed_values': 'Model', '_validate_fields': 'Model', '_fields': 'FieldSqlMixin', '_add_missing_default_values': 'DefaultGetMixin', 'default_get': 'HrEmployee', '_inherits': None, '_inherits_fields': None, 'objects': 'HrEmployee'}
+is_basemodel:hr.HrEmployee: False
+basemodel_concrete: ['base.ProbeBulk']
+plain_from_ids_pk: EXC RecursionError: maximum recursion depth exceeded
+plain_from_ids_len: EXC TypeError: object of type 'ResPartner' has no len()
+plain_from_ids_iter: EXC TypeError: ResPartner[0]: sólo se accede por nombre de campo. El contenedor de filas es el QuerySet, no la instancia.

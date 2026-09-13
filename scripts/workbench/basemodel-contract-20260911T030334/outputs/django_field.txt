@@ -1,0 +1,89 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/fields/__init__.py  (2890 lineas)
+
+=== Field(RegisterLookupMixin)  :119-1155  metodos=68 atributos=18
+  ATTR	empty_strings_allowed	124	empty_strings_allowed = True
+  ATTR	empty_values	125	empty_values = list(validators.EMPTY_VALUES)
+  ATTR	creation_counter	130	creation_counter = 0
+  ATTR	auto_creation_counter	131	auto_creation_counter = -1
+  ATTR	default_validators	132	default_validators = []  # Default set of validators
+  ATTR	default_error_messages	133	default_error_messages = {
+  ATTR	system_check_deprecated_details	145	system_check_deprecated_details = None
+  ATTR	system_check_removed_details	146	system_check_removed_details = None
+  ATTR	non_db_attrs	150	non_db_attrs = (
+  ATTR	hidden	167	hidden = False
+  ATTR	many_to_many	169	many_to_many = None
+  ATTR	many_to_one	170	many_to_one = None
+  ATTR	one_to_many	171	one_to_many = None
+  ATTR	one_to_one	172	one_to_one = None
+  ATTR	related_model	173	related_model = None
+  ATTR	generated	174	generated = False
+  ATTR	descriptor_class	176	descriptor_class = DeferredAttribute
+  ATTR	description	184	description = property(_description)
+  DEF 	_description	179-182	-	(self)	
+  DEF 	__init__	186-246	-	(self, verbose_name=None, name=None, primary_key=False, max_length=None, unique=False, blank=False, null=False, db_index=False, rel=None, default=NOT_PROVIDED, editable=True, serialize=True, unique_for_date=None, unique_for_month=None, unique_for_year=None, choices=None, help_text='', db_column=None, db_tablespace=None, auto_created=False, validators=(), error_messages=None, db_comment=None, db_default=NOT_PROVIDED)	
+  DEF 	__str__	248-256	-	(self)	Return "app_label.model_label.field_name" for fields attached to
+  DEF 	__repr__	258-264	-	(self)	Display the module, class, and name of the field.
+  DEF 	check	266-277	-	(self, **kwargs)	
+  DEF 	_check_field_name	279-311	-	(self)	Check if field name is valid, i.e. 1) does not end with an
+  DEF 	_choices_is_value	314-315	classmethod	(cls, value)	
+  DEF 	_check_choices	317-388	-	(self)	
+  DEF 	_check_db_default	390-424	-	(self, databases=None, **kwargs)	
+  DEF 	_check_db_index	426-436	-	(self)	
+  DEF 	_check_db_comment	438-458	-	(self, databases=None, **kwargs)	
+  DEF 	_check_null_allowed_for_primary_keys	460-481	-	(self)	
+  DEF 	_check_backend_specific_checks	483-490	-	(self, databases=None, **kwargs)	
+  DEF 	_check_validators	492-510	-	(self)	
+  DEF 	_check_deprecation_details	512-537	-	(self)	
+  DEF 	get_col	539-546	-	(self, alias, output_field=None)	
+  DEF 	choices	549-550	property	(self)	
+  DEF 	choices	553-554	choices.setter	(self, value)	
+  DEF 	cached_col	557-560	cached_property	(self)	
+  DEF 	select_format	562-568	-	(self, compiler, sql, params)	Custom format for select clauses. For example, GIS columns need to be
+  DEF 	deconstruct	570-664	-	(self)	Return enough information to recreate the field as a 4-tuple:
+  DEF 	clone	666-672	-	(self)	Uses deconstruct() to clone a new copy of this Field.
+  DEF 	__eq__	674-680	-	(self, other)	
+  DEF 	__lt__	682-700	-	(self, other)	
+  DEF 	__hash__	702-703	-	(self)	
+  DEF 	__deepcopy__	705-714	-	(self, memodict)	
+  DEF 	__copy__	716-722	-	(self)	
+  DEF 	__reduce__	724-745	-	(self)	Pickling should return the model._meta.fields instance of the field,
+  DEF 	get_pk_value_on_save	747-756	-	(self, instance)	Hook to generate new PK values on save. This method is called when
+  DEF 	to_python	758-764	-	(self, value)	Convert the input value into the expected Python data type, raising
+  DEF 	error_messages	767-772	cached_property	(self)	
+  DEF 	validators	775-780	cached_property	(self)	Some validators can't be created at field initialization time.
+  DEF 	run_validators	782-796	-	(self, value)	
+  DEF 	validate	798-827	-	(self, value, model_instance)	Validate value and raise ValidationError if necessary. Subclasses
+  DEF 	clean	829-838	-	(self, value, model_instance)	Convert the value's type and run validation. Validation errors
+  DEF 	db_type_parameters	840-841	-	(self, connection)	
+  DEF 	db_check	843-855	-	(self, connection)	Return the database column check constraint for this field, for the
+  DEF 	db_type	857-886	-	(self, connection)	Return the database column data type for this field, for the provided
+  DEF 	rel_db_type	888-894	-	(self, connection)	Return the data type that a related field pointing to this field should
+  DEF 	cast_db_type	896-901	-	(self, connection)	Return the data type to use in the Cast() function.
+  DEF 	db_parameters	903-914	-	(self, connection)	Extension of db_type(), providing a range of different return values
+  DEF 	db_type_suffix	916-917	-	(self, connection)	
+  DEF 	get_db_converters	919-922	-	(self, connection)	
+  DEF 	unique	925-926	cached_property	(self)	
+  DEF 	db_tablespace	929-930	property	(self)	
+  DEF 	db_returning	933-935	property	(self)	Private API intended only to be used by Django itself.
+  DEF 	set_attributes_from_name	937-942	-	(self, name)	
+  DEF 	contribute_to_class	944-966	-	(self, cls, name, private_only=False)	Register the field with the model class it belongs to.
+  DEF 	get_filter_kwargs_for_object	968-973	-	(self, obj)	Return a dict that when passed as kwargs to self.model.filter(), would
+  DEF 	get_attname	975-976	-	(self)	
+  DEF 	get_attname_column	978-981	-	(self)	
+  DEF 	get_internal_type	983-984	-	(self)	
+  DEF 	pre_save	986-988	-	(self, model_instance, add)	Return field's value just before saving.
+  DEF 	get_prep_value	990-994	-	(self, value)	Perform preliminary non-db specific value checks and conversions.
+  DEF 	get_db_prep_value	996-1005	-	(self, value, connection, prepared=False)	Return field's value prepared for interacting with the database
+  DEF 	get_db_prep_save	1007-1011	-	(self, value, connection)	Return field's value prepared for saving into a database.
+  DEF 	has_default	1013-1015	-	(self)	Return a boolean of whether this field has a default value.
+  DEF 	has_db_default	1017-1019	-	(self)	Return a boolean of whether this field has a db_default value.
+  DEF 	get_default	1021-1023	-	(self)	Return the default value for this field.
+  DEF 	_get_default	1026-1045	cached_property	(self)	
+  DEF 	_db_default_expression	1048-1054	cached_property	(self)	
+  DEF 	get_choices	1056-1083	-	(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=())	Return choices with a default blank choices included, for use
+  DEF 	value_to_string	1085-1090	-	(self, obj)	Return a string value of this field from the passed obj.
+  DEF 	flatchoices	1093-1095	property	(self)	Flattened version of choices tuple.
+  DEF 	save_form_data	1097-1098	-	(self, instance, data)	
+  DEF 	formfield	1100-1147	-	(self, form_class=None, choices_form_class=None, **kwargs)	Return a django.forms.Field instance for this field.
+  DEF 	value_from_object	1149-1151	-	(self, obj)	Return the value of this field in the given model instance.
+  DEF 	slice_expression	1153-1155	-	(self, expression, start, length)	Return a slice of this field.

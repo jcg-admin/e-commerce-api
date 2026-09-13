@@ -42,7 +42,11 @@ from operator import attrgetter
 
 from django.db import models
 
-from orm.fields_nonstored import projection_or_none
+from orm.fields_nonstored import (
+    _UNSET,
+    annotate_related,
+    apply_source_defaults,
+)
 
 __all__ = ['Binary', 'Image']
 
@@ -63,26 +67,21 @@ class Binary(models.BinaryField):
     #: ≙ ``:37`` — el valor depende de si se pide el contenido o su tamaño.
     _depends_context = ('bin_size',)
 
-    def __new__(cls, *args, related=None, **kwargs):
-        """Despacha la proyección sin dejar de ser una clase.
-
-        Mismo mecanismo que ``Html``: cuando ``__new__`` devuelve una
-        instancia que **no** es de ``cls``, Python no llama a ``__init__``, así
-        que el descriptor queda construido por el suyo. La clase se conserva
-        porque el árbol la usa en ``isinstance``.
-        """
-        projection, _attributes = projection_or_none(related, kwargs)
-        if projection is not None:
-            return projection
-        instance = super().__new__(cls)
-        instance.related = related
-        return instance
-
-    def __init__(self, *args, attachment=False, related=None, store=None,
+    def __init__(self, *args, attachment=False, related=None, store=_UNSET,
                  **kwargs):
-        #: ≙ ``:39``. El default diverge — la razón, en el docstring del módulo.
+        """≙ ``:39``. El default de ``attachment`` diverge — la razón, en el
+        docstring del módulo.
+
+        ``store`` y ``related`` se **reenvían**, no se tragan: el enrutado de
+        ``__new__`` se retiró (TASK-API-0417) y el vocabulario tiene que llegar
+        a ``_args__`` para que la costura lo vea tras fusionar la MRO.
+        """
         self.attachment = bool(attachment)
+        if store is not _UNSET:
+            kwargs['store'] = store
+        related_attrs = apply_source_defaults(related, kwargs)
         super().__init__(*args, **kwargs)
+        annotate_related(self, related, related_attrs)
 
     #: ≙ ``:51`` — lo que el cliente lee para saber dónde vive el valor.
     _description_attachment = property(attrgetter('attachment'))
@@ -121,28 +120,18 @@ class Image(models.ImageField):
     max_height = 0
     verify_resolution = True
 
-    def __new__(cls, *args, related=None, **kwargs):
-        """Despacha la proyección sin dejar de ser una clase.
-
-        Mismo mecanismo que ``Html``: cuando ``__new__`` devuelve una
-        instancia que **no** es de ``cls``, Python no llama a ``__init__``, así
-        que el descriptor queda construido por el suyo. La clase se conserva
-        porque el árbol la usa en ``isinstance``.
-        """
-        projection, _attributes = projection_or_none(related, kwargs)
-        if projection is not None:
-            return projection
-        instance = super().__new__(cls)
-        instance.related = related
-        return instance
-
     def __init__(self, *args, max_width=0, max_height=0, related=None,
-                 store=None,
-                 verify_resolution=True, **kwargs):
+                 store=_UNSET, verify_resolution=True, **kwargs):
+        """Los tres atributos de recorte, y el vocabulario de la fuente
+        reenviado — mismo criterio que :class:`Binary`."""
         self.max_width = max_width
         self.max_height = max_height
         self.verify_resolution = verify_resolution
+        if store is not _UNSET:
+            kwargs['store'] = store
+        related_attrs = apply_source_defaults(related, kwargs)
         super().__init__(*args, **kwargs)
+        annotate_related(self, related, related_attrs)
 
     def deconstruct(self):
         """Mismo criterio que :meth:`Binary.deconstruct` — ver allí."""

@@ -1784,7 +1784,7 @@ class ResPartner(AvatarMixin, models.OriginMixin, models.DefaultGetMixin,
         create_values = {cls._rec_name: name or email_normalized}
         if email_normalized:   # keep default_email in context
             create_values['email'] = email_normalized
-        partner = cls.create(**create_values)
+        partner, = cls.create([create_values])
         return partner.pk, partner.display_name
 
     @classmethod

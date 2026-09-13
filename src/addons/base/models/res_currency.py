@@ -132,6 +132,7 @@ from django.db import connection
 from django.db.models import F
 
 import fields
+import api
 import models
 from orm.environments import get_context, get_current_company
 from orm.utils import COLLECTION_TYPES
@@ -157,7 +158,8 @@ except ImportError:
     num2words = None
 
 
-class ResCurrency(models.Model):
+class ResCurrency(models.DefaultGetMixin, models.RecordLoaderMixin,
+                  models.CheckCompanyMixin, models.Model):
     """``res.currency`` — moneda ISO 4217 (Odoo base).
 
     Fiel a ``res_currency.py`` (18:23-47 / 19:21-49): ``name`` (código ISO 4217,
@@ -283,15 +285,22 @@ class ResCurrency(models.Model):
         """
         return self.delete()
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: res_currency.py:57-63``).
 
         Su cuerpo llama a ``super().create``, dispara el toggle del grupo
-        multi-divisa e invalida el caché de ``get_all_currencies``. Las tres
-        cosas ocurren aquí, por la vía de ``save()``.
+        multi-divisa e invalida el caché de ``get_all_currencies``. Las dos
+        últimas ocurren por la vía de ``save()``, que la fila recorre.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        return cls.objects.create(**vals)
+        return super().create(vals_list)
 
     def write(self, vals):
         """≙ ``write`` (``odoo19c: res_currency.py:72-81``).
@@ -812,7 +821,8 @@ class ResCurrency(models.Model):
         return self.round(amount) == 0
 
 
-class ResCurrencyRate(models.Model):
+class ResCurrencyRate(models.DefaultGetMixin, models.RecordLoaderMixin,
+                      models.CheckCompanyMixin, models.Model):
     """``res.currency.rate`` — tipo de cambio de una moneda en una fecha."""
 
     _name = 'res.currency.rate'
@@ -1074,19 +1084,23 @@ class ResCurrencyRate(models.Model):
         vals['rate'] = rate
         return vals, rate
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: res_currency.py:399-402``).
 
         Su cuerpo es ``super().create([self._sanitize_vals(v) for v in
         vals_list])``, precedido de la invalidación que aquí no aplica (ver el
-        docstring del módulo). El lote de la fuente —``vals_list``— es su forma
-        de amortizar el viaje a la base; aquí ``objects.bulk_create`` cubre ese
-        caso y no cambia la resolución de las tres tasas, que es lo que este
-        método porta.
+        docstring del módulo). La resolución de las tres tasas —lo que este
+        método porta— se aplica a cada ``vals`` antes de delegar, como allá.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        vals, _rate = cls._rate_from_vals(vals)
-        return cls.objects.create(**vals)
+        return super().create([cls._rate_from_vals(vals)[0] for vals in vals_list])
 
     def write(self, vals):
         """≙ ``write`` (``odoo19c: res_currency.py:394-397``).

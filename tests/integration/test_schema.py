@@ -41,12 +41,13 @@ class TestSchemaEndpoint:
     def test_schema_titulo_nombra_la_plataforma(self, api_client, db):
         # El título publicado nombra al operador L0 (Kaupamex), NO al L1 de
         # ejemplo: la API es una sola y sirve a todas las Company. Decisión de
-        # producto del ejecutor (2026-08-05); antes decía 'Kaupamex API'
-        # y este test guardaba ese valor — el guard sigue, el valor cambió.
+        # producto del ejecutor (2026-08-05). El guard negativo que vigilaba
+        # el nombre del L1 se retiró: el barrido del 2026-09-05 lo dejó
+        # apuntando al propio 'Kaupamex' y se contradecía con la línea de
+        # arriba. Ver :ref:`h-api-1095`.
         r = api_client.get('/api/schema/?format=json')
         titulo = r.json()['info']['title']
         assert 'Kaupamex' in titulo
-        assert 'Kaupamex' not in titulo
 
     def test_schema_has_signup_endpoint(self, api_client, db):
         # El alta vive en ``authz_signup`` (``controllers/urls.py:9``),

@@ -11,16 +11,21 @@ En la referencia un campo puede declararse sin persistencia:
 (``odoo19c: account/models/res_currency.py:17``). Django no lo tiene: todo
 ``models.Field`` es una columna.
 
-Por eso ``Char`` no es un alias pelado sino un **despachador**: con ``store``
-por defecto devuelve el ``CharField`` de siempre, y con ``store=False``
-devuelve un :class:`~orm.fields_nonstored.NonStored`. El sitio de declaración
-queda **idéntico al de la fuente**, que es el punto — la alternativa era
-repartir en el cableado de cada addon lo que la referencia declara en la clase.
+Por eso ``Char`` no es un alias pelado sino un **despachador**: recibe el
+vocabulario de la fuente, lo deriva y lo anota sobre el campo. El sitio de
+declaración queda **idéntico al de la fuente**, que es el punto — la
+alternativa era repartir en el cableado de cada addon lo que la referencia
+declara en la clase.
 
-``Text`` y ``Html`` **no** llevan el despachador de ``store``: ``grep -rn
-"Text(store=False\\|Html(store=False)"`` sobre ``odoo19c:`` da **0** — la
-referencia no declara ninguno sin almacenar, así que darles esa rama sería
-construir para un caso que no existe.
+Lo que el despachador **ya no hace es elegir clase** (TASK-API-0417): un
+``Char`` sin columna sigue siendo un ``CharField``, porque ``store`` es un
+atributo del campo y no un tipo (``odoo19c: odoo/orm/fields.py:455``). La
+forma sin columna —sin columna en la tabla, sin accessor inverso, leída por
+su ``compute`` o su ``default``— la resuelve la costura al contribuir a la
+clase, no el constructor. Por la misma razón ``Text`` y ``Html`` reciben hoy
+el vocabulario aunque la referencia no declare ninguno sin almacenar
+(``grep -rn "Text(store=False"`` sobre ``odoo19c:`` da **0**): no es una rama
+que haya que construirles, es la ausencia de rama.
 
 ``company_dependent`` — los tres lo llevan (tarea #129)
 ========================================================
@@ -59,10 +64,8 @@ from django.db import models
 from orm.fields_company_dependent import CompanyDependent, make_dispatcher
 from orm.fields_nonstored import (
     _UNSET,
-    NonStored,
     annotate_related,
     apply_source_defaults,
-    projection_or_none,
 )
 from tools.misc import SENTINEL
 
@@ -90,23 +93,39 @@ class Html(models.TextField):
         admite: cuando devuelve una instancia que **no** es de ``cls``, Python
         no llama a ``__init__`` — así el ``CompanyDependent`` queda construido
         por su propio constructor y no por el de ``TextField``.
+
+        **La única rama que queda es ``company_dependent``.** ``store`` ya no
+        elige clase: un ``Html`` sin columna sigue siendo un ``Html``
+        (``odoo19c: odoo/orm/fields.py:455``). Por eso la derivación vive en
+        :meth:`__init__`, que es el camino de la rama llana; aquí sólo se
+        deriva la que no pasa por él, porque Python no llama a ``__init__``
+        cuando ``__new__`` devuelve algo que no es de ``cls``.
         """
-        projection, _attributes = projection_or_none(related, kwargs,
-                                                     company_dependent)
-        if projection is not None:
-            return projection
         if company_dependent:
-            return CompanyDependent(*args, base_type='html', **kwargs)
-        instance = super().__new__(cls)
-        instance.related = related
-        return instance
+            attrs = apply_source_defaults(related, kwargs,
+                                          company_dependent=True)
+            return annotate_related(
+                CompanyDependent(*args, base_type='html', **kwargs),
+                related, attrs)
+        return super().__new__(cls)
 
     def __init__(self, *args, company_dependent=False, related=None,
-                 store=None, **kwargs):
-        """Traga las dos palabras clave — las ramas las resolvió
-        :meth:`__new__`, y nombrarlas evita que caigan en ``**kwargs`` y
-        lleguen al constructor de Django, que no las conoce."""
+                 store=_UNSET, **kwargs):
+        """Deriva el vocabulario de la fuente y lo reenvía al constructor.
+
+        **Reenvía en vez de tragar.** La versión anterior nombraba ``store`` y
+        ``related`` sólo para que no llegaran al constructor de Django —y con
+        eso nunca aterrizaban en ``_args__``, así que la costura veía un campo
+        que no declaraba nada y le dejaba los defaults de clase. Hoy los
+        reenvía: ``_field_init_with_copy`` los recoge y los retira él mismo
+        (``orm/fields.py``), medido sobre los once tipos en la sonda
+        ``probe_vocabulary_reaches_args_by_type``.
+        """
+        if store is not _UNSET:
+            kwargs['store'] = store
+        related_attrs = apply_source_defaults(related, kwargs)
         super().__init__(*args, **kwargs)
+        annotate_related(self, related, related_attrs)
 
     def deconstruct(self):
         """Deconstruye como ``django.db.models.TextField``.
@@ -210,14 +229,14 @@ def Char(*args, store=_UNSET, required=None, translate=None, help=None,
         kwargs['max_length'] = size
     if store is not _UNSET:
         kwargs['store'] = store
-    related_attrs = apply_source_defaults(related, kwargs)
+    related_attrs = apply_source_defaults(related, kwargs,
+                                         company_dependent=company_dependent)
     store = related_attrs['store']
 
     if company_dependent:
-        if not store:
-            raise ValueError(
-                'store=False y company_dependent=True son excluyentes: un '
-                'campo sin columna no tiene jsonb donde repartir el valor.')
+        #: La exclusión ``store=False`` + ``company_dependent`` la levanta
+        #: :func:`~orm.fields_nonstored.apply_source_defaults`, que es donde
+        #: vive su única copia. Aquí quedan las dos que son de ``Char``.
         if translate:
             raise ValueError('company_dependent field cannot be translated')
         # La guarda de ``required`` va AQUI y no en ``CompanyDependent``: para
@@ -227,10 +246,11 @@ def Char(*args, store=_UNSET, required=None, translate=None, help=None,
         if required:
             raise ValueError('company_dependent field cannot be required')
         campo = CompanyDependent(*args, base_type='char', **kwargs)
-    elif store:
-        campo = models.CharField(*args, **kwargs)
     else:
-        campo = NonStored(*args, **kwargs)
+        #: El ``CharField`` se construye con columna y sin ella. ``store`` es
+        #: atributo del campo, no una clase distinta: la forma sin columna la
+        #: resuelve la costura al contribuir a la clase (TASK-API-0417).
+        campo = models.CharField(*args, **kwargs)
     campo.translate = bool(translate)
     return annotate_related(campo, related, related_attrs)
 

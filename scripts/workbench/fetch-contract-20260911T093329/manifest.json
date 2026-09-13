@@ -1,0 +1,10 @@
+{
+  "question": "¿Qué le pregunta `fetch()` de la referencia a cada campo, y sabe responderlo nuestro árbol? La medición anterior contó `def <símbolo>` y publicó cinco piezas ausentes; la pregunta correcta es de conducta, no de presencia.",
+  "instrument": "scripts/workbench/fetch-contract-20260911T093329/probes/probe_fetch_dependencies.py — hace las nueve preguntas de `_determine_fields_to_fetch` y `_fetch_query` a campos concretos de base.ResPartner, con una relación inversa como control negativo",
+  "metric": "cuántas de las nueve preguntas NINGÚN campo concreto sabe responder, sobre 4 campos concretos de base.ResPartner + 1 relación inversa de control",
+  "blind_to": "la SEMÁNTICA de la respuesta — que `db_type` devuelva `bigint` no prueba que la fuente hubiera devuelto `('int4','int4')` para ese mismo campo, sólo que el predicado «¿tiene columna?» tiene quien lo responda; y a un campo cuya respuesta sea correcta en ResPartner y no en otro modelo, porque la población es un modelo y no el árbol",
+  "destination": "la descripción de TASK-API-0401, que pasa de «cinco piezas ausentes» a «tres métodos más `fetch`, 224 líneas, sin dependencias pendientes»",
+  "form": "measurement",
+  "task": "TASK-API-0401 (board #321)",
+  "reference": "odoo19c: odoo/orm/models.py:3775-3818 (fetch), :3820-3878, :3879-3989, :5396-5449; odoo/orm/fields.py:781 (column_type), :252 (translate)"
+}

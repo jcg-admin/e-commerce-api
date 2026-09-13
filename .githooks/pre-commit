@@ -69,7 +69,7 @@ fi
 # ─── Gate 2: canon-idioma en values de identifier (EN canonico) ──────────────
 # Iniciativa: docs/source/gestion/pm/api/iniciativas/
 #             canon-idioma-enums-error-codes/
-# Script:     docs/scripts/check_canon_idioma.py (cross-submodule).
+# Script:     docs/scripts/check_canon_language.py (cross-submodule).
 # Allowlist:  docs/scripts/canon-idioma-allowlist.txt.
 # El gate aplica solo cuando hay .py staged en addons/.
 # El clon hermano de docs se llama `kaupamex-docs` desde el rename de repos
@@ -79,8 +79,8 @@ fi
 if [[ "${#STAGED_PY[@]}" -gt 0 ]]; then
     CANON_CHECKER=""
     for CANDIDATO in kaupamex-docs docs e-commerce-docs; do
-        if [[ -f "$REPO_ROOT/../$CANDIDATO/scripts/check_canon_idioma.py" ]]; then
-            CANON_CHECKER="$REPO_ROOT/../$CANDIDATO/scripts/check_canon_idioma.py"
+        if [[ -f "$REPO_ROOT/../$CANDIDATO/scripts/check_canon_language.py" ]]; then
+            CANON_CHECKER="$REPO_ROOT/../$CANDIDATO/scripts/check_canon_language.py"
             CANON_ROOT="$REPO_ROOT/.."
             break
         fi

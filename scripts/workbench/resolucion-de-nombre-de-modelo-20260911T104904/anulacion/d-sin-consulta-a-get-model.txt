@@ -1,0 +1,435 @@
+EEEEEEEEEEEEEEEEE                                                        [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of TestThePositiveThatM18Measured.test_a_two_dot_name_no_longer_breaks_the_class_body _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestThePositiveThatM18Measured.test_the_source_name_survives_on_the_field _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestThePositiveThatM18Measured.test_related_model_resolves_to_the_class _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelNeverReachesAMigration.test_deconstruct_emits_the_real_label _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelNeverReachesAMigration.test_no_sentinel_key_of_a_registered_name_is_left_pending _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheOrderOfDeclarationHasTwoCases.test_target_first_resolves_at_construction _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheOrderOfDeclarationHasTwoCases.test_referrer_first_resolves_when_the_target_is_prepared _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheOrderOfDeclarationHasTwoCases.test_self_reference_resolves_on_its_own_class_prepared _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestWhatWasAlreadyWorkingStaysWorking.test_the_django_label_is_untouched _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestWhatWasAlreadyWorkingStaysWorking.test_a_model_class_is_untouched _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestWhatWasAlreadyWorkingStaysWorking.test_the_recursive_constant_is_untouched _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestWhatWasAlreadyWorkingStaysWorking.test_the_django_label_in_lowercase_is_untouched _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelLabelIsLegalAndUnambiguous.test_the_sentinel_app_label_is_not_installed _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelLabelIsLegalAndUnambiguous.test_the_sentinel_is_what_make_model_tuple_would_derive _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelLabelIsLegalAndUnambiguous.test_every_dotted_name_collapses_to_one_segment[ir.model.fields] _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelLabelIsLegalAndUnambiguous.test_every_dotted_name_collapses_to_one_segment[ir.model] _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+_ ERROR at setup of TestTheSentinelLabelIsLegalAndUnambiguous.test_every_dotted_name_collapses_to_one_segment[account.move.line] _
+.venv/lib/python3.12/site-packages/pytest_django/fixtures.py:140: in django_db_setup
+    db_cfg = setup_databases(
+.venv/lib/python3.12/site-packages/django/test/utils.py:207: in setup_databases
+    connection.creation.create_test_db(
+.venv/lib/python3.12/site-packages/django/db/backends/base/creation.py:85: in create_test_db
+    call_command(
+.venv/lib/python3.12/site-packages/django/core/management/__init__.py:195: in call_command
+    return command.execute(*args, **defaults)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:464: in execute
+    output = self.handle(*args, **options)
+.venv/lib/python3.12/site-packages/django/core/management/base.py:111: in wrapper
+    res = handle_func(*args, **kwargs)
+.venv/lib/python3.12/site-packages/django/core/management/commands/migrate.py:300: in handle
+    pre_migrate_apps = pre_migrate_state.apps
+.venv/lib/python3.12/site-packages/django/utils/functional.py:47: in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:591: in apps
+    return StateApps(self.real_apps, self.models)
+.venv/lib/python3.12/site-packages/django/db/migrations/state.py:662: in __init__
+    raise ValueError("\n".join(error.msg for error in errors))
+E   ValueError: The field base.IrActionsReport.group_ids was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+E   The field base.IrActionsReport.paperformat_id was declared with a lazy reference to 'orm.base_reportpaperformat', but app 'orm' isn't installed.
+E   The field base.IrActionsReport_group_ids.base_resgroups was declared with a lazy reference to 'orm.base_resgroups', but app 'orm' isn't installed.
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_a_two_dot_name_no_longer_breaks_the_class_body
+ERROR tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_the_source_name_survives_on_the_field
+ERROR tests/unit/orm/test_deferred_model_name.py::TestThePositiveThatM18Measured::test_related_model_resolves_to_the_class
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelNeverReachesAMigration::test_deconstruct_emits_the_real_label
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelNeverReachesAMigration::test_no_sentinel_key_of_a_registered_name_is_left_pending
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_target_first_resolves_at_construction
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_referrer_first_resolves_when_the_target_is_prepared
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheOrderOfDeclarationHasTwoCases::test_self_reference_resolves_on_its_own_class_prepared
+ERROR tests/unit/orm/test_deferred_model_name.py::TestWhatWasAlreadyWorkingStaysWorking::test_the_django_label_is_untouched
+ERROR tests/unit/orm/test_deferred_model_name.py::TestWhatWasAlreadyWorkingStaysWorking::test_a_model_class_is_untouched
+ERROR tests/unit/orm/test_deferred_model_name.py::TestWhatWasAlreadyWorkingStaysWorking::test_the_recursive_constant_is_untouched
+ERROR tests/unit/orm/test_deferred_model_name.py::TestWhatWasAlreadyWorkingStaysWorking::test_the_django_label_in_lowercase_is_untouched
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelLabelIsLegalAndUnambiguous::test_the_sentinel_app_label_is_not_installed
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelLabelIsLegalAndUnambiguous::test_the_sentinel_is_what_make_model_tuple_would_derive
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelLabelIsLegalAndUnambiguous::test_every_dotted_name_collapses_to_one_segment[ir.model.fields]
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelLabelIsLegalAndUnambiguous::test_every_dotted_name_collapses_to_one_segment[ir.model]
+ERROR tests/unit/orm/test_deferred_model_name.py::TestTheSentinelLabelIsLegalAndUnambiguous::test_every_dotted_name_collapses_to_one_segment[account.move.line]
+1 warning, 17 errors in 2.29s

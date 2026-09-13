@@ -149,6 +149,7 @@ import datetime
 from collections import defaultdict
 
 import fields
+import api
 import models
 from django.apps import apps
 from django.db.models import Q, Sum
@@ -189,7 +190,7 @@ STOCKED_USAGES = (USAGE_INTERNAL, USAGE_TRANSIT)
 INTER_COMPANY_XMLID = 'stock.stock_location_inter_company'
 
 
-class StockLocation(TimeStampedModel):
+class StockLocation(models.DefaultGetMixin, TimeStampedModel):
     """``stock.location`` — el nodo del árbol físico y sus contrapartes virtuales."""
 
     # Alias de clase de las constantes de módulo. NO son atributos de ORM de la
@@ -530,17 +531,25 @@ class StockLocation(TimeStampedModel):
 
     # -- create / write / unlink / copy --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :286-290``).
 
         Tras crear, la referencia invalida ``warehouse_id`` para que se
         recalcule; aquí el recálculo se hace en el acto, que es lo que la
         invalidación produce en la siguiente lectura.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        ubicacion = cls.objects.create(**vals)
-        ubicacion.refresh_computed_fields()
-        return ubicacion
+        locations = super().create(vals_list)
+        for location in locations:
+            location.refresh_computed_fields()
+        return locations
 
     def save(self, *args, **kwargs):
         """Los ``compute … store=True`` se disparan en CADA escritura.
@@ -649,7 +658,7 @@ class StockLocation(TimeStampedModel):
             return None
         partes = name.split('/')
         padre = cls.objects.filter(complete_name='/'.join(partes[:-1])).first()
-        nueva = cls.create(name=partes[-1], location=padre)
+        nueva, = cls.create([{'name': partes[-1], 'location': padre}])
         return nueva.pk, str(nueva)
 
     def copy_data(self, default=None):

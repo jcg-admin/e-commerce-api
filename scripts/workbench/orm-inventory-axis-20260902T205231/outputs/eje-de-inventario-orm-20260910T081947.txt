@@ -1,0 +1,251 @@
+=== ausentes de odoo/orm: en que universo vive su nombre ===
+
+ya_esta_aqui          18  (  7.5 %)
+trae_candidato         5  (  2.1 %)
+trae_renombrado       12  (  5.0 %)
+nombre_generico       24  ( 10.0 %)
+sin_rastro           180  ( 75.3 %)
+
+universo: 239 simbolo(s) ausente(s) distintos en 22 archivo(s) de la referencia
+indice del stack: 31094 nombre(s) declarado(s); nuestro arbol fuera de src/orm: 7303
+mapa de renombre: 13 fila(s), 0 muerta(s)
+
+sin_rastro         BaseDate                                                   
+sin_rastro         BaseModel                                                  
+sin_rastro         BaseString                                                 
+nombre_generico    Boolean                                                    .venv/lib/python3.12/site-packages/pyasn1/type/univ.py, .venv/lib/python3.12/site-packages/zeep/xsd/types/builtins.py
+nombre_generico    Date                                                       .venv/lib/python3.12/site-packages/psycopg/dbapi20.py, .venv/lib/python3.12/site-packages/pyasn1_modules/rfc5275.py, .venv/lib/python3.12/site-packages/zeep/xsd/types/builtins.py
+sin_rastro         Datetime                                                   
+nombre_generico    Field                                                      .venv/lib/python3.12/site-packages/django/contrib/gis/gdal/field.py, .venv/lib/python3.12/site-packages/django/db/models/fields/__init__.py, .venv/lib/python3.12/site-packages/django/forms/fields.py
+trae_candidato     Float                                                      .venv/lib/python3.12/site-packages/zeep/xsd/types/builtins.py
+sin_rastro         Id                                                         
+nombre_generico    Integer                                                    .venv/lib/python3.12/site-packages/pyasn1/type/univ.py, .venv/lib/python3.12/site-packages/pyasn1_modules/rfc1902.py, .venv/lib/python3.12/site-packages/zeep/xsd/types/builtins.py
+sin_rastro         Many2oneReference                                          
+trae_candidato     Model                                                      .venv/lib/python3.12/site-packages/django/db/models/base.py
+sin_rastro         Selection                                                  
+nombre_generico    Text                                                       .venv/lib/python3.12/site-packages/PIL/ImageText.py, /usr/lib/python3.12/xml/dom/minidom.py
+sin_rastro         _Relational                                                
+sin_rastro         _RelationalMulti                                           
+nombre_generico    __deepcopy__                                               .venv/lib/python3.12/site-packages/babel/support.py, .venv/lib/python3.12/site-packages/cryptography/hazmat/primitives/asymmetric/dh.py, .venv/lib/python3.12/site-packages/cryptography/hazmat/primitives/asymmetric/dsa.py
+sin_rastro         __ensure_xml_id                                            
+ya_esta_aqui       __ge__                                                     src/tools/func.py, .venv/lib/python3.12/site-packages/PIL/ImageMath.py, .venv/lib/python3.12/site-packages/attr/_make.py
+nombre_generico    __gt__                                                     src/tools/func.py, src/tools/set_expression.py, .venv/lib/python3.12/site-packages/PIL/ImageMath.py
+ya_esta_aqui       __init_subclass__                                          src/tools/profiler.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/postgis/base.py, .venv/lib/python3.12/site-packages/django/contrib/postgres/aggregates/mixins.py
+ya_esta_aqui       __int__                                                    src/tools/func.py, .venv/lib/python3.12/site-packages/PIL/ImageWin.py, .venv/lib/python3.12/site-packages/cffi/backend_ctypes.py
+nombre_generico    __le__                                                     src/tools/func.py, src/tools/set_expression.py, .venv/lib/python3.12/site-packages/PIL/ImageMath.py
+nombre_generico    __sub__                                                    src/tools/func.py, src/tools/intervals.py, .venv/lib/python3.12/site-packages/PIL/Image.py
+sin_rastro         _add_inherited_fields                                      
+sin_rastro         _add_manual_fields                                         
+sin_rastro         _add_manual_models                                         
+trae_renombrado    _add_sql_constraints -> add_constraint                     .venv/lib/python3.12/site-packages/django/db/backends/base/schema.py, .venv/lib/python3.12/site-packages/django/db/backends/sqlite3/schema.py, .venv/lib/python3.12/site-packages/django/db/migrations/state.py
+sin_rastro         _apply_onchange_methods                                    
+sin_rastro         _as_query                                                  
+sin_rastro         _auto_init                                                 
+trae_candidato     _cache                                                     .venv/lib/python3.12/site-packages/django/core/cache/backends/memcached.py, .venv/lib/python3.12/site-packages/django/core/cache/backends/redis.py
+sin_rastro         _can_return_content                                        
+sin_rastro         _check_m2m_recursion                                       
+sin_rastro         _check_parent_path                                         
+sin_rastro         _check_recursion                                           
+sin_rastro         _check_removed_columns                                     
+sin_rastro         _check_sudo_commands                                       
+trae_renombrado    _column_type -> db_type                                    .venv/lib/python3.12/site-packages/django/contrib/gis/db/models/fields.py, .venv/lib/python3.12/site-packages/django/contrib/postgres/fields/array.py, .venv/lib/python3.12/site-packages/django/contrib/postgres/fields/hstore.py
+sin_rastro         _compute_field_value                                       
+sin_rastro         _compute_related                                           
+trae_renombrado    _condition_to_sql -> as_sql                                .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/oracle/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/postgis/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/spatialite/operations.py
+sin_rastro         _condition_to_sql_company                                  
+sin_rastro         _condition_to_sql_relational                               
+sin_rastro         _constraint_methods                                        
+sin_rastro         _context                                                   
+ya_esta_aqui       _convert                                                   src/addons/base/models/res_currency.py, .venv/lib/python3.12/site-packages/barcode/codex.py, .venv/lib/python3.12/site-packages/dateutil/parser/_parser.py
+trae_renombrado    _convert_db_column -> alter_field                          .venv/lib/python3.12/site-packages/django/db/backends/base/schema.py, .venv/lib/python3.12/site-packages/django/db/backends/oracle/schema.py, .venv/lib/python3.12/site-packages/django/db/migrations/state.py
+sin_rastro         _convert_to_record                                         
+sin_rastro         _convert_to_write                                          
+sin_rastro         _cr                                                        
+nombre_generico    _create                                                    .venv/lib/python3.12/site-packages/_pytest/nodes.py, .venv/lib/python3.12/site-packages/factory/alchemy.py, .venv/lib/python3.12/site-packages/factory/base.py
+sin_rastro         _default_group_expand                                      
+sin_rastro         _description_aggregator                                    
+sin_rastro         _description_allow_hierachy_operators                      
+sin_rastro         _description_currency_field                                
+sin_rastro         _description_depends                                       
+sin_rastro         _description_digits                                        
+sin_rastro         _description_domain                                        
+sin_rastro         _description_falsy_value_label                             
+sin_rastro         _description_groupable                                     
+sin_rastro         _description_help                                          
+sin_rastro         _description_min_display_digits                            
+sin_rastro         _description_searchable                                    
+sin_rastro         _description_selection                                     
+sin_rastro         _description_sortable                                      
+sin_rastro         _description_string                                        
+sin_rastro         _description_translate                                     
+sin_rastro         _determine_fields_to_fetch                                 
+nombre_generico    _encode                                                    .venv/lib/python3.12/site-packages/django/contrib/messages/storage/cookie.py, .venv/lib/python3.12/site-packages/uritemplate/variable.py, /usr/lib/python3.12/email/charset.py
+ya_esta_aqui       _export_rows                                               addons/web/controllers/export.py
+sin_rastro         _expression_property_getter                                
+sin_rastro         _fetch_field                                               
+sin_rastro         _fetch_query                                               
+sin_rastro         _filter_access_rules                                       
+sin_rastro         _filter_access_rules_python                                
+sin_rastro         _get_attrs                                                 
+sin_rastro         _get_base_lang                                             
+ya_esta_aqui       _get_placeholder_filename                                  addons/onboarding/models/onboarding_onboarding_step.py
+sin_rastro         _get_query_for_condition_value                             
+sin_rastro         _get_stored_translations                                   
+sin_rastro         _has_cycle                                                 
+sin_rastro         _has_onchange                                              
+ya_esta_aqui       _image_process                                             addons/html_editor/tools.py
+sin_rastro         _internal_description_domain_raw                           
+sin_rastro         _inverse_related                                           
+sin_rastro         _is_an_ordinary_table                                      
+sin_rastro         _onchange_methods                                          
+sin_rastro         _ondelete_methods                                          
+trae_renombrado    _order_field_to_sql -> get_order_by                        .venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py
+trae_renombrado    _order_to_sql -> get_order_by                              .venv/lib/python3.12/site-packages/django/db/models/sql/compiler.py
+sin_rastro         _parent_store_compute                                      
+sin_rastro         _parent_store_create                                       
+sin_rastro         _parent_store_update                                       
+sin_rastro         _parent_store_update_prepare                               
+sin_rastro         _post_model_setup__                                        
+sin_rastro         _prepare_create_values                                     
+sin_rastro         _process_related                                           
+sin_rastro         _read_format                                               
+sin_rastro         _read_group                                                
+ya_esta_aqui       _read_group_empty_value                                    addons/web/models/models.py
+sin_rastro         _read_group_expand_full                                    
+sin_rastro         _read_group_fill_results                                   
+sin_rastro         _read_group_fill_temporal                                  
+sin_rastro         _read_group_format_result                                  
+sin_rastro         _read_group_format_result_properties                       
+ya_esta_aqui       _read_group_groupby                                        addons/mail/models/mail_activity_mixin.py
+sin_rastro         _read_group_groupby_properties                             
+sin_rastro         _read_group_having                                         
+sin_rastro         _read_group_orderby                                        
+sin_rastro         _read_group_postprocess_aggregate                          
+sin_rastro         _read_group_postprocess_groupby                            
+nombre_generico    _read_group_select                                         addons/account/report/account_invoice_report.py, addons/stock/models/stock_quant.py
+sin_rastro         _read_grouping_sets                                        
+ya_esta_aqui       _rec_name_fallback                                         addons/web/controllers/export.py
+sin_rastro         _record_ids_per_res_model                                  
+sin_rastro         _register_hook                                             
+sin_rastro         _related_domain                                            
+sin_rastro         _remove_inverses                                           
+nombre_generico    _search                                                    addons/stock/models/stock_quant.py, src/addons/base/models/res_groups.py, src/tools/convert.py
+sin_rastro         _search_related                                            
+sin_rastro         _selection_modules                                         
+nombre_generico    _setup                                                     .venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py, .venv/lib/python3.12/site-packages/django/conf/__init__.py, .venv/lib/python3.12/site-packages/django/contrib/admin/sites.py
+sin_rastro         _setup_fields                                              
+sin_rastro         _sorted_order_to_function                                  
+sin_rastro         _sql_error_to_message_generic                              
+sin_rastro         _table_sql                                                 
+sin_rastro         _to_prefetch                                               
+trae_renombrado    _to_sql -> as_sql                                          .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/oracle/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/postgis/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/spatialite/operations.py
+sin_rastro         _uid                                                       
+sin_rastro         _unregister_hook                                           
+sin_rastro         _update_field_translations                                 
+sin_rastro         _update_inverse                                            
+sin_rastro         _update_inverses                                           
+sin_rastro         _valid_field_parameter                                     
+sin_rastro         _value_to_column                                           
+nombre_generico    _write                                                     .venv/lib/python3.12/site-packages/PIL/TiffImagePlugin.py, .venv/lib/python3.12/site-packages/django/db/migrations/writer.py, .venv/lib/python3.12/site-packages/faker/sphinx/documentor.py
+sin_rastro         _write_multi                                               
+sin_rastro         action_archive                                             
+ya_esta_aqui       action_unarchive                                           addons/crm/models/crm_lead.py
+nombre_generico    add                                                        src/addons/base/models/res_company.py, src/tools/date_utils.py, src/tools/misc.py
+ya_esta_aqui       add_default                                                src/tools/speedscope.py
+sin_rastro         add_to_registry                                            
+sin_rastro         and_predicate                                              
+sin_rastro         apply_except_missing                                       
+sin_rastro         base_field                                                 
+sin_rastro         build_like_regex                                           
+sin_rastro         check_access_rights                                        
+sin_rastro         check_access_rule                                          
+sin_rastro         check_field_access_rights                                  
+sin_rastro         column_order                                               
+trae_renombrado    column_type -> db_type                                     .venv/lib/python3.12/site-packages/django/contrib/gis/db/models/fields.py, .venv/lib/python3.12/site-packages/django/contrib/postgres/fields/array.py, .venv/lib/python3.12/site-packages/django/contrib/postgres/fields/hstore.py
+trae_renombrado    condition_to_sql -> as_sql                                 .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/oracle/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/postgis/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/spatialite/operations.py
+sin_rastro         context_timestamp                                          
+sin_rastro         context_today                                              
+ya_esta_aqui       convert_to_column_insert                                   addons/base_sparse_field/models/fields.py
+sin_rastro         convert_to_record_multi                                    
+sin_rastro         determine_group_expand                                     
+sin_rastro         ensure_one                                                 
+nombre_generico    exists                                                     .venv/lib/python3.12/site-packages/_pytest/_py/path.py, .venv/lib/python3.12/site-packages/babel/localedata.py, .venv/lib/python3.12/site-packages/django/contrib/sessions/backends/base.py
+sin_rastro         export_data                                                
+ya_esta_aqui       fetch                                                      addons/web/models/models.py, .venv/lib/python3.12/site-packages/psycopg/_typeinfo.py, /usr/lib/python3.12/imaplib.py
+sin_rastro         fetch_fields                                               
+sin_rastro         fields_get                                                 
+sin_rastro         fill_properties_cache                                      
+sin_rastro         filtered                                                   
+sin_rastro         get_column_update                                          
+sin_rastro         get_currency_field                                         
+nombre_generico    get_description                                            .venv/lib/python3.12/site-packages/drf_spectacular/openapi.py, .venv/lib/python3.12/site-packages/drf_spectacular/utils.py, .venv/lib/python3.12/site-packages/rest_framework/renderers.py
+sin_rastro         get_digits                                                 
+sin_rastro         get_field_translations                                     
+sin_rastro         get_metadata                                               
+sin_rastro         get_min_display_digits                                     
+nombre_generico    get_origin                                                 .venv/lib/python3.12/site-packages/typing_extensions.py, /usr/lib/python3.12/typing.py
+trae_candidato     get_text_content                                           /usr/lib/python3.12/email/contentmanager.py
+sin_rastro         get_trans_terms                                            
+sin_rastro         get_translation_dictionary                                 
+sin_rastro         get_translation_fallback_langs                             
+sin_rastro         grouped                                                    
+sin_rastro         ids                                                        
+sin_rastro         invalidate_model                                           
+sin_rastro         invalidate_recordset                                       
+sin_rastro         is_constraint                                              
+sin_rastro         is_editable                                                
+sin_rastro         is_inherited_field                                         
+sin_rastro         is_onchange                                                
+sin_rastro         is_ondelete                                                
+nombre_generico    join                                                       src/tools/query.py, src/tools/sql.py, .venv/lib/python3.12/site-packages/_pytest/_py/path.py
+ya_esta_aqui       lock_for_update                                            addons/account_edi/models/account_edi_document.py
+sin_rastro         make_type                                                  
+sin_rastro         mapped                                                     
+sin_rastro         might_duplicate_rows                                       
+nombre_generico    now                                                        .venv/lib/python3.12/site-packages/django/template/defaulttags.py, .venv/lib/python3.12/site-packages/django/utils/timezone.py, .venv/lib/python3.12/site-packages/gunicorn/glogging.py
+sin_rastro         onchange_default                                           
+sin_rastro         or_predicate                                               
+sin_rastro         order_to_function                                          
+sin_rastro         prepare_setup                                              
+ya_esta_aqui       read                                                       src/service/db.py, .venv/lib/python3.12/site-packages/PIL/ContainerIO.py, .venv/lib/python3.12/site-packages/PIL/MpegImagePlugin.py
+sin_rastro         read_group                                                 
+sin_rastro         recordset                                                  
+sin_rastro         recursive_compute                                          
+sin_rastro         relation_add                                               
+sin_rastro         relation_delete                                            
+sin_rastro         relation_remove                                            
+sin_rastro         relation_set                                               
+sin_rastro         resolve_depends                                            
+sin_rastro         search_count                                               
+ya_esta_aqui       search_fetch                                               addons/crm/models/crm_lead.py
+sin_rastro         search_read                                                
+sin_rastro         setup_inverses                                             
+sin_rastro         setup_model_classes                                        
+nombre_generico    setup_nonrelated -> contribute_to_class                    .venv/lib/python3.12/site-packages/django/contrib/contenttypes/fields.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/models/fields.py, .venv/lib/python3.12/site-packages/django/db/models/fields/__init__.py
+trae_candidato     sorted                                                     .venv/lib/python3.12/site-packages/factory/builder.py
+sin_rastro         to_date                                                    
+sin_rastro         to_datetime                                                
+trae_renombrado    to_sql -> as_sql                                           .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/oracle/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/postgis/operations.py, .venv/lib/python3.12/site-packages/django/contrib/gis/db/backends/spatialite/operations.py
+nombre_generico    to_string                                                  .venv/lib/python3.12/site-packages/django/db/backends/base/operations.py, .venv/lib/python3.12/site-packages/passlib/apache.py, .venv/lib/python3.12/site-packages/passlib/context.py
+sin_rastro         to_xid                                                     
+nombre_generico    today                                                      .venv/lib/python3.12/site-packages/dateutil/utils.py, /usr/lib/python3.12/_pydatetime.py
+sin_rastro         toggle_active                                              
+sin_rastro         translate_func                                             
+sin_rastro         translation_lang                                           
+sin_rastro         try_lock_for_update                                        
+trae_renombrado    update_db_column -> alter_field                            .venv/lib/python3.12/site-packages/django/db/backends/base/schema.py, .venv/lib/python3.12/site-packages/django/db/backends/oracle/schema.py, .venv/lib/python3.12/site-packages/django/db/migrations/state.py
+sin_rastro         update_db_foreign_key                                      
+sin_rastro         update_db_foreign_keys                                     
+trae_renombrado    update_db_notnull -> alter_field                           .venv/lib/python3.12/site-packages/django/db/backends/base/schema.py, .venv/lib/python3.12/site-packages/django/db/backends/oracle/schema.py, .venv/lib/python3.12/site-packages/django/db/migrations/state.py
+sin_rastro         update_db_related                                          
+sin_rastro         update_field_translations                                  
+sin_rastro         validated                                                  
+sin_rastro         with_company                                               
+sin_rastro         with_context                                               
+sin_rastro         with_env                                                   
+sin_rastro         with_prefetch                                              
+sin_rastro         with_user                                                  
+ya_esta_aqui       wrap                                                       addons/web/controllers/export.py, .venv/lib/python3.12/site-packages/PIL/ImageText.py, .venv/lib/python3.12/site-packages/attr/_make.py
+sin_rastro         write_batch                                                
+sin_rastro         write_new                                                  
+sin_rastro         write_real                                                 

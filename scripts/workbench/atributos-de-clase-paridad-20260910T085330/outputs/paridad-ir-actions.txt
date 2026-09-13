@@ -1,0 +1,36 @@
+
+=== src/addons/base/models/ir_actions.py
+    contraparte: odoo19c: odoo/addons/base/models/ir_actions.py
+    IrActionsActions                
+        5 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _name, _order, _table
+        objetos de tabla (hogar = Meta): _path_unique — SIN Meta
+    IrActionsActWindow                (ref IrActionsAct_Window)
+        6 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _inherit, _name, _order, _table
+    IrActionsActWindowView            (ref IrActionsAct_WindowView)
+        6 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _name, _order, _rec_name, _table
+        objetos de tabla (hogar = Meta): _unique_mode_per_action — Meta declarado
+    IrActionsActWindowClose           (ref IrActionsAct_Window_Close)
+        5 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _inherit, _name, _table
+    IrActionsActUrl                   (ref IrActionsAct_Url)
+        6 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _inherit, _name, _order, _table
+    ServerActionHistoryWizard       
+        OK
+    IrActionsServerHistory          
+        OK
+    IrActionsServer                 
+        OK
+    IrActionsTodo                   
+        5 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _name, _order, _rec_name
+    IrActionsClient                 
+        6 ausentes, 0 inventados
+        missing: _allow_sudo_commands, _description, _inherit, _name, _order, _table
+    nuestras sin contraparte (NO se marcan): IrActionsBase
+    de la referencia sin puerto: LoggerProxy
+
+total: 39 atributos ausentes, 0 inventados

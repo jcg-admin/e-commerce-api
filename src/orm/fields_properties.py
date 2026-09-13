@@ -47,7 +47,11 @@ from orm import registry
 import orm.domains as _domains
 import orm.models as _models
 from orm.environments import context_scope, get_context, get_current_uid, sudo
-from orm.fields_nonstored import projection_or_none
+from orm.fields_nonstored import (
+    _UNSET,
+    annotate_related,
+    apply_source_defaults,
+)
 from orm.utils import (COLLECTION_TYPES, display_name_of, parse_field_expr,
                        regex_alphanumeric)
 from tools.misc import OrderedSet, has_list_types, is_list_of
@@ -143,22 +147,6 @@ class Properties(models.JSONField):
     un alias siguen siendo idénticas y ``makemigrations --check`` queda limpio.
     """
 
-    def __new__(cls, *args, related=None, **kwargs):
-        """Despacha la proyección sin dejar de ser una clase.
-
-        Mismo mecanismo que ``Html``: cuando ``__new__`` devuelve una
-        instancia que **no** es de ``cls``, Python no llama a ``__init__``, así
-        que el descriptor queda construido por el suyo. La clase se conserva
-        porque el árbol la usa en ``isinstance``.
-        """
-        projection, _attributes = projection_or_none(related, kwargs)
-        if projection is not None:
-            return projection
-        instance = super().__new__(cls)
-        instance.related = related
-        return instance
-
-
     #: ``'campo_al_contenedor.campo_de_definicion'``, tal cual la fuente.
     definition = None
     #: El campo de ESTE modelo que apunta al contenedor.
@@ -180,8 +168,16 @@ class Properties(models.JSONField):
         'separator',
     )
 
-    def __init__(self, *args, definition=None, store=None, **kwargs):
+    def __init__(self, *args, definition=None, related=None, store=_UNSET,
+                 **kwargs):
+        """``definition`` es propio del tipo; ``store`` y ``related`` son el
+        vocabulario de la fuente, que se **reenvía** al constructor para que
+        ``_args__`` lo recoja (TASK-API-0417)."""
+        if store is not _UNSET:
+            kwargs['store'] = store
+        related_attrs = apply_source_defaults(related, kwargs)
         super().__init__(*args, **kwargs)
+        annotate_related(self, related, related_attrs)
         self.definition = definition
 
     def _setup_definition_attrs(self, model_class=None):
@@ -1162,31 +1158,23 @@ class PropertiesDefinition(models.JSONField):
     alias siguen siendo idénticas.
     """
 
-    def __new__(cls, *args, related=None, **kwargs):
-        """Despacha la proyección sin dejar de ser una clase.
+    def __init__(self, *args, related=None, store=_UNSET, **kwargs):
+        """Recibe el vocabulario de la fuente y lo reenvía al constructor.
 
-        El mismo enrutador que :class:`Properties`, ``Html``, ``Binary`` e
-        ``Image``. Faltaba aquí, y la ausencia no era una divergencia
-        declarada: ``fields.PropertiesDefinition(store=False)`` levantaba
-        ``TypeError`` en vez de dar un campo sin columna.
-
-        En la fuente no hay tal asimetría — es un ``Field`` como los demás
-        (``odoo19c: odoo/orm/fields_properties.py:844``), y todo ``Field``
+        ``fields.PropertiesDefinition(store=False)`` llegó a levantar
+        ``TypeError``, y la ausencia no era una divergencia declarada: en la
+        fuente es un ``Field`` como los demás
+        (``odoo19c: odoo/orm/fields_properties.py:844``) y todo ``Field``
         admite ``store`` (``odoo/orm/fields.py:278``). Que hoy ninguna
         declaración de la referencia lo pida (**0** medidas en
         ``addons/*/models/*.py``) no autoriza a portar menos: el molde es el
         del tipo, no el de sus consumidores de hoy.
         """
-        projection, _attributes = projection_or_none(related, kwargs)
-        if projection is not None:
-            return projection
-        instance = super().__new__(cls)
-        instance.related = related
-        return instance
-
-    def __init__(self, *args, related=None, store=None, **kwargs):
-        """Traga las dos palabras clave que resolvió :meth:`__new__`."""
+        if store is not _UNSET:
+            kwargs['store'] = store
+        related_attrs = apply_source_defaults(related, kwargs)
         super().__init__(*args, **kwargs)
+        annotate_related(self, related, related_attrs)
 
     #: Los campos ``Properties`` que consumen esta definición. Lo puebla
     #: ``Properties.setup``, igual que la fuente.

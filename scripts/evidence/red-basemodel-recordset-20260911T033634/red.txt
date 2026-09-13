@@ -1,0 +1,35 @@
+# Mitad ROJA — TASK-API-0397, nucleo del recordset de BaseModel
+# fecha: 2026-09-11T03:36:34
+# comando: uv run pytest tests/unit/orm/test_base_model_recordset.py -q --reuse-db
+
+
+==================================== ERRORS ====================================
+_________ ERROR collecting tests/unit/orm/test_base_model_recordset.py _________
+ImportError while importing test module '/home/user/kaupamex-api/tests/unit/orm/test_base_model_recordset.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+tests/unit/orm/test_base_model_recordset.py:91: in <module>
+    from orm.models import BaseModel
+E   ImportError: cannot import name 'BaseModel' from 'orm.models' (/home/user/kaupamex-api/src/orm/models.py)
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854
+  /home/user/kaupamex-api/.venv/lib/python3.12/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/unit/orm/test_base_model_recordset.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 warning, 1 error in 0.15s
+EXIT=2
+
+# COMO SE LEE ESTA SALIDA
+# El fallo es de COLECCION, no de aserción: pytest imprime «1 error» y NO
+# imprime ningún conteo de «failed». Leer un «0 failed» aquí como verde sería
+# el sub-patrón D de metrica-decide-la-conclusion.md — el instrumento no llegó
+# a ejecutar ninguna aserción, así que su silencio no informa de nada.
+#
+# Metrica: importación del módulo de test bajo config.settings.testing.
+# Ciega a: todo el contenido del archivo — 0 de las aserciones corrieron.

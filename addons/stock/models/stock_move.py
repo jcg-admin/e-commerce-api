@@ -347,6 +347,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 import fields
+import api
 import models
 
 from orm.environments import get_current_company, get_current_user
@@ -374,7 +375,7 @@ PRODUCT_LOCATION_INDEX = models.Index(
 )
 
 
-class StockMove(TimeStampedModel):
+class StockMove(models.DefaultGetMixin, TimeStampedModel):
     """``stock.move`` — un movimiento de inventario."""
 
     # Atributos de clase de modelo — los cuatro de ORM que la referencia
@@ -1281,18 +1282,26 @@ class StockMove(TimeStampedModel):
             values['picked'] = True
         return values
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :818-830``).
 
         Normaliza, inserta, y **luego** propaga: las reglas de reabastecimiento
         que este producto toca quedan marcadas para recalcularse, y el
         movimiento hereda las referencias de su albarán.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        move = cls.objects.create(**cls._normalize_create_values(vals))
-        move._update_orderpoints()
-        move._set_references()
-        return move
+        moves = super().create([cls._normalize_create_values(vals) for vals in vals_list])
+        for move in moves:
+            move._update_orderpoints()
+            move._set_references()
+        return moves
 
     def write(self, vals, skip_uom_conversion=False):
         """≙ ``write`` (``odoo19c: :833-905``) — la mitad de guardas.

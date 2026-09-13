@@ -1,0 +1,43 @@
+{
+  "question": "Para el `id` de BaseModel, ¿el stack trae el mecanismo de los tres regímenes de `Id.__get__` (vacío→False, singleton→ids[0], N→ValueError), o hay que construirlo? ¿Y `__slots__` verbatim sobre una base abstracta de Django es admisible?",
+  "instrument": [
+    "scripts/workbench/basemodel-id-access-20260911T035612/probe_id_access.py",
+    "scripts/workbench/basemodel-id-access-20260911T035612/probe_id_descriptor.py",
+    "scripts/workbench/basemodel-id-access-20260911T035612/probe_abstract_base.py",
+    "scripts/workbench/basemodel-id-access-20260911T035612/probe_id_setter.py"
+  ],
+  "metric": "Conducta observada de `.id` sobre instancias construidas por tres vías (object.__new__ pelado, +_state, +__dict__) y número de consultas SQL emitidas, con django.setup() y config.settings.testing; más el descriptor que `Sujeto.__dict__['id']` guarda en cada montaje (base llana contra receptor de `class_prepared`). Y: si el `Id.__set__` de la referencia (fields_misc.py:116-117) se puede portar verbatim, construyendo una fila con `Sujeto(id=99)` bajo un descriptor con `__set__` y bajo uno sin el.",
+  "blind_to": [
+    "el camino que SÍ puede consultar la base — `rs.<campo>` por DeferredAttribute → refresh_from_db; las sondas sólo ejercitan `.id`",
+    "el comportamiento bajo un modelo con pk no entera o con pk compuesta: los tres sujetos declaran AutoField implícito",
+    "si el receptor de class_prepared sobrevive a una recarga del registro de apps (migraciones, makemigrations) — no se midió",
+    "el coste de la indirección del descriptor: ninguna sonda mide tiempo",
+    "el punto exacto de Model.__init__ donde la asignacion falla: la sonda mide el desenlace de la construccion, no la linea que lo produce"
+  ],
+  "destination": [
+    "api: src/orm/models.py — BaseModel, el núcleo del recordset de TASK-API-0397",
+    "api: tests/unit/orm/test_base_model_recordset.py — la mitad RED ya escrita (api@08908b86)"
+  ],
+  "control": "El positivo real es el tercer régimen: con `_ids=(7, 18)` la sonda exige ValueError, que es lo que `odoo19c: odoo/orm/fields_misc.py:110-114` hace. Un descriptor que devolviera ids[0] pasaría los otros dos y fallaría éste. Y el control negativo del montaje: probe_id_descriptor.py declara el MISMO descriptor sobre una base llana y mide que ModelBase lo sombrea con DeferredAttribute — sin esa sonda, el éxito del receptor de class_prepared no distinguiría 'el descriptor funciona' de 'cualquier descriptor habría funcionado'.",
+  "corrected_premise": {
+    "decia": "`.id` sobre una instancia construida con object.__new__ dispara refresh_from_db y por tanto una consulta SQL",
+    "mide": "lanza AttributeError con 0 consultas — el DeferredAttribute muere en `self.field.attname` antes de llegar a la base",
+    "consecuencia": "el riesgo del bypass no es una consulta silenciosa sino un atributo inaccesible; el camino que sí consulta es `rs.<campo>`, no `.id`"
+  },
+  "reproducible": "cd /home/user/kaupamex-api && for p in probe_id_access probe_id_descriptor probe_abstract_base; do uv run python scripts/workbench/basemodel-id-access-20260911T035612/$p.py; done",
+  "outputs": [
+    "id_access.txt",
+    "id_descriptor.txt",
+    "abstract_base.txt",
+    "id_setter.txt"
+  ],
+  "source": "odoo19c: odoo/orm/fields_misc.py:89-130 (Id) y odoo/orm/models.py:334-7004 (BaseModel) — odoo-tools@abe4040ec1; django 6.0.5 en .venv/lib/python3.12/site-packages",
+  "tasks": [
+    "#318"
+  ],
+  "durable_tasks": [
+    "TASK-API-0397"
+  ],
+  "measured_at": "2026-09-11T03:56:42",
+  "api_head": "08908b86"
+}

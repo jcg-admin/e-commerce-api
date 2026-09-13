@@ -1,0 +1,233 @@
+{
+  "corpus_available": true,
+  "by_root": [
+    {
+      "root": "src",
+      "files_parsed": 300,
+      "occurrences": 139,
+      "distinct_keys": 45,
+      "top_keys": [
+        [
+          "thousands_sep",
+          93
+        ],
+        [
+          "y",
+          2
+        ],
+        [
+          "enseres",
+          2
+        ],
+        [
+          "America/Argentina/ComodRivadavia",
+          1
+        ],
+        [
+          "America/Buenos_Aires",
+          1
+        ],
+        [
+          "America/Cordoba",
+          1
+        ],
+        [
+          "America/Jujuy",
+          1
+        ],
+        [
+          "America/Mendoza",
+          1
+        ],
+        [
+          "America/Rosario",
+          1
+        ],
+        [
+          "Asia/Macao",
+          1
+        ],
+        [
+          "Australia/Victoria",
+          1
+        ],
+        [
+          "Brazil/DeNoronha",
+          1
+        ]
+      ]
+    },
+    {
+      "root": "tests",
+      "files_parsed": 797,
+      "occurrences": 173,
+      "distinct_keys": 101,
+      "top_keys": [
+        [
+          "en_US",
+          13
+        ],
+        [
+          "es_MX",
+          9
+        ],
+        [
+          "iva_rate",
+          5
+        ],
+        [
+          "importe",
+          5
+        ],
+        [
+          "IrFieldConverterImage",
+          4
+        ],
+        [
+          "IrFieldConverterRelative",
+          4
+        ],
+        [
+          "IrFieldConverterTemplate",
+          4
+        ],
+        [
+          "campo",
+          4
+        ],
+        [
+          "texto",
+          3
+        ],
+        [
+          "vacio",
+          3
+        ],
+        [
+          "marca",
+          3
+        ],
+        [
+          "clave",
+          3
+        ]
+      ]
+    },
+    {
+      "root": "addons",
+      "files_parsed": 1932,
+      "occurrences": 405,
+      "distinct_keys": 115,
+      "top_keys": [
+        [
+          "codigo_error",
+          269
+        ],
+        [
+          "party_vals",
+          5
+        ],
+        [
+          "nombre",
+          4
+        ],
+        [
+          "product_categ_selectable",
+          4
+        ],
+        [
+          "campo",
+          3
+        ],
+        [
+          "SE",
+          2
+        ],
+        [
+          "SI",
+          2
+        ],
+        [
+          "addons.authz_timeout.models.ir_http",
+          2
+        ],
+        [
+          "de",
+          2
+        ],
+        [
+          "es",
+          2
+        ],
+        [
+          "gr",
+          2
+        ],
+        [
+          "se",
+          2
+        ]
+      ]
+    },
+    {
+      "root": "scripts",
+      "files_parsed": 116,
+      "occurrences": 142,
+      "distinct_keys": 132,
+      "top_keys": [
+        [
+          "IrActionsClient",
+          3
+        ],
+        [
+          "IrActionsActions",
+          3
+        ],
+        [
+          "authz_totp",
+          2
+        ],
+        [
+          "authz_totp_mail",
+          2
+        ],
+        [
+          "llamadas",
+          2
+        ],
+        [
+          "nuestros",
+          2
+        ],
+        [
+          "referencia",
+          2
+        ],
+        [
+          "IrActionsAct_Window_Close",
+          2
+        ],
+        [
+          "authz_catalog.py",
+          1
+        ],
+        [
+          "ref-ausente",
+          1
+        ],
+        [
+          "no-declarado",
+          1
+        ],
+        [
+          "sin-super",
+          1
+        ]
+      ]
+    }
+  ],
+  "totals": {
+    "occurrences": 859,
+    "files_parsed": 3145
+  }
+}

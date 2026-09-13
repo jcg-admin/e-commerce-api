@@ -1,0 +1,9 @@
+69:    street = fields.Char(compute='_compute_address', inverse='_inverse_street')
+70:    street2 = fields.Char(compute='_compute_address', inverse='_inverse_street2')
+71:    zip = fields.Char(compute='_compute_address', inverse='_inverse_zip')
+72:    city = fields.Char(compute='_compute_address', inverse='_inverse_city')
+74:        'res.country.state', compute='_compute_address', inverse='_inverse_state',
+78:    country_id = fields.Many2one('res.country', compute='_compute_address', inverse='_inverse_country', string="Country")
+137:    def _compute_address(self):
+164:    def _inverse_country(self):
+EXIT=0

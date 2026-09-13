@@ -20,6 +20,7 @@ resto (paquetes, backorder-wizard, la máquina de reservas de
 from decimal import Decimal
 
 import pytest
+from orm.environments import sudo
 from django.utils import timezone
 
 from addons.base.models import IrSequence, ResCompany, ResPartner, ResUsers
@@ -35,6 +36,16 @@ from addons.stock.models import (
 from exceptions import UserError
 
 pytestmark = [pytest.mark.unit, pytest.mark.django_db]
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 @pytest.fixture
@@ -316,14 +327,14 @@ def test_create_assigns_name_from_picking_type_sequence(company):
     tipo = StockPickingType.objects.create(
         name='Entrega', code='outgoing', sequence_code='OUT',
         company=company, sequence_id=sequence)
-    picking = StockPicking.create(picking_type=tipo, company=company)
+    picking, = StockPicking.create([{'picking_type': tipo, 'company': company}])
     assert picking.name == 'OUT/00001'
 
 
 def test_create_leaves_name_blank_without_sequence(picking_type, company):
     """``:1117-1139`` — sin secuencia en el tipo, el nombre queda vacío (D-8:
     la red de seguridad es ``action_confirm``, no ``create``)."""
-    picking = StockPicking.create(picking_type=picking_type, company=company)
+    picking, = StockPicking.create([{'picking_type': picking_type, 'company': company}])
     assert picking.name in ('', None)
 
 
@@ -334,8 +345,8 @@ def test_create_respects_an_explicit_name(company):
     tipo = StockPickingType.objects.create(
         name='Entrega 2', code='outgoing', sequence_code='OUT2',
         company=company, sequence_id=sequence)
-    picking = StockPicking.create(
-        picking_type=tipo, company=company, name='MANUAL-001')
+    picking, = StockPicking.create([
+        {'picking_type': tipo, 'company': company, 'name': 'MANUAL-001'}])
     assert picking.name == 'MANUAL-001'
 
 
@@ -370,7 +381,7 @@ def test_write_renumbers_and_relocates_on_type_change(company):
         sequence_id=seq_b, default_location_src=origen_b,
         default_location_dest=destino_b)
 
-    picking = StockPicking.create(picking_type=tipo_a, company=company)
+    picking, = StockPicking.create([{'picking_type': tipo_a, 'company': company}])
     assert picking.name == 'A/001'
 
     picking.write({'picking_type': tipo_b})

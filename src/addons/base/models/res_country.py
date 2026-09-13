@@ -105,6 +105,16 @@ class ResCountry(models.Model):
         default=True,
         help_text='El código postal es obligatorio (Odoo zip_required).',
     )
+    #: ≙ ``country_group_codes`` (``odoo19c: res_country.py:68``), que allá es
+    #: ``fields.Json(compute="_compute_country_group_codes")`` — un computado
+    #: SIN ``store``. Era un ``@property`` aquí, y su docstring lo justificaba
+    #: con *"no hay columna que migrar"*: eso explica la referencia, no nuestra
+    #: diferencia. Un ``@property`` no vive en ``_meta``, así que ninguna cadena
+    #: ``related=`` puede navegarlo — que es lo que rompía
+    #: ``company_country_group_codes`` de ``SiteConfigSettings``.
+    country_group_codes = fields.Json(
+        compute='_compute_country_group_codes', store=False)
+
     # `country_groups` NO se declara aquí: ya existe como el `related_name` del
     # M2M que `ResCountryGroup.country_ids` declara sobre la tabla
     # `res_country_res_country_group_rel` — la misma que nombra
@@ -163,20 +173,18 @@ class ResCountry(models.Model):
         country = cls.objects.filter(code=(code or '').upper()).first()
         return country.phone_code if country else None
 
-    @property
-    def country_group_codes(self):
-        """Los códigos de sus agrupaciones — ≙ ``_compute_country_group_codes``.
+    def _compute_country_group_codes(self):
+        """Los códigos de sus agrupaciones — ≙ ``_compute_country_group_codes``
+        (``odoo19c: odoo/addons/base/models/res_country.py:162-168``).
 
-        ≙ ``odoo19c: res_country.py:162-169``. **Devuelve ``['']`` cuando no hay
-        ninguna**, y eso no es una rareza: la referencia lo documenta porque su
-        ORM guardaría la lista vacía como ``False``, y quien la recorriera
+        **Devuelve ``['']`` cuando no hay ninguna**, y eso no es una rareza: la
+        fuente lo documenta en su propio docstring —*"If a country has no
+        associated country groups, assign [''] to country_group_codes"*— porque
+        su ORM guardaría la lista vacía como ``False``, y quien la recorriera
         iteraría sobre un booleano. Aquí no hay ese riesgo, pero el valor se
         conserva porque es **contrato**: ``account_fiscal_country`` compara
         contra esta lista, y cambiar ``['']`` por ``[]`` alteraría el resultado
         de esa comparación para todo país sin agrupación.
-
-        Es ``property`` y no campo porque en la referencia es un computado sin
-        ``store`` — no hay columna que migrar.
         """
         return [g.code for g in self.country_groups.all() if g.code] or ['']
 

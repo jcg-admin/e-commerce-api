@@ -1,0 +1,22 @@
+--- singleton: un solo id en la terna ---
+rs.id                        -> 7
+rs.pk                        -> 7
+rs.label                     -> ProgrammingError: relation "orm_id_probe" does not exist
+LINE 1: ... "orm_id_probe"."id", "orm_id_probe"."label" FROM "orm_id_pr...
+                                                             ^
+
+--- tres ids en la terna ---
+rs.id                        -> ValueError: Expected singleton: ids=(7, 18, 33)
+rs.pk                        -> ValueError: Expected singleton: ids=(7, 18, 33)
+rs.label                     -> ValueError: Expected singleton: ids=(7, 18, 33)
+
+--- terna vacia ---
+rs.id                        -> False
+rs.label                     -> ProgrammingError: relation "orm_id_probe" does not exist
+LINE 1: ... "orm_id_probe"."id", "orm_id_probe"."label" FROM "orm_id_pr...
+                                                             ^
+
+--- que atributo de clase sirve cada nombre ---
+id       IdFromIds
+label    DeferredAttribute
+pk       NoneType

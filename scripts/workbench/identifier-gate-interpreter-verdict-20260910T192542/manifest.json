@@ -1,0 +1,53 @@
+{
+  "question": "El gate de identificadores, ¿da el mismo veredicto sobre el mismo arbol cuando lo corre el python3 del sistema y cuando lo corre el interprete que uv construye para este repositorio? Y si no, ¿que lo decide?",
+
+  "instrument": [
+    "probes/probe_verdict_by_interpreter.py",
+    "probes/probe_corpus_exclusion.py",
+    "probes/probe_dict_key_population.py"
+  ],
+
+  "metric": "Codigo de salida y linea de veredicto de scripts/check_identifier_language.py —el PUNTO DE ENTRADA del consumidor, no el mecanismo del proveedor— sobre las raices por defecto, por interprete; mas corpus_available() de cada uno. Medir el mecanismo directo NO discrimina: rehusa con exit 2 en los dos porque el baseline lo declara el punto de entrada, no el proveedor. La segunda sonda mide, por palabra, su pertenencia al lexico cerrado, a las particulas y al criterio de corpus, POR SEPARADO. La tercera cuenta claves de dict literales de tipo str por raiz, filtradas por el mismo criterio que el gate aplica a un identificador.",
+
+  "blind_to": [
+    "si el desacuerdo entre interpretes es un defecto del gate o de la declaracion de dependencias: la sonda mide el desacuerdo, no su culpa",
+    "el resto de interpretes del contenedor, que no se enumeran — la sonda compara dos, no censa todos",
+    "las palabras fuera de la lista de sondas de probe_corpus_exclusion: es un control, no un censo del lexico",
+    "la clave de dict compuesta en tiempo de ejecucion, la que llega por **kwargs y la del JSON, que no es Python",
+    "si una clave es contrato externo —codigo_error lo es, y sale 269 veces— lo decide quien lee, no el conteo"
+  ],
+
+  "destination": [
+    "outputs/verdict-by-interpreter.json — el desacuerdo, con su causa declarada",
+    "outputs/corpus-exclusion.json — las cinco palabras que solo el corpus atrapa",
+    "outputs/dict-key-population.json — la poblacion de TASK-API-0394, por raiz",
+    "thyrox@5887e230 — pyproject.toml que declara el corpus como dependencia del PROVEEDOR"
+  ],
+
+  "corrected_premise": {
+    "antes": "«nadie instala el lexico: esta ahi por accidente del contenedor». Se midieron dos manifiestos (api y thyrox) y se concluyo sobre tres arboles.",
+    "despues": "Ningun manifiesto lo declaraba porque THYROX no tenia pyproject.toml en absoluto — su mitad Python no declaraba nada. El lexico lo instalo kaupamex-docs cuando docs era el PRODUCER, de forma imperativa y sin declararlo, y por eso quedo atado al interprete del sistema. La deuda ya estaba nombrada en #183, cuya asercion test_thyrox_confines_typescript_and_not_python esta escrita para caer el dia que esa mitad declare su toolchain."
+  },
+
+  "results": {
+    "verdicts_agree": false,
+    "system_python": "3.11.15 · corpus True · exit 1 · FAIL — 2994 identificadores fuera del baseline",
+    "project_toolchain": "3.12.3 · corpus False · exit 0 · OK: identificadores en ingles (2587 archivos, 1265 en deuda heredada)",
+    "lexicon_declared_in_any_manifest_before": [],
+    "caught_only_by_corpus": ["ir", "vals", "es", "q", "iban"],
+    "closed_lexicon_size": 175,
+    "dict_key_occurrences_total": 859,
+    "dict_key_top_hit": "codigo_error ×269 — el canon de error del propio proyecto",
+    "corpus_available_consumers_in_the_gate": 0
+  },
+
+  "findings": ["H-DOCS-1139"],
+  "tasks": ["#302", "#303", "#304"],
+  "commits": ["docs@54c9598d9"],
+
+  "reproducible": "bash /home/user/thyrox/src/session/run-task-pool.sh --width 3 --timeout 900 --prefix identifier-gate - <<< $'python3 probes/probe_verdict_by_interpreter.py > outputs/verdict-by-interpreter.json\\npython3 probes/probe_corpus_exclusion.py > outputs/corpus-exclusion.json\\npython3 probes/probe_dict_key_population.py > outputs/dict-key-population.json'",
+
+  "measured_at": "2026-09-10T19:25:42",
+  "api_head": "7ae19a73",
+  "thyrox_head": "5887e230"
+}

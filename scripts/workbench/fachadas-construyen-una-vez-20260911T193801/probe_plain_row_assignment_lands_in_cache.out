@@ -1,0 +1,11 @@
+compute= <bound method _field_compute_related of <django.db.models.fields.CharField: partner_name>> | related= partner.name | store= False | descriptor= ComputedFieldDescriptor
+cache antes: {}
+  -> _model_setitem(OwnerPr pk=1, 'partner_name', 'Ada')
+  -> _field_write(['OwnerPr', 'str'], ids=[1])
+  -> _filter_not_equal_ids(['OwnerPr', 'str'], ids=[1])
+  <- _filter_not_equal_ids = (1,)
+  -> _update_cache(['tuple', 'str'], ids=[(1,)])
+  <- _update_cache = None
+  <- _field_write = None
+cache despues: {1: 'Ada'} | missing: []
+VEREDICTO: OK

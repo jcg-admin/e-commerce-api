@@ -1,0 +1,3 @@
+descriptor original      : DeferredAttribute
+solo __get__             : .id = 99
+__get__ + __set__ (ref)  : TypeError: field 'id' cannot be assigned

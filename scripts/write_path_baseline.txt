@@ -1,20 +1,27 @@
 # Deuda heredada del camino de escritura, congelada.
 # Una entrada listada no bloquea; una nueva si. Se paga al tocar el
 # archivo, no en un barrido.
-src/addons/base/models/ir_actions.py::_get_eval_context
-src/addons/base/models/ir_attachment.py::generate_access_token
-src/addons/base/models/ir_cron.py::_reschedule_asap
-src/addons/base/models/ir_cron.py::_trigger_list
-src/addons/base/models/res_device.py::__update_revoked
-src/addons/base/models/res_device.py::_revoke
-src/addons/base/models/res_device.py::_update_device
-src/addons/base/models/res_groups.py::_ensure_xml_id
-src/addons/base/models/res_partner.py::_commercial_sync_from_company
-src/addons/base/models/res_partner.py::_commercial_sync_to_descendants
-src/addons/base/models/res_partner.py::_company_dependent_commercial_sync
-src/addons/base/models/res_partner.py::_create_contact_parent_company
-src/addons/base/models/res_partner.py::_fields_sync
-src/addons/base/models/res_users.py::_generate
-src/orm/models.py::_add_missing_default_values
-src/tools/convert.py::_tag_delete
-src/tools/lru.py::snapshot
+#
+# La clave cambio de forma el 2026-09-11: era `archivo::simbolo` y ahora es
+# `archivo::Clase.simbolo` para lo declarado en clase (la funcion de modulo
+# conserva el nombre desnudo). Sin la duena, dos hermanas del mismo archivo
+# comparten entrada, y congelar una autorizaba a la otra. Las 17 entradas son
+# LAS MISMAS que antes — medido: 0 desaparecidas, 0 aparecidas sobre `src` —,
+# reescritas a la clave nueva; no hay deuda nueva congelada aqui.
+src/addons/base/models/ir_actions.py::IrActionsServer._get_eval_context
+src/addons/base/models/ir_attachment.py::IrAttachment.generate_access_token
+src/addons/base/models/ir_cron.py::IrCron._reschedule_asap
+src/addons/base/models/ir_cron.py::IrCron._trigger_list
+src/addons/base/models/res_device.py::ResDeviceLog.__update_revoked
+src/addons/base/models/res_device.py::ResDeviceLog._update_device
+src/addons/base/models/res_device.py::ResDeviceQuerySet._revoke
+src/addons/base/models/res_groups.py::ResGroups._ensure_xml_id
+src/addons/base/models/res_partner.py::ResPartner._commercial_sync_from_company
+src/addons/base/models/res_partner.py::ResPartner._commercial_sync_to_descendants
+src/addons/base/models/res_partner.py::ResPartner._company_dependent_commercial_sync
+src/addons/base/models/res_partner.py::ResPartner._create_contact_parent_company
+src/addons/base/models/res_partner.py::ResPartner._fields_sync
+src/addons/base/models/res_users.py::_ResUsersApikeysBase._generate
+src/orm/models.py::DefaultGetMixin._add_missing_default_values
+src/tools/convert.py::XmlImport._tag_delete
+src/tools/lru.py::LRU.snapshot

@@ -1,0 +1,35 @@
+{
+  "mechanism": "/home/user/thyrox/src/verify/check_identifier_language.py",
+  "entry_point": "/home/user/kaupamex-api/scripts/check_identifier_language.py",
+  "measured_root": "/home/user/kaupamex-api",
+  "by_interpreter": [
+    {
+      "interpreter": "system",
+      "argv": [
+        "python3"
+      ],
+      "version": "3.11.15",
+      "corpus_available": true,
+      "exit_code": 1,
+      "verdict_line": "FAIL — 2994 identificador(es) en español fuera del baseline:"
+    },
+    {
+      "interpreter": "project_toolchain",
+      "argv": [
+        "uv",
+        "run",
+        "python"
+      ],
+      "version": "3.12.3",
+      "corpus_available": false,
+      "exit_code": 0,
+      "verdict_line": "OK: identificadores en inglés (2587 archivos medidos, 1265 en deuda heredada)."
+    }
+  ],
+  "lexicon": {
+    "declared_in": [],
+    "importable_by_system_python": true,
+    "installed_at": "/usr/local/lib/python3.11/dist-packages/spacy_lookups_data/__init__.py"
+  },
+  "verdicts_agree": false
+}

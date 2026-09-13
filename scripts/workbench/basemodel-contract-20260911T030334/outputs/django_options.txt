@@ -1,0 +1,54 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/options.py  (1045 lineas)
+
+=== Options(-)  :90-1045  metodos=48 atributos=3
+  ATTR	FORWARD_PROPERTIES	91	FORWARD_PROPERTIES = {
+  ATTR	REVERSE_PROPERTIES	104	REVERSE_PROPERTIES = {"related_objects", "fields_map", "_relation_tree"}
+  ATTR	default_apps	106	default_apps = apps
+  DEF 	__init__	108-163	-	(self, meta, app_label=None)	
+  DEF 	label	166-167	property	(self)	
+  DEF 	label_lower	170-171	property	(self)	
+  DEF 	app_config	174-176	property	(self)	
+  DEF 	contribute_to_class	178-242	-	(self, cls, name)	
+  DEF 	_format_names	244-252	-	(self, objs)	App label/class name interpolation for object names.
+  DEF 	_get_default_pk_class	254-283	-	(self)	
+  DEF 	_prepare	285-327	-	(self, model)	
+  DEF 	add_manager	329-331	-	(self, manager)	
+  DEF 	add_field	333-366	-	(self, field, private=False)	
+  DEF 	setup_pk	368-371	-	(self, field)	
+  DEF 	setup_proxy	373-380	-	(self, target)	Do the internal setup so that the current model is a proxy for
+  DEF 	__repr__	382-383	-	(self)	
+  DEF 	__str__	385-386	-	(self)	
+  DEF 	can_migrate	388-404	-	(self, connection)	Return True if the model can/should be migrated on the `connection`.
+  DEF 	verbose_name_raw	407-412	cached_property	(self)	Return the untranslated verbose name.
+  DEF 	swapped	415-440	cached_property	(self)	Has this model been swapped out for another? If so, return the model
+  DEF 	setting_changed	442-444	-	(self, *, setting, **kwargs)	
+  DEF 	managers	447-464	cached_property	(self)	
+  DEF 	managers_map	467-468	cached_property	(self)	
+  DEF 	base_manager	471-497	cached_property	(self)	
+  DEF 	default_manager	500-522	cached_property	(self)	
+  DEF 	fields	525-564	cached_property	(self)	Return a list of all forward fields on the model and its parents,
+  DEF 	concrete_fields	567-577	cached_property	(self)	Return a list of all concrete fields on the model and its parents.
+  DEF 	local_concrete_fields	580-590	cached_property	(self)	Return a list of all concrete fields on the model.
+  DEF 	many_to_many	593-608	cached_property	(self)	Return a list of all many to many fields on the model and its parents.
+  DEF 	related_objects	611-631	cached_property	(self)	Return all related objects pointing to the current model. The related
+  DEF 	_forward_fields_map	634-646	cached_property	(self)	
+  DEF 	fields_map	649-661	cached_property	(self)	
+  DEF 	get_field	663-688	-	(self, field_name)	Return a field instance given the name of a forward or reverse field.
+  DEF 	get_base_chain	690-705	-	(self, model)	Return a list of parent classes leading to `model` (ordered from
+  DEF 	all_parents	708-718	cached_property	(self)	Return all the ancestors of this model as a tuple ordered by MRO.
+  DEF 	get_parent_list	720-725	-	(self)	Return all the ancestors of this model as a list ordered by MRO.
+  DEF 	get_ancestor_link	727-745	-	(self, ancestor)	Return the field on the current model which points to the given
+  DEF 	get_path_to_parent	747-777	-	(self, parent)	Return a list of PathInfos containing the path from the current
+  DEF 	get_path_from_parent	779-799	-	(self, parent)	Return a list of PathInfos containing the path from the parent
+  DEF 	_populate_directed_relation_graph	801-839	-	(self)	This method is used by each model to find its reverse objects. As this
+  DEF 	_relation_tree	842-843	cached_property	(self)	
+  DEF 	_expire_cache	845-856	-	(self, forward=True, reverse=True)	
+  DEF 	get_fields	858-872	-	(self, include_parents=True, include_hidden=False)	Return a list of fields associated to the model. By default, include
+  DEF 	_get_fields	874-967	-	(self, forward=True, reverse=True, include_parents=True, include_hidden=False, topmost_call=True)	Internal helper function to return fields of the model.
+  DEF 	total_unique_constraints	970-983	cached_property	(self)	Return a list of total unique constraints. Useful for determining set
+  DEF 	pk_fields	986-987	cached_property	(self)	
+  DEF 	is_composite_pk	990-991	property	(self)	
+  DEF 	_property_names	994-1005	cached_property	(self)	Return a set of the names of the properties defined on the model.
+  DEF 	_non_pk_concrete_field_names	1008-1021	cached_property	(self)	Return a set of the non-pk concrete field names defined on the model.
+  DEF 	_reverse_one_to_one_field_names	1024-1031	cached_property	(self)	Return a set of reverse one to one field names pointing to the current
+  DEF 	db_returning_fields	1034-1045	cached_property	(self)	Private API intended only to be used by Django itself.

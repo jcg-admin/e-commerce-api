@@ -1,0 +1,13 @@
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_code should be searchable. This is necessary to determine which records to recompute when base.ResCountry.code is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+/home/user/kaupamex-api/src/orm/fields.py:4020: UserWarning: Field <django.db.models.fields.related.ForeignKey: country> in dependency of base_setup.SiteConfigSettings.company_country_group_codes should be searchable. This is necessary to determine which records to recompute when base.ResCountry.country_group_codes is modified. You should either make the field searchable, or simplify the field dependency.
+  warnings.warn(
+setup_ran: OK
+the_read_writes_the_field: OK
+the_read_is_protected: OK
+the_real_row_bucket_is_reached: OK
+setup_count: 5674
+cubos por camino: {'create_by_kwargs': ['orm_building'], 'read_runs_the_compute': ['is_protected'], 'assign_on_a_real_row': ['real_row']}
+errores: {}
+VEREDICTO la_guarda_del_computo_es_el_cubo_protegido: OK
+EXIT=0

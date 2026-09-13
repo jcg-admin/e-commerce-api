@@ -1,0 +1,46 @@
+== la clase NO sale de `store`, en ninguna linea de la fuente ==
+medido 2026-09-11T18:28:11  ·  odoo19c @ abe4040ec1
+
+odoo/orm/model_classes.py:414-415 — quien crea la instancia fusionada:
+
+    Field = type(fields_[-1])
+    add_field(model_cls, name, Field(_base_fields__=tuple(fields_)))
+
+  La clase sale de `type(fields_[-1])` — la ULTIMA declaracion de la
+  cadena. No hay predicado sobre `store` en la eleccion.
+
+odoo/orm/fields.py:278 — `store` es un ATRIBUTO de clase de `Field`:
+
+    store: bool = True                  # whether the field is stored in database
+
+odoo/orm/fields.py:447 y :455 — donde se DERIVA, sobre el attrs fusionado:
+
+    if attrs.get('compute'):
+        attrs['store'] = store = attrs.get('store', False)
+    if attrs.get('related'):
+        attrs['store'] = store = attrs.get('store', False)
+
+odoo/orm/fields.py:314-317 — `Field.__init__`, tres lineas, sin enrutar:
+
+    def __init__(self, string: str | Sentinel = SENTINEL, **kwargs):
+        kwargs['string'] = string
+        self._sequence = next(_global_seq)
+        self._args__ = ReadonlyDict({key: val for key, val in kwargs.items()
+                                     if val is not SENTINEL})
+
+== la consecuencia para el puerto ==
+
+   El orden de la fuente es: construir (una clase, sin decidir) ->
+   recolectar la cadena -> fusionar -> derivar `store` -> registrar.
+   La fachada de este arbol invierte los dos extremos: decide la CLASE
+   al construir, a partir de un `store` que todavia no puede conocer
+   porque depende de declaraciones de OTRAS clases de la jerarquia.
+
+   Atornillar la captura de `_args__` a esa fachada apuntala la
+   inversion en vez de retirarla — clausula 5 de la leccion. La captura
+   va donde la fuente la pone: en el unico constructor, que no enruta.
+
+   Metrica: el predicado que elige la clase en la fuente, y la linea en
+            que `store` recibe su valor derivado.
+   Ciega a: si el stack ADMITE ese orden — eso lo mide la sonda hermana
+            de este mismo banco (verdict-one-class.txt, 2 de 2).

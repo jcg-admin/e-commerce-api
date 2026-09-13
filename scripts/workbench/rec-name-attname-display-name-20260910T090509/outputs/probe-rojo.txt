@@ -1,0 +1,9 @@
+modelo: IrUiViewCustom  _rec_name: 'user_id'
+  get_field('user_id') -> ForeignKey name=user attname=user_id
+  get_field('user') -> ForeignKey name=user attname=user_id
+  getattr(registro, 'user_id') = 7
+  display_name = '7'
+
+esperado por la fuente: la etiqueta del res.users apuntado
+obtenido aqui:          el id crudo como texto
+EXIT=0

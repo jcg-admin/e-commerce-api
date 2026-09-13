@@ -59,16 +59,22 @@ usos reales del lado de Django. Las 17 menciones de ``models.Constraint`` que
 un grep de texto encuentra están todas en prosa que describe la referencia — la
 distinción la hace el AST, no el grep.
 
-Los tres que faltan, con su veredicto
-=====================================
+Los dos que faltan, con su veredicto
+====================================
 
 **Bloqueo medido**: ``orm/`` todavía no los declara, y ligar un nombre
 inexistente rompe el import del paquete. Cada uno entra con el pase que porta su
 símbolo, que es el mismo pase y no un barrido posterior:
 
-- ``BaseModel``, ``MetaModel`` — la jerarquía de la fuente
-  (``odoo19c: odoo/orm/models.py``). Es #211 y #209.
+- ``MetaModel`` — la metaclase de la fuente
+  (``odoo19c: odoo/orm/models.py``). Es #209.
 - ``READ_GROUP_DISPLAY_FORMAT`` — la familia de ``read_group``.
+
+``BaseModel`` salió de esta lista en **TASK-API-0397**, que lo portó como base
+abstracta de Django y lo ligó abajo en el mismo pase. Su salida la forzó un
+control, no la memoria de nadie:
+``test_sugar_packages.py::test_src_orm_does_not_declare_it_yet`` se puso rojo el
+mismo pase en que la clase aterrizó — que es exactamente para lo que existe.
 
 Esta lista decía **ocho** y su cifra llevaba tres nombres de más. Medido al
 portar ``READ_GROUP_TIME_GRANULARITY``: ``AbstractModel``,
@@ -98,6 +104,7 @@ from orm.models import (
     LOG_ACCESS_COLUMNS,
     MAGIC_COLUMNS,
     AbstractModel,
+    BaseModel,
     CopyMixin,
     DefaultGetMixin,
     Model,

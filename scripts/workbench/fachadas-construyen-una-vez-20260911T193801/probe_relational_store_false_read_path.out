@@ -1,0 +1,13 @@
+setup_ran: OK
+compute_installed: OK
+read_by_name_returns_target: OK
+read_by_attname_returns_id: OK
+fresh_read_returns_target: OK
+setup_count: 4654
+class descriptors: {'fk_nostore': 'ForwardManyToOneDescriptor', 'fk_nostore_id': 'ComputedFieldDescriptor', 'ctrl_fk': 'ForwardManyToOneDescriptor', 'ctrl_fk_id': 'ForeignKeyDeferredAttribute'}
+convert_to_record owner: _field_convert_to_record
+read by name: None(1,) | type: ProbeRelDTarget | queries: 2
+read by attname: 1 | queries: 0
+fresh read: None(1,) | type: ProbeRelDTarget
+VEREDICTO fk_store_false_lectura: OK
+EXIT=0

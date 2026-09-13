@@ -1,0 +1,39 @@
+{
+  "question": "¿Puede la fusión de campos operar sobre la DECLARACIÓN del autor, como en la fuente, o nuestra fachada la consume al construir?",
+  "instrument": [
+    "probe_declaration_collection.py — firma de ModelBase.__new__ y orden de contribute_to_class",
+    "probe_what_the_attribute_holds.py — qué objeto guarda cada sitio en las dos formas de herencia",
+    "probe_the_override_loses_the_base.py — el caso de aceptación sobre TestOrmCategory real",
+    "probe_declarations_survive.py — claves de `_args__` contra las que el autor escribió"
+  ],
+  "metric": "por caso, el conjunto de claves presentes en `field._args__` contra el conjunto de claves que la declaración escribió; y el orden y la clase de los objetos que `vars()`, `_meta.local_fields` y `__mro__` guardan en las dos formas de herencia del árbol.",
+  "blind_to": "el VALOR de una clave conservada (el veredicto compara claves, no valores); una clave que la fachada renombre antes de delegar —`readonly` sale como `editable`, y el conjunto la acusa como perdida aunque el dato viaje con otro nombre—; y el comportamiento en tiempo de arranque del registro de la referencia, que esta sonda no ejecuta porque el árbol de la referencia no se instala.",
+  "destination": [
+    "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/",
+    "TASK-API-0416 — portar la fase que recoge las definiciones de campo por clase"
+  ],
+  "reproducible": "PYTHONPATH=src DJANGO_SETTINGS_MODULE=config.settings.testing uv run python scripts/workbench/recoleccion-de-definiciones-20260911T175852/probe_declarations_survive.py",
+  "outputs": [
+    "outputs/veredicto-inicial.txt",
+    "outputs/veredicto-que-guarda.txt",
+    "outputs/veredicto-el-override-pierde-la-base.txt",
+    "outputs/veredicto-declaraciones.txt"
+  ],
+  "source": [
+    "odoo19c: odoo/orm/fields.py:314-317 — Field.__init__ son tres lineas y NO enruta: guarda kwargs crudos en _args__",
+    "odoo19c: odoo/orm/fields.py:278 — store es un ATRIBUTO de clase de Field, no una clase aparte",
+    "odoo19c: odoo/orm/fields.py:414-450 — _get_attrs fusiona _args__ de _base_fields__ y deriva store DESPUES",
+    "odoo19c: odoo/orm/models.py:473-476 — BaseModel.display_name = Char(compute=, search=)",
+    "odoo19c: odoo/addons/test_orm/models/test_orm.py:28-29 — TestOrmCategory.display_name = fields.Char(inverse=, recursive=)",
+    "odoo19c: odoo/orm/model_classes.py:411-415 — Field = type(fields_[-1]); Field(_base_fields__=tuple(fields_))"
+  ],
+  "control": "el veredicto se mide por CONTENIDO y discrimina: su primera version cerraba con hasattr(holder, '_args__') y publicaba tres True con los valores impresos encima diciendo None y {}. Medido por claves, el mismo arbol da 0 de 5. Retirar la comparacion de conjuntos y volver a hasattr hace subir el veredicto a 5 de 5 sin que el arbol cambie — esa asimetria es lo que lo hace control y no adorno.",
+  "tasks": [
+    "TASK-API-0416",
+    "#346",
+    "#318"
+  ],
+  "measured_at": "2026-09-11T18:08:17",
+  "api_head": "6440ccc5",
+  "odoo_tools_head": "abe4040ec1"
+}

@@ -84,6 +84,7 @@ Divergencias declaradas
 from decimal import Decimal
 
 import fields
+import api
 import models
 
 from addons.base.models import TimeStampedModel
@@ -103,7 +104,7 @@ PACKAGE_USE_CHOICES = [
 SEQUENCE_PADDING = 7
 
 
-class StockPackageType(TimeStampedModel):
+class StockPackageType(models.DefaultGetMixin, TimeStampedModel):
     """``stock.package.type`` — el contenedor físico y sus límites."""
 
     # Atributos de clase de modelo — los tres que la referencia declara
@@ -297,23 +298,31 @@ class StockPackageType(TimeStampedModel):
 
     # -- create / write / copy --
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :93-103``).
 
         Si llega ``sequence_code`` sin ``sequence_ref``, la secuencia se crea
-        antes del registro — igual que la referencia, que la crea dentro del
-        bucle sobre ``vals_list`` y deja su id en ``vals['sequence_id']``.
+        antes del registro — dentro del bucle sobre ``vals_list``, como la
+        referencia, que deja su id en ``vals['sequence_id']``.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
-        code = vals.pop('sequence_code', None)
-        if code and not vals.get('sequence_ref'):
-            vals['sequence_ref'] = IrSequence.objects.create(
-                name=f'Secuencia de tipo de paquete {code}',
-                prefix=code,
-                padding=SEQUENCE_PADDING,
-                company=vals.get('company'),
-            )
-        return cls.objects.create(**vals)
+        for vals in vals_list:
+            code = vals.pop('sequence_code', None)
+            if code and not vals.get('sequence_ref'):
+                vals['sequence_ref'] = IrSequence.objects.create(
+                    name=f'Secuencia de tipo de paquete {code}',
+                    prefix=code,
+                    padding=SEQUENCE_PADDING,
+                    company=vals.get('company'),
+                )
+        return super().create(vals_list)
 
     def write(self, **vals):
         """≙ ``write`` (``odoo19c: :105-127``).

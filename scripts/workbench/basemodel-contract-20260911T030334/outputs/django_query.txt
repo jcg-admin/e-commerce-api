@@ -1,0 +1,118 @@
+archivo: .venv/lib/python3.12/site-packages/django/db/models/query.py  (2782 lineas)
+
+=== QuerySet(AltersData)  :283-2097  metodos=111 atributos=1
+  ATTR	as_manager	325	as_manager = classmethod(as_manager)
+  DEF 	__init__	286-300	-	(self, model=None, query=None, using=None, hints=None)	
+  DEF 	query	303-308	property	(self)	
+  DEF 	query	311-314	query.setter	(self, value)	
+  DEF 	as_manager	316-322	-	(cls)	
+  DEF 	__deepcopy__	331-339	-	(self, memo)	Don't populate the QuerySet's cache.
+  DEF 	__getstate__	341-344	-	(self)	
+  DEF 	__setstate__	346-363	-	(self, state)	
+  DEF 	__repr__	365-369	-	(self)	
+  DEF 	__len__	371-373	-	(self)	
+  DEF 	__iter__	375-391	-	(self)	The queryset iterator protocol uses three nested iterators in the
+  DEF 	__aiter__	393-401	-	(self)	
+  DEF 	__bool__	403-405	-	(self)	
+  DEF 	__getitem__	407-442	-	(self, k)	Retrieve an item or slice from the set of results.
+  DEF 	__class_getitem__	444-445	-	(cls, *args, **kwargs)	
+  DEF 	__and__	447-457	-	(self, other)	
+  DEF 	__or__	459-476	-	(self, other)	
+  DEF 	__xor__	478-495	-	(self, other)	
+  DEF 	_iterator	501-514	-	(self, use_chunked_fetch, chunk_size)	
+  DEF 	iterator	516-533	-	(self, chunk_size=None)	An iterator over the results from applying this QuerySet to the
+  DEF 	aiterator	535-569	-	(self, chunk_size=2000)	An asynchronous iterator over the results from applying this QuerySet
+  DEF 	aggregate	571-594	-	(self, *args, **kwargs)	Return a dictionary containing the calculations (aggregation)
+  DEF 	aaggregate	596-597	-	(self, *args, **kwargs)	
+  DEF 	count	599-610	-	(self)	Perform a SELECT COUNT() and return the number of records as an
+  DEF 	acount	612-613	-	(self)	
+  DEF 	get	615-648	-	(self, *args, **kwargs)	Perform the query and return a single object matching the given
+  DEF 	aget	650-651	-	(self, *args, **kwargs)	
+  DEF 	create	653-670	-	(self, **kwargs)	Create a new object with the given kwargs, saving it to the database
+  DEF 	acreate	674-675	-	(self, **kwargs)	
+  DEF 	_prepare_for_bulk_create	679-693	-	(self, objs)	
+  DEF 	_check_bulk_create_options	695-747	-	(self, ignore_conflicts, update_conflicts, update_fields, unique_fields)	
+  DEF 	bulk_create	749-853	-	(self, objs, batch_size=None, ignore_conflicts=False, update_conflicts=False, update_fields=None, unique_fields=None)	Insert each of the instances into the database. Do *not* call
+  DEF 	_handle_order_with_respect_to	855-884	-	(self, objs)	
+  DEF 	abulk_create	888-904	-	(self, objs, batch_size=None, ignore_conflicts=False, update_conflicts=False, update_fields=None, unique_fields=None)	
+  DEF 	bulk_update	908-964	-	(self, objs, fields, batch_size=None)	Update the given fields in each of the given objects in the database.
+  DEF 	abulk_update	968-973	-	(self, objs, fields, batch_size=None)	
+  DEF 	get_or_create	977-1000	-	(self, defaults=None, **kwargs)	Look up an object with the given kwargs, creating one if necessary.
+  DEF 	aget_or_create	1004-1008	-	(self, defaults=None, **kwargs)	
+  DEF 	update_or_create	1012-1056	-	(self, defaults=None, create_defaults=None, **kwargs)	Look up an object with the given kwargs, updating one with defaults
+  DEF 	aupdate_or_create	1060-1065	-	(self, defaults=None, create_defaults=None, **kwargs)	
+  DEF 	_extract_model_params	1069-1094	-	(self, defaults, **kwargs)	Prepare `params` for creating a model instance based on the given
+  DEF 	_earliest	1096-1116	-	(self, *fields)	Return the earliest object according to fields (if given) or by the
+  DEF 	earliest	1118-1121	-	(self, *fields)	
+  DEF 	aearliest	1123-1124	-	(self, *fields)	
+  DEF 	latest	1126-1133	-	(self, *fields)	Return the latest object according to fields (if given) or by the
+  DEF 	alatest	1135-1136	-	(self, *fields)	
+  DEF 	first	1138-1146	-	(self)	Return the first object of a query or None if no match is found.
+  DEF 	afirst	1148-1149	-	(self)	
+  DEF 	last	1151-1159	-	(self)	Return the last object of a query or None if no match is found.
+  DEF 	alast	1161-1162	-	(self)	
+  DEF 	in_bulk	1164-1206	-	(self, id_list=None, *, field_name='pk')	Return a dictionary mapping each of the given IDs to the object with
+  DEF 	ain_bulk	1208-1212	-	(self, id_list=None, *, field_name='pk')	
+  DEF 	delete	1214-1242	-	(self)	Delete the records in the current QuerySet.
+  DEF 	adelete	1247-1248	-	(self)	
+  DEF 	_raw_delete	1253-1260	-	(self, using)	Delete objects found from the given queryset in single direct SQL
+  DEF 	update	1264-1302	-	(self, **kwargs)	Update all elements in the current QuerySet, setting all the given
+  DEF 	aupdate	1306-1307	-	(self, **kwargs)	
+  DEF 	_update	1311-1327	-	(self, values, returning_fields=None)	A version of update() that accepts field objects instead of field
+  DEF 	exists	1332-1338	-	(self)	Return True if the QuerySet would have any results, False otherwise.
+  DEF 	aexists	1340-1341	-	(self)	
+  DEF 	contains	1343-1362	-	(self, obj)	Return True if the QuerySet contains the provided obj,
+  DEF 	acontains	1364-1365	-	(self, obj)	
+  DEF 	_prefetch_related_objects	1367-1370	-	(self)	
+  DEF 	explain	1372-1377	-	(self, *, format=None, **options)	Runs an EXPLAIN on the SQL query this QuerySet would perform, and
+  DEF 	aexplain	1379-1380	-	(self, *, format=None, **options)	
+  DEF 	raw	1386-1397	-	(self, raw_query, params=(), translations=None, using=None)	
+  DEF 	_values	1399-1410	-	(self, *fields, **expressions)	
+  DEF 	values	1412-1416	-	(self, *fields, **expressions)	
+  DEF 	values_list	1418-1464	-	(self, *fields, flat=False, named=False)	
+  DEF 	dates	1466-1484	-	(self, field_name, kind, order='ASC')	Return a list of date objects representing all available dates for
+  DEF 	datetimes	1486-1517	-	(self, field_name, kind, order='ASC', tzinfo=None)	Return a list of datetime objects representing all available
+  DEF 	none	1519-1523	-	(self)	Return an empty QuerySet.
+  DEF 	all	1529-1534	-	(self)	Return a new QuerySet that is a copy of the current one. This allows a
+  DEF 	filter	1536-1542	-	(self, *args, **kwargs)	Return a new QuerySet instance with the args ANDed to the existing
+  DEF 	exclude	1544-1550	-	(self, *args, **kwargs)	Return a new QuerySet instance with NOT (args) ANDed to the existing
+  DEF 	_filter_or_exclude	1552-1561	-	(self, negate, args, kwargs)	
+  DEF 	_filter_or_exclude_inplace	1563-1570	-	(self, negate, args, kwargs)	
+  DEF 	complex_filter	1572-1587	-	(self, filter_obj)	Return a new QuerySet instance with filter_obj added to the filters.
+  DEF 	_combinator_query	1589-1598	-	(self, combinator, *other_qs, all=False)	
+  DEF 	union	1600-1611	-	(self, *other_qs, all=False)	
+  DEF 	intersection	1613-1620	-	(self, *other_qs)	
+  DEF 	difference	1622-1626	-	(self, *other_qs)	
+  DEF 	select_for_update	1628-1642	-	(self, nowait=False, skip_locked=False, of=(), no_key=False)	Return a new QuerySet instance that will select objects with a
+  DEF 	select_related	1644-1666	-	(self, *fields)	Return a new QuerySet instance that will select related objects.
+  DEF 	prefetch_related	1668-1691	-	(self, *lookups)	Return a new QuerySet instance that will prefetch the specified
+  DEF 	annotate	1693-1699	-	(self, *args, **kwargs)	Return a query set in which the returned objects have been annotated
+  DEF 	alias	1701-1706	-	(self, *args, **kwargs)	Return a query set with added aliases for extra data or aggregations.
+  DEF 	_annotate	1708-1764	-	(self, args, kwargs, select=True)	
+  DEF 	order_by	1766-1773	-	(self, *field_names)	Return a new QuerySet instance with the ordering changed.
+  DEF 	distinct	1775-1786	-	(self, *field_names)	Return a new QuerySet instance that will select only distinct results.
+  DEF 	extra	1788-1803	-	(self, select=None, where=None, params=None, tables=None, order_by=None, select_params=None)	Add extra SQL fragments to the query.
+  DEF 	reverse	1805-1811	-	(self)	Reverse the ordering of the QuerySet.
+  DEF 	defer	1813-1828	-	(self, *fields)	Defer the loading of data for certain fields until they are accessed.
+  DEF 	only	1830-1849	-	(self, *fields)	Essentially, the opposite of defer(). Only the fields passed into this
+  DEF 	using	1851-1855	-	(self, alias)	Select which database this QuerySet should execute against.
+  DEF 	ordered	1862-1880	property	(self)	Return True if the QuerySet is ordered -- i.e. has an order_by()
+  DEF 	db	1883-1887	property	(self)	Return the database used if this query is executed now.
+  DEF 	_insert	1893-1918	-	(self, objs, fields, returning_fields=None, raw=False, using=None, on_conflict=None, update_fields=None, unique_fields=None)	Insert a new record for the given model. This provides an interface to
+  DEF 	_batched_insert	1923-1966	-	(self, objs, fields, batch_size, on_conflict=None, update_fields=None, unique_fields=None)	Helper method for bulk_create() to insert objs one batch at a time.
+  DEF 	_chain	1968-1977	-	(self)	Return a copy of the current QuerySet that's ready for another
+  DEF 	_clone	1979-1996	-	(self)	Return a copy of the current QuerySet. A lightweight alternative
+  DEF 	_fetch_all	1998-2002	-	(self)	
+  DEF 	_next_is_sticky	2004-2016	-	(self)	Indicate that the next filter call and the one following that should
+  DEF 	_merge_sanity_check	2018-2028	-	(self, other)	Check that two QuerySet classes may be merged.
+  DEF 	_merge_known_related_objects	2030-2035	-	(self, other)	Keep track of all known related objects from either QuerySet instance.
+  DEF 	resolve_expression	2037-2040	-	(self, *args, **kwargs)	
+  DEF 	_add_hints	2044-2049	-	(self, **hints)	Update hinting information for use by routers. Add new key/values or
+  DEF 	_has_filters	2051-2057	-	(self)	Check if this QuerySet has any filtering going on. This isn't
+  DEF 	_validate_values_are_expressions	2060-2071	staticmethod	(values, method_name)	
+  DEF 	_not_support_combined_queries	2073-2078	-	(self, operation_name)	
+  DEF 	_check_operator_queryset	2080-2082	-	(self, other, operator_)	
+  DEF 	_check_ordering_first_last_queryset_aggregation	2084-2097	-	(self, method)	
+
+=== ModelIterable(BaseIterable)  :86-150  metodos=1 atributos=0
+  DEF 	__iter__	89-150	-	(self)	

@@ -38,4 +38,4 @@ sería un verde falso.
 no se transcribe aquí** — es propiedad de un artefacto que cambia con cada
 tramo del barrido, y lo publica el propio gate al correr (`wc -l` sobre el
 baseline da la cifra del día). Uno listado no bloquea; uno nuevo sí. Se paga al
-tocar (barrido: tarea #147).
+tocar — el de api en TASK-API-0396, el de docs en TASK-DOCS-0533.

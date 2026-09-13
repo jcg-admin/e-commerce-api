@@ -1,0 +1,17 @@
+field_builds: OK
+setup_closes: FALLA
+store_is_false: OK
+readonly_is_false: OK
+has_no_column: OK
+remote_is_the_target: OK
+read_returns_target: FALLA
+fresh_read_returns_target: FALLA
+build_error: None
+setup_error: EXC KeyError: 'El campo country de la definición related de company_country_code no existe en ResCompany.'
+setup_count: None
+concrete fields: ['id', 'partner']
+remote_field.model: ProbeCiCountry
+read by name: None | type: NoneType
+fresh read: None | type: NoneType
+VEREDICTO relacional_compute_inverso_construye_y_lee: FALLA
+EXIT=1

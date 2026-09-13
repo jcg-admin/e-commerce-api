@@ -1,0 +1,4 @@
+FAILED tests/unit/orm/test_create.py::TestInheritsParents::test_the_inherits_parent_is_created_first
+FAILED tests/unit/orm/test_create.py::TestInheritsParents::test_a_model_without_the_loader_mixin_now_creates
+2 failed, 12 passed, 1 warning in 5.36s
+EXIT=0

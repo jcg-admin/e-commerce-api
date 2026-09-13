@@ -1,0 +1,21 @@
+== forma 1: base ABSTRACTA de Django ==
+qué guarda cada sitio:
+   vars(Base)[label]      FieldDescriptor          <orm.fields.FieldDescriptor object at 0x7f2b14859f10>
+   vars(Child)[label]     FieldDescriptor          <orm.fields.FieldDescriptor object at 0x7f2b148b6780>
+   _meta de la base    CharField   max_length = 10
+   _meta de la hija    CharField   max_length = 20
+
+¿se recuperan LAS DOS ocurrencias, y en orden de override?
+   por recorrido de __mro__ con _meta.local_fields: [('HoldsBase', 10), ('HoldsChild', 20)]
+
+== forma 2: MIXIN LLANO de Python (el de este árbol) ==
+qué guarda cada sitio:
+   vars(HoldsMixin)       NonStored                <orm.fields_nonstored.NonStored object at 0x7f2b150b4350>
+   vars(HoldsMixed)       NonStored                <orm.fields_nonstored.NonStored object at 0x7f2b150b42f0>
+   _meta de la mezclada tiene label: False
+   el compute que queda           : _compute_other
+   el compute del mixin sobrevive : _compute_label
+
+== la pregunta que decide: ¿el objeto de la base es alcanzable? ==
+   forma 1 — base abstracta : True (dos objetos distintos, los dos vivos)
+   forma 2 — mixin llano    : True (dos objetos distintos, los dos vivos)

@@ -15,12 +15,28 @@ que declare. Si no declara ninguno, no se inventa ninguno.**
 ## El procedimiento es un comando, no una lista de memoria
 
 ```bash
-python3 -c "import ast,pathlib,sys
-ref=pathlib.Path(sys.argv[1]).read_text(); L=ref.splitlines()
-[print(c.name, [(x.id,n.lineno) for n in c.body if isinstance(n,ast.Assign)
-  for x in n.targets if isinstance(x,ast.Name) and x.id.startswith('_')])
- for c in ast.parse(ref).body if isinstance(c,ast.ClassDef)]" $ODOO19C/addons/<x>/models/<y>.py
+python3 scripts/census_class.py "$ODOO19C/addons/<x>/models/<y>.py" <Clase> --prefix _
 ```
+
+> **Corregido 2026-09-11 (TASK-API-0320).** Aquí vivía un `python3 -c` que
+> recorría **sólo** `ast.Assign`. Los 28 atributos que `BaseModel` declara —y
+> entre ellos los 24 que esta regla legisla— son `ast.AnnAssign`, que es otro
+> nodo. Medido sobre `odoo19c: odoo/orm/models.py`: `Assign=3`
+> (`__slots__`, `id`, `display_name`) contra `AnnAssign=28`. Corrido contra la
+> clase que **declara** el contrato, el comando publicaba 3 atributos y
+> **ninguno** de los que la regla gobierna.
+>
+> La ceguera no era general: medido sobre tres modelos de addon
+> (`stock_picking.py`, `sale_order.py`, `res_company.py`) hay **236 `Assign` y
+> 0 `AnnAssign`**. La forma anotada vive en el núcleo — `odoo/orm/models.py`
+> 28, `odoo/orm/fields.py` 49. El comando servía para el caso corriente y
+> fallaba justo al ir a leer **cuál es** el contrato.
+>
+> La regla nombra ahora **el instrumento**, no una copia de su cuerpo: una
+> segunda fuente de verdad en prosa es lo que `calibration-verified-numbers.md`
+> prohíbe para una cifra, y vale igual para un recorrido. Su control positivo
+> —`BaseModel` da 31, y cegar la rama `AnnAssign` hace caer exactamente 2 de
+> los 7 casos— vive en `tests/unit/scripts/test_census_class.py`.
 
 Lo que salga es el contrato. Cada atributo se porta o declara su divergencia;
 ninguno se omite en silencio.

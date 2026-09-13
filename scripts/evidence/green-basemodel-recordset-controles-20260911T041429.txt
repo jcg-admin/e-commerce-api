@@ -1,0 +1,75 @@
+Controles por neutralización — núcleo del recordset (TASK-API-0397 / #318)
+Fecha: 2026-09-11T04:14:29
+Árbol: api@08908b86 + el porte de BaseModel sin commitear
+
+Por qué existe este archivo
+---------------------------
+La mitad VERDE pasó a la primera (65 passed). Un verde a la primera NO
+discrimina «el porte funciona» de «la suite no pregunta» — sub-patrón D de
+metrica-decide-la-conclusion.md. Cada mecanismo declarado como load-bearing se
+anula y se comprueba que caen EXACTAMENTE los casos que dependen de él.
+
+Comando de la suite
+-------------------
+  uv run pytest tests/unit/orm/test_base_model_recordset.py -q --reuse-db -p no:randomly
+
+Antes de cada restauración se borra el bytecode; un __pycache__ de la versión
+mutada deja el rojo puesto y el veredicto miente:
+  find src tests -name __pycache__ -type d -exec rm -rf {} +
+
+Control 1 — el descriptor de id (IdFromIds + class_prepared)
+------------------------------------------------------------
+Mutación: primer statement de _install_id_descriptor -> `return`.
+Resultado: 4 failed, 60 passed.
+  TestMembership::test_a_record_of_the_same_model_is_in_the_set
+  TestMembership::test_a_record_not_in_the_set_is_not
+  TestIdentity::test_int_of_a_singleton_is_its_id
+  TestProjection::test_sorted_by_key_reorders_the_ids
+Traza del fallo (verbatim):
+  django/db/models/query_utils.py:285: in _check_parent_chain
+      return getattr(instance, link_field.attname)
+  E   AttributeError: 'NoneType' object has no attribute 'attname'
+Lectura: caen los cuatro casos que leen `.id`, ni uno más. El DeferredAttribute
+de Django no sabe leer `_ids`; el descriptor es load-bearing.
+
+Control 2 — el override de __str__ (PRIMERA PASADA: NO discriminaba)
+--------------------------------------------------------------------
+Mutación: `return self.__repr__()` -> `return Model.__str__(self)`.
+Resultado con la suite tal como estaba: **64 passed, 0 failed**.
+
+Ése es el hallazgo: el override se había declarado «divergencia forzada» sin
+un control que lo midiera. Medido a mano bajo la mutación:
+
+  str(rs)    -> ValueError | Expected singleton: ids=(7, 18)
+  ensure_one -> ValueError | Expected singleton: ids=(7, 18)
+
+`ensure_one` seguía levantando ValueError y su mensaje seguía casando con
+`match='Expected singleton'` — pero lo lanzaba el DESCRIPTOR al interpolar
+`%s`, no `ensure_one`. Dos causas distintas, un solo texto: el caso no podía
+separarlas.
+
+Reparación de la suite (dos casos, no uno):
+  * TestIdentity::test_str_of_a_multi_recordset_is_its_repr — caso nuevo.
+  * TestEnsureOne::test_more_than_one_raises_value_error — el match se ancla a
+    `Expected singleton: orm\.recordset\.probe`, que sólo produce el puerto.
+
+Control 2 — repetido con la suite reparada
+-------------------------------------------
+Resultado: 2 failed, 63 passed.
+  TestEnsureOne::test_more_than_one_raises_value_error
+  TestIdentity::test_str_of_a_multi_recordset_is_its_repr
+Lectura: caen los dos que miden __str__, ni uno más. Discrimina.
+
+Restauración
+------------
+  cp <copia verde> src/orm/models.py && find ... -name __pycache__ -exec rm -rf {} +
+  uv run pytest tests/unit/orm/test_base_model_recordset.py -q --reuse-db
+  -> 65 passed, 1 warning
+
+Métrica: casos de tests/unit/orm/test_base_model_recordset.py que cambian de
+veredicto al anular un mecanismo del porte.
+Ciega a: los mecanismos que la suite no ejercita — la rama relacional de
+mapped() (TASK-API-0402), fetch() sobre PREFETCH_MAX (TASK-API-0399) y
+_sorted_order_to_function (TASK-API-0400), que hoy levantan
+NotImplementedError con su cita. Y ciega al acceso llano `rs.label`, que no
+pasa por la guarda de tamaño (TASK-API-0401).

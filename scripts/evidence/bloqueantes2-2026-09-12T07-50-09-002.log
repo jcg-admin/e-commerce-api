@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_compute_inverse_dispatch_on_write.py", line 97, in <module>
+    read_before = company.street
+                  ^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 1438, in __get__
+    ensure_field_setup()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1317, in ensure_field_setup
+    return sum(setup_fields(model_cls) for model_cls in models_)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1317, in <genexpr>
+    return sum(setup_fields(model_cls) for model_cls in models_)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1256, in setup_fields
+    field.setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 3864, in _field_setup
+    self.setup_related(model)
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 3718, in _field_setup_related
+    field_seq = walk_related_chain(self, model)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/fields.py", line 3698, in walk_related_chain
+    raise KeyError(
+KeyError: 'El campo country de la definición related de company_country_code no existe en ResCompany.'
+EXIT=1

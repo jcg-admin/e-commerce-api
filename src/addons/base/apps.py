@@ -92,3 +92,11 @@ class BaseConfig(AppConfig):
         # bucle escrito a mano que habia aqui dejaba fuera a ``ir.cron``, que
         # declara la suya en este mismo addon.
         ensure_inherits()
+        # La fase que completa cada campo (``prepare_setup`` + ``setup``,
+        # ``odoo19c: odoo/orm/model_classes.py:318-323``) NO corre aquí: este
+        # ``ready()`` va antes que los ``extend_model`` de los addons que
+        # cuelgan campos de modelos ajenos (medido: ``crm`` añade
+        # ``lead_properties_definition`` a ``crm.team`` en su propio
+        # ``ready()``). La dispara el primer consumidor tras ``apps.ready``
+        # —``orm.model_classes.ensure_field_setup``—, que es el momento
+        # «tras el último módulo» de la fuente (``loading.py:488``).

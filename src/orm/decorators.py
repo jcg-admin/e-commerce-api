@@ -14,6 +14,9 @@ portado para expresar la intención Odoo — el ``save()``/``clean()`` del model
 es quien realmente los llama.
 """
 
+import collections.abc
+import functools
+
 __all__ = [
     'attrsetter', 'depends', 'depends_context', 'constrains', 'onchange',
     'ondelete', 'model', 'model_create_multi', 'returns', 'autovacuum',
@@ -185,12 +188,37 @@ def model(method):
 
 
 def model_create_multi(method):
-    """≙ ``odoo19c: odoo/orm/decorators.py:371`` — ``create._api_model = True``.
+    """≙ ``odoo19c: odoo/orm/decorators.py:357-371`` — envuelve ``create``.
 
-    La referencia marca el ``create`` multi con el **mismo** atributo que
-    ``model``: crear no parte de registros existentes.
+    La referencia devuelve un **wrapper**, no el método marcado: convierte un
+    ``Mapping`` en ``[vals]`` antes de delegar, y fija ``_api_model`` en el
+    wrapper. Hasta :ref:`h-api-1108` este decorador sólo marcaba —``return
+    _mark(method, '_api_model')``—, así que un ``create({...})`` llegaba al
+    cuerpo como diccionario y cada override lo desdoblaba a mano.
+
+    Dos adaptaciones, declaradas:
+
+    - **Se apila bajo o sobre ``classmethod``.** La fuente decora un método de
+      instancia; aquí ``create`` es ``classmethod`` (``DefaultGetMixin.create``)
+      y el árbol escribe el decorador en los dos órdenes. Si llega un objeto
+      ``classmethod`` se envuelve su ``__func__`` y se devuelve otro
+      ``classmethod``; si llega la función, se devuelve la función.
+    - **``*args``/``**kwargs`` pasan.** La fuente no tiene ``using=`` porque el
+      cursor viaja en ``self.env.cr``; aquí tres overrides lo reciben
+      (``grep -rn "def create(cls, vals_list, using" src addons``). El wrapper
+      no los toca — el contrato de la fuente es sobre ``vals_list``, no sobre
+      el resto de la firma.
     """
-    return _mark(method, '_api_model')
+    inner = getattr(method, '__func__', method)
+
+    @functools.wraps(inner)
+    def create(self, vals_list, *args, **kwargs):
+        if isinstance(vals_list, collections.abc.Mapping):
+            vals_list = [vals_list]
+        return inner(self, vals_list, *args, **kwargs)
+
+    create._api_model = True
+    return classmethod(create) if isinstance(method, classmethod) else create
 
 
 def returns(*args, **kwargs):

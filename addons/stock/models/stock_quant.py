@@ -330,7 +330,10 @@ from collections import defaultdict, namedtuple
 from decimal import Decimal
 
 import fields
+import api
 import models
+from orm.environments import sudo
+from orm.utils import browse
 from django.apps import apps
 from django.db import connection
 from django.db.models import (
@@ -353,7 +356,7 @@ PackageQty = namedtuple('PackageQty', ['package_id', 'available_qty'])
 UNBOUNDED_QTY = Decimal('999999999.00')
 
 
-class StockQuant(TimeStampedModel):
+class StockQuant(models.DefaultGetMixin, TimeStampedModel):
     """``stock.quant`` — existencia de un producto en una ubicación."""
 
     # Atributos de clase de modelo — los cuatro que la referencia declara
@@ -748,8 +751,9 @@ class StockQuant(TimeStampedModel):
         """≙ ``name_create`` (``odoo19c: :248-250``) — crear por nombre no aplica."""
         return False
 
+    @api.model_create_multi
     @classmethod
-    def create(cls, **vals):
+    def create(cls, vals_list):
         """≙ ``create`` (``odoo19c: :252-312``).
 
         Docstring de la referencia: *"Override to handle the 'inventory mode'
@@ -758,46 +762,59 @@ class StockQuant(TimeStampedModel):
         En modo inventario la creación se restringe a los campos permitidos y,
         si ya existe un quant con las mismas características, **se escribe
         sobre él** en vez de crear uno nuevo. Es lo que evita que un conteo
-        duplique la existencia.
+        duplique la existencia. El bucle por ``vals`` y la unión de lo creado
+        con lo reescrito (``quants |= ...``) son los de la referencia.
+
+        La referencia recibe ``vals_list`` y devuelve el recordset; desde
+        :ref:`h-api-1108` la firma es la misma aquí — ``@api.model_create_multi``
+        convierte un dict suelto en ``[vals]`` — y ``super().create`` es
+        ``DefaultGetMixin.create`` (``orm/models.py``), el porte por contenido de
+        ``BaseModel.create``.
         """
         modo_inventario = cls._is_inventory_mode()
         permitidos = cls._get_inventory_fields_create()
-        trae_conteo = any(
-            campo in vals
-            for campo in ('inventory_quantity', 'inventory_quantity_auto_apply')
-        )
-        if not (modo_inventario and trae_conteo):
-            if 'inventory_quantity' not in vals:
-                vals.setdefault('inventory_quantity_set', False)
-            return cls.objects.create(**vals)
+        quants = []
+        for vals in vals_list:
+            trae_conteo = any(
+                campo in vals
+                for campo in ('inventory_quantity', 'inventory_quantity_auto_apply')
+            )
+            if not (modo_inventario and trae_conteo):
+                if 'inventory_quantity' not in vals:
+                    vals.setdefault('inventory_quantity_set', False)
+                quant, = super().create([vals])
+                quants.append(quant)
+                continue
 
-        invasores = [c for c in vals if not c.startswith('x_') and c not in permitidos]
-        if invasores:
-            raise UserError(
-                _('La creación de existencias está restringida; no se puede '
-                  'realizar esta operación.'))
+            invasores = [c for c in vals if not c.startswith('x_') and c not in permitidos]
+            if invasores:
+                raise UserError(
+                    _('La creación de existencias está restringida; no se puede '
+                      'realizar esta operación.'))
 
-        auto_aplicar = 'inventory_quantity_auto_apply' in vals
-        contado = (vals.pop('inventory_quantity_auto_apply', None)
-                   or vals.pop('inventory_quantity', None)
-                   or Decimal('0.00'))
+            auto_aplicar = 'inventory_quantity_auto_apply' in vals
+            contado = (vals.pop('inventory_quantity_auto_apply', None)
+                       or vals.pop('inventory_quantity', None)
+                       or Decimal('0.00'))
 
-        quant = cls._gather(
-            vals.get('product'), vals.get('location'), lot=vals.get('lot'),
-            package=vals.get('package'), owner=vals.get('owner'), strict=True,
-        ).first()
-        if quant is None:
-            quant = cls.objects.create(**vals)
-        if auto_aplicar:
-            quant.inventory_quantity_auto_apply = contado
-        else:
-            quant.inventory_quantity = Decimal(contado)
-            quant.user = vals.get('user')
-            quant.inventory_date = timezone.now().date()
-            quant.save(update_fields=['inventory_quantity', 'user',
-                                      'inventory_date', 'inventory_diff_quantity',
-                                      'updated_at'])
-        return quant
+            quant = cls._gather(
+                vals.get('product'), vals.get('location'), lot=vals.get('lot'),
+                package=vals.get('package'), owner=vals.get('owner'), strict=True,
+            ).first()
+            if quant is None:
+                with sudo():  # ``self.sudo().create(vals)`` (``odoo19c: :295``)
+                    quant, = super().create([vals])
+            if auto_aplicar:
+                quant.inventory_quantity_auto_apply = contado
+            else:
+                quant.inventory_quantity = Decimal(contado)
+                quant.user = vals.get('user')
+                quant.inventory_date = timezone.now().date()
+                quant.save(update_fields=['inventory_quantity', 'user',
+                                          'inventory_date', 'inventory_diff_quantity',
+                                          'updated_at'])
+            quants.append(quant)
+        return browse(cls, [quant.pk for quant in quants])
 
     @classmethod
     def _load_records_create(cls, values):
@@ -811,7 +828,7 @@ class StockQuant(TimeStampedModel):
         for value in values:
             if 'location' not in value and almacen is not None:
                 value['location'] = almacen.lot_stock
-        return [cls.create(**value) for value in values]
+        return list(cls.create(values))
 
     @classmethod
     def _load_records_write(cls, values):
@@ -1511,26 +1528,27 @@ class StockQuant(TimeStampedModel):
         trazabilidad la suma se hace **por lote**, porque un lote en déficit no
         debe consumir el disponible de otro.
         """
-        quants = cls._gather(product, location, lot=lot, package=package,
-                             owner=owner, strict=strict)
-        cero = Decimal('0.00')
-        if getattr(product, 'tracking', 'none') == 'none':
-            agregado = quants.aggregate(
-                q=Sum('quantity'), r=Sum('reserved_quantity'))
-            disponible = ((agregado['q'] or cero) - (agregado['r'] or cero))
-            if allow_negative:
-                return disponible
-            return disponible if disponible >= cero else cero
+        with sudo():  # ``self = self.sudo()`` de la referencia (``odoo19c: :812``)
+            quants = cls._gather(product, location, lot=lot, package=package,
+                                 owner=owner, strict=strict)
+            cero = Decimal('0.00')
+            if getattr(product, 'tracking', 'none') == 'none':
+                agregado = quants.aggregate(
+                    q=Sum('quantity'), r=Sum('reserved_quantity'))
+                disponible = ((agregado['q'] or cero) - (agregado['r'] or cero))
+                if allow_negative:
+                    return disponible
+                return disponible if disponible >= cero else cero
 
-        por_lote = defaultdict(lambda: cero)
-        for quant in quants:
-            if quant.lot is None and strict and lot is not None:
-                continue
-            clave = quant.lot_id if quant.lot is not None else 'untracked'
-            por_lote[clave] += quant.quantity - quant.reserved_quantity
-        if allow_negative:
-            return sum(por_lote.values(), start=cero)
-        return sum((v for v in por_lote.values() if v > cero), start=cero)
+            por_lote = defaultdict(lambda: cero)
+            for quant in quants:
+                if quant.lot is None and strict and lot is not None:
+                    continue
+                clave = quant.lot_id if quant.lot is not None else 'untracked'
+                por_lote[clave] += quant.quantity - quant.reserved_quantity
+            if allow_negative:
+                return sum(por_lote.values(), start=cero)
+            return sum((v for v in por_lote.values() if v > cero), start=cero)
 
     @classmethod
     def _get_reserve_quantity(cls, product, location, quantity, uom=None, lot=None,
@@ -1550,63 +1568,64 @@ class StockQuant(TimeStampedModel):
         3. una cantidad negativa es una **liberación**, y no puede liberar más
            de lo reservado.
         """
-        cero = Decimal('0.00')
-        quants = list(cls._gather(product, location, lot=lot, package=package,
-                                  owner=owner, strict=strict, qty=quantity))
-        disponible = cls._get_available_quantity(
-            product, location, lot, package, owner, strict)
-        cantidad = min(Decimal(quantity), disponible)
+        with sudo():  # ``self = self.sudo()`` de la referencia (``odoo19c: :844``)
+            cero = Decimal('0.00')
+            quants = list(cls._gather(product, location, lot=lot, package=package,
+                                      owner=owner, strict=strict, qty=quantity))
+            disponible = cls._get_available_quantity(
+                product, location, lot, package, owner, strict)
+            cantidad = min(Decimal(quantity), disponible)
 
-        if getattr(product, 'tracking', 'none') == 'serial' and cantidad != int(cantidad):
-            cantidad = cero
+            if getattr(product, 'tracking', 'none') == 'serial' and cantidad != int(cantidad):
+                cantidad = cero
 
-        reservados = []
-        if cantidad > cero:
-            disponible = (
-                sum((q.quantity for q in quants if q.quantity > cero), start=cero)
-                - sum((q.reserved_quantity for q in quants), start=cero)
-            )
-        elif cantidad < cero:
-            disponible = sum((q.reserved_quantity for q in quants), start=cero)
-            if abs(cantidad) > disponible:
-                raise UserError(
-                    _('No es posible liberar más productos de %s de los que hay '
-                      'en existencia.') % product)
-        else:
-            return reservados
-
-        negativos = defaultdict(lambda: cero)
-        for quant in quants:
-            saldo = quant.quantity - quant.reserved_quantity
-            if saldo < cero:
-                negativos[(quant.location_id, quant.lot_id,
-                           quant.package_id, quant.owner_id)] += saldo
-
-        for quant in quants:
-            clave = (quant.location_id, quant.lot_id, quant.package_id, quant.owner_id)
+            reservados = []
             if cantidad > cero:
-                tope = quant.quantity - quant.reserved_quantity
-                if tope <= cero:
-                    continue
-                negativo = negativos[clave]
-                if negativo:
-                    a_descontar = min(abs(negativo), tope)
-                    negativos[clave] += a_descontar
-                    tope -= a_descontar
-                if tope <= cero:
-                    continue
-                tope = min(tope, cantidad)
-                reservados.append((quant, tope))
-                cantidad -= tope
-                disponible -= tope
+                disponible = (
+                    sum((q.quantity for q in quants if q.quantity > cero), start=cero)
+                    - sum((q.reserved_quantity for q in quants), start=cero)
+                )
+            elif cantidad < cero:
+                disponible = sum((q.reserved_quantity for q in quants), start=cero)
+                if abs(cantidad) > disponible:
+                    raise UserError(
+                        _('No es posible liberar más productos de %s de los que hay '
+                          'en existencia.') % product)
             else:
-                tope = min(quant.reserved_quantity, abs(cantidad))
-                reservados.append((quant, -tope))
-                cantidad += tope
-                disponible += tope
-            if cantidad == cero or disponible == cero:
-                break
-        return reservados
+                return reservados
+
+            negativos = defaultdict(lambda: cero)
+            for quant in quants:
+                saldo = quant.quantity - quant.reserved_quantity
+                if saldo < cero:
+                    negativos[(quant.location_id, quant.lot_id,
+                               quant.package_id, quant.owner_id)] += saldo
+
+            for quant in quants:
+                clave = (quant.location_id, quant.lot_id, quant.package_id, quant.owner_id)
+                if cantidad > cero:
+                    tope = quant.quantity - quant.reserved_quantity
+                    if tope <= cero:
+                        continue
+                    negativo = negativos[clave]
+                    if negativo:
+                        a_descontar = min(abs(negativo), tope)
+                        negativos[clave] += a_descontar
+                        tope -= a_descontar
+                    if tope <= cero:
+                        continue
+                    tope = min(tope, cantidad)
+                    reservados.append((quant, tope))
+                    cantidad -= tope
+                    disponible -= tope
+                else:
+                    tope = min(quant.reserved_quantity, abs(cantidad))
+                    reservados.append((quant, -tope))
+                    cantidad += tope
+                    disponible += tope
+                if cantidad == cero or disponible == cero:
+                    break
+            return reservados
 
     @classmethod
     def _get_quants_by_products_locations(cls, products, locations, extra_domain=None):
@@ -1757,53 +1776,54 @@ class StockQuant(TimeStampedModel):
         concurren: es la clave de orden de FIFO, y tomar la nueva rompería el
         orden de consumo.
         """
-        if not (quantity or reserved_quantity):
-            raise ValidationError(
-                _('Se debe indicar la cantidad o la cantidad reservada.'))
-        cero = Decimal('0.00')
-        quants = list(cls._gather(product, location, lot=lot, package=package,
-                                  owner=owner, strict=True))
-        if lot is not None:
-            if Decimal(quantity or cero) > cero:
-                quants = [q for q in quants if q.lot is not None]
+        with sudo():  # ``self = self.sudo()`` de la referencia (``odoo19c: :1055``)
+            if not (quantity or reserved_quantity):
+                raise ValidationError(
+                    _('Se debe indicar la cantidad o la cantidad reservada.'))
+            cero = Decimal('0.00')
+            quants = list(cls._gather(product, location, lot=lot, package=package,
+                                      owner=owner, strict=True))
+            if lot is not None:
+                if Decimal(quantity or cero) > cero:
+                    quants = [q for q in quants if q.lot is not None]
+                else:
+                    # No se descuenta de un quant negativo sin lote.
+                    quants = [q for q in quants if q.quantity > cero or q.lot is not None]
+
+            if location is not None and location.should_bypass_reservation():
+                fechas = []
             else:
-                # No se descuenta de un quant negativo sin lote.
-                quants = [q for q in quants if q.quantity > cero or q.lot is not None]
+                fechas = [q.in_date for q in quants if q.in_date and q.quantity > cero]
+            if in_date is not None:
+                fechas.append(in_date)
+            in_date = min(fechas) if fechas else timezone.now()
 
-        if location is not None and location.should_bypass_reservation():
-            fechas = []
-        else:
-            fechas = [q.in_date for q in quants if q.in_date and q.quantity > cero]
-        if in_date is not None:
-            fechas.append(in_date)
-        in_date = min(fechas) if fechas else timezone.now()
-
-        quant = quants[0] if quants else None
-        if quant is not None:
-            # ≙ ``try_lock_for_update(limit=1)`` (``:1085``): la referencia
-            # bloquea el primer quant disponible para que dos transacciones no
-            # repartan el mismo saldo.
-            quant = (cls.objects.select_for_update()
-                     .filter(pk=quant.pk).first()) or quant
-            quant.in_date = in_date
-            if quantity:
-                quant.quantity = quant.quantity + Decimal(quantity)
-            if reserved_quantity:
-                nueva = quant.reserved_quantity + Decimal(reserved_quantity)
-                quant.reserved_quantity = nueva if nueva > cero else cero
-            quant.save(update_fields=['in_date', 'quantity', 'reserved_quantity',
-                                      'inventory_diff_quantity', 'updated_at'])
-        else:
-            vals = {'product': product, 'location': location, 'lot': lot,
-                    'package': package, 'owner': owner, 'in_date': in_date}
-            if quantity:
-                vals['quantity'] = Decimal(quantity)
-            if reserved_quantity:
-                vals['reserved_quantity'] = Decimal(reserved_quantity)
-            cls.create(**vals)
-        return cls._get_available_quantity(
-            product, location, lot=lot, package=package, owner=owner,
-            strict=True, allow_negative=True), in_date
+            quant = quants[0] if quants else None
+            if quant is not None:
+                # ≙ ``try_lock_for_update(limit=1)`` (``:1085``): la referencia
+                # bloquea el primer quant disponible para que dos transacciones no
+                # repartan el mismo saldo.
+                quant = (cls.objects.select_for_update()
+                         .filter(pk=quant.pk).first()) or quant
+                quant.in_date = in_date
+                if quantity:
+                    quant.quantity = quant.quantity + Decimal(quantity)
+                if reserved_quantity:
+                    nueva = quant.reserved_quantity + Decimal(reserved_quantity)
+                    quant.reserved_quantity = nueva if nueva > cero else cero
+                quant.save(update_fields=['in_date', 'quantity', 'reserved_quantity',
+                                          'inventory_diff_quantity', 'updated_at'])
+            else:
+                vals = {'product': product, 'location': location, 'lot': lot,
+                        'package': package, 'owner': owner, 'in_date': in_date}
+                if quantity:
+                    vals['quantity'] = Decimal(quantity)
+                if reserved_quantity:
+                    vals['reserved_quantity'] = Decimal(reserved_quantity)
+                cls.create([vals])
+            return cls._get_available_quantity(
+                product, location, lot=lot, package=package, owner=owner,
+                strict=True, allow_negative=True), in_date
 
     @classmethod
     def _update_reserved_quantity(cls, product, location, quantity, lot=None,
@@ -1839,7 +1859,8 @@ class StockQuant(TimeStampedModel):
                 [digitos, digitos, digitos])
             ids = [fila[0] for fila in cursor.fetchall()]
         if ids:
-            cls.objects.filter(pk__in=ids).delete()
+            with sudo():  # ``quants.sudo().unlink()`` (``odoo19c: :1139``)
+                cls.objects.filter(pk__in=ids).delete()
 
     @classmethod
     def _clean_reservations(cls):

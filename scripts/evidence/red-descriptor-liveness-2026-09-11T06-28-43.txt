@@ -1,0 +1,9 @@
+# Mitad ROJA de TASK-DOCS-0545 — el modulo aun no existe
+2026-09-11T06:28:43
+
+Traceback (most recent call last):
+  File "/home/user/thyrox/tests/roster/test_descriptor_liveness.py", line 36, in <module>
+    from roster import descriptor_liveness as dl  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ImportError: cannot import name 'descriptor_liveness' from 'roster' (/home/user/thyrox/src/roster/__init__.py)
+EXIT=1

@@ -1,0 +1,18 @@
+OK  sin usuario ni elevación → denegado: got='PermissionDenied' expected='PermissionDenied'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/create-por-contenido-20260911T221144/probe_create_list_returns_ordered_rows.py", line 44, in <module>
+    rows = ResPartner.create([{'name': 'Sonda A'}, {'name': 'Sonda B'}, {'name': 'Sonda C'}])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/decorators.py", line 218, in create
+    return inner(self, vals_list, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/models.py", line 792, in create
+    new_vals_list = cls._prepare_create_values(vals_list)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/models.py", line 932, in _prepare_create_values
+    bad_names.extend(
+  File "/home/user/kaupamex-api/src/orm/models.py", line 935, in <genexpr>
+    if field.precompute and field.readonly
+       ^^^^^^^^^^^^^^^^
+AttributeError: 'ManyToOneRel' object has no attribute 'precompute'
+EXIT=0

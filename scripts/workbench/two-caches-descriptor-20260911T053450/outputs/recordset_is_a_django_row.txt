@@ -1,0 +1,43 @@
+--- atributo de clase por campo ---
+id       attname=id       descriptor=DeferredAttribute    exacto_DeferredAttribute=True
+login    attname=login    descriptor=DeferredAttribute    exacto_DeferredAttribute=True
+
+--- las tres piezas que el diseno necesita ---
+BaseModel.ensure_one existe : True
+Model.pk es                 : property
+  -> pk resuelve a getattr(self, meta.pk.attname), o sea al campo `id`
+
+--- un recordset, construido como _from_ids lo construye ---
+type(row) es el modelo Django : True
+row.__dict__ (sin _state)     : {'_ids': (7, 18, 33)}
+
+CONSECUENCIA: con el descriptor instalado en todo campo llano,
+`instance.pk` dentro de __get__ entra al descriptor de `id`, que vuelve
+a pedir `instance.pk`. La rama de tamano tiene que ir ANTES, y leer
+`_ids` directamente del almacen de la instancia.
+
+=====================================================================
+CORRECCION 2026-09-11T05:51:00 — las dos afirmaciones de arriba midieron OTRA POBLACION
+=====================================================================
+
+El sujeto de la tabla fue `ResUsers`, que NO hereda `BaseModel`
+(`models.DefaultGetMixin, TimeStampedModel`, res_users.py:468). Sobre un
+BaseModel real el atributo de clase de `id` NO es un DeferredAttribute:
+
+    id       IdFromIds          <- el porte de Id.__get__, models.py:4769
+    label    DeferredAttribute
+
+Ver `id_resolution_on_recordset.txt`, misma fecha. Consecuencias:
+
+1. El parrafo CONSECUENCIA de arriba es FALSO. No hay recursion: `IdFromIds`
+   lee `record._ids` sin tocar `pk`. Medido sobre un singleton (7,):
+   `rs.id -> 7` y `rs.pk -> 7`.
+2. `Id.__get__` YA esta portado, con sus tres ramas (0 -> False, 1 -> _ids[0],
+   >1 -> ValueError) y con `__set__` fuera por divergencia medida (TASK-API-0403).
+3. El fallo de los 9 casos llanos de `sorted()` NO lo causa `id`: lo causa
+   `rs.label`, que cae al DeferredAttribute de Django y emite refresh_from_db.
+
+*Metrica:* getattr sobre un recordset construido con `_from_ids`, con la cache
+del campo llano sembrada, sobre un BaseModel (`IdProbe`).
+*Ciega a:* el coste de cada acceso y al comportamiento contra una tabla real
+(la sonda es `managed = False`).

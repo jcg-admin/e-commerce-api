@@ -1,0 +1,24 @@
+{
+  "question": "De los atributos de clase que la referencia declara por clase, ¿cuántos declara su puerto — y cuántos declara el puerto que la referencia NO tiene?",
+  "instrument": "scripts/workbench/atributos-de-clase-paridad-20260910T085330/class_attr_parity.py",
+  "metric": "asignaciones `_*` en el cuerpo de cada clase, por AST, en las dos direcciones (missing = ref − puerto; extra = puerto − ref), sobre las clases emparejadas por tres claves: nombre literal, nombre sin guiones bajos, y tabla. La tabla de la referencia es su `_table` declarado, y sólo a falta de él la sustitución de `_name`. Los objetos de tabla (Constraint/Index/UniqueIndex) se apartan a un cubo propio: su hogar aquí es Meta.constraints/Meta.indexes, no un atributo de clase.",
+  "blind_to": "el VALOR del atributo — que `_order` exista no dice que ordene igual; el atributo portado bajo otro nombre (no hay tabla de equivalencia); la clase que ninguna de las tres claves empareja, que se reporta aparte y no se cuenta; y el contenido de Meta.constraints, del que sólo mide si está declarado.",
+  "control": "dos anulaciones, cada una con su aserción. (1) Retirada la normalización sin guiones bajos cae 1 de 10 — la del join a través del `_` de la fuente; las otras nueve sobreviven porque la tabla las rescata. (2) Retirado el retiro de la clase ya emparejada cae 1 de 10 — la fixture donde la tabla es la ÚNICA clave. Esa segunda aserción se AÑADIÓ tras medir que la original pasaba con y sin la guarda: era código muerto que ningún verde delataba.",
+  "corrected_premise": {
+    "decia": "el join por tabla usa `_name.replace('.','_')`, la derivación de model_classes.py:266",
+    "mide": "9 de las 10 clases de ir_actions.py declaran `_table` EXPLÍCITO y lo sobreescriben: `ir.actions.act_window` declara `ir_act_window`, no `ir_actions_act_window`. Con la derivación, 0 de esas 9 emparejan.",
+    "consecuencia": "los 5 `clase-sin-contraparte` de ir_actions.py que la clasificación previa no resolvió (IrActionsActWindow, IrActionsActWindowView, IrActionsActUrl, IrActionsActWindowClose, IrActionsBase) eran 4 renombres + 1 clase propia, no 5 ausencias. `check_table_matches_name` del runtime YA honraba `_table`; el defecto estaba en el instrumento ad-hoc, no en el código."
+  },
+  "reproducible": "python3 scripts/workbench/atributos-de-clase-paridad-20260910T085330/class_attr_parity.py",
+  "source": [
+    "odoo19c: odoo/addons/base/models/ir_actions.py — 12 clases, 9 con _table explícito",
+    "src/addons/base/models/ir_actions.py — 12 clases, 3 con cabecera completa",
+    "docs: .claude/rules/atributos-de-clase-de-modelo.md v2.0.0",
+    "src/orm/registry.py:492 check_table_matches_name — ya honra _table sobre la sustitución"
+  ],
+  "tasks": ["#341"],
+  "destination": "docs: source/gestion/pm/api/iniciativas/completar-raiz-orm/ — el eje que atributos-de-clase-de-modelo.md declara sin gate ('el gate de porte no mira los atributos de clase')",
+  "measured_at": "2026-09-10T08:57:01",
+  "api_head": "0eb60dee",
+  "odoo_tools_head": "abe4040ec1"
+}

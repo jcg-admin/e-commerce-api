@@ -5,20 +5,18 @@ de ``DecimalField`` que en el proyecto sale como string por
 ``COERCE_DECIMAL_TO_STRING``).
 
 ``Monetary`` no es un alias pelado sino un **despachador** de ``store=``, igual
-que ``Char`` (ver ``fields_textual.py``): con ``store=True`` (el defecto)
-devuelve el ``DecimalField`` de siempre; con ``store=False`` devuelve un
-:class:`~orm.fields_nonstored.NonStored` — la traducción fijada del campo
-``compute`` sin columna de la referencia (precedente:
-``account/models/account_analytic_distribution_model.py``, campo
-``prefix_placeholder``). Primer consumidor Monetary:
-``account/models/digest.py`` (los KPI ``kpi_account_*_value``, que en la
-fuente son ``compute`` no almacenados). ``Integer`` y ``Float`` **no** llevan
-la rama de ``store`` **propia**: la llevan por el molde de
-:func:`~orm.fields_company_dependent.make_dispatcher`, que devuelve un
-``NonStored`` en cuanto el ``store`` resuelto es falso — con ``related=``
-o sin él. Primer consumidor de ``Integer(store=False)``:
-``hr_recruitment/models/digest.py`` (tarea #159), cuyo KPI la fuente
-declara ``fields.Integer(compute=…)``, sin columna.
+que ``Char`` (ver ``fields_textual.py``): recibe el vocabulario de la fuente,
+lo deriva y lo anota sobre el campo. Lo que **ya no hace** es elegir clase —
+``store`` es un atributo, no un tipo (``odoo19c: odoo/orm/fields.py:455``), y
+la forma sin columna la resuelve la costura al contribuir a la clase
+(TASK-API-0417). Precedente de ``Monetary`` sin columna:
+``account/models/account_analytic_distribution_model.py`` (campo
+``prefix_placeholder``) y ``account/models/digest.py`` (los KPI
+``kpi_account_*_value``, que en la fuente son ``compute`` no almacenados).
+``Integer`` y ``Float`` reciben el mismo trato por el molde de
+:func:`~orm.fields_company_dependent.make_dispatcher`. Primer consumidor de
+``Integer(store=False)``: ``hr_recruitment/models/digest.py`` (tarea #159),
+cuyo KPI la fuente declara ``fields.Integer(compute=…)``, sin columna.
 
 ``company_dependent`` — ``Integer`` y ``Float`` sí lo llevan (tarea #129)
 =========================================================================
@@ -43,9 +41,8 @@ from django.db import models
 from orm.fields_company_dependent import make_dispatcher
 from orm.fields_nonstored import (
     _UNSET,
-    NonStored,
     annotate_related,
-    projection_or_none,
+    apply_source_defaults,
 )
 
 __all__ = ['Integer', 'Float', 'Monetary']
@@ -66,13 +63,10 @@ def Monetary(*args, store=_UNSET, help=None, related=None, **kwargs):
     #: defecto de ``store`` depende de si hay ``related``.
     if store is not _UNSET:
         kwargs['store'] = store
-    projection, related_attrs = projection_or_none(related, kwargs)
-    if projection is not None:
-        return projection
-    if not related_attrs['store']:
-        field = NonStored(*args, **kwargs)
-    else:
-        field = models.DecimalField(*args, **kwargs)
+    related_attrs = apply_source_defaults(related, kwargs)
+    #: El ``DecimalField`` se construye con columna y sin ella: ``store`` es
+    #: atributo, no tipo (``odoo19c: odoo/orm/fields.py:455``).
+    field = models.DecimalField(*args, **kwargs)
     return annotate_related(field, related, related_attrs)
 
 

@@ -18,9 +18,19 @@ from django.db import IntegrityError, transaction
 from addons.base.models import ResCompany, ResCurrency
 from addons.base.models.res_currency import ResCurrencyRate
 from tests.conftest import matching_by_display_name
-from orm.environments import company_scope
+from orm.environments import company_scope, sudo
 
 pytestmark = pytest.mark.integration
+
+
+@pytest.fixture(autouse=True)
+def _elevated():
+    """``create`` comprueba ``check_access('create')`` como la fuente
+    (:ref:`h-api-1108`); sin usuario en contexto la ACL deniega, así que el
+    módulo corre elevado — el mismo ``sudo()`` que
+    ``tests/integration/base/test_ir_model_access_check.py`` ya usa."""
+    with sudo():
+        yield
 
 
 @pytest.fixture
@@ -601,9 +611,9 @@ class TestCreateAndWrite:
         ResCurrencyRate.objects.create(currency=currency, company=company,
                                        name=date(2026, 1, 1),
                                        rate=Decimal('2'))
-        row = ResCurrencyRate.create(
-            currency=other_currency, company=company,
-            name=date(2026, 3, 1), company_rate=Decimal('4'))
+        row, = ResCurrencyRate.create([{
+            'currency': other_currency, 'company': company,
+            'name': date(2026, 3, 1), 'company_rate': Decimal('4')}])
         row.refresh_from_db()
         assert row.rate == Decimal('8')
 
@@ -612,9 +622,9 @@ class TestCreateAndWrite:
         ResCurrencyRate.objects.create(currency=currency, company=company,
                                        name=date(2026, 1, 1),
                                        rate=Decimal('2'))
-        row = ResCurrencyRate.create(
-            currency=other_currency, company=company,
-            name=date(2026, 3, 1), inverse_company_rate=Decimal('0.25'))
+        row, = ResCurrencyRate.create([{
+            'currency': other_currency, 'company': company,
+            'name': date(2026, 3, 1), 'inverse_company_rate': Decimal('0.25')}])
         row.refresh_from_db()
         assert row.rate == Decimal('8')
 
@@ -629,9 +639,9 @@ class TestCreateAndWrite:
         ResCurrencyRate.objects.create(currency=currency, company=company,
                                        name=date(2026, 1, 1),
                                        rate=Decimal('2'))
-        row = ResCurrencyRate.create(
-            currency=other_currency, company=company, name=date(2026, 3, 1),
-            rate=Decimal('3'), company_rate=Decimal('4'))
+        row, = ResCurrencyRate.create([{
+            'currency': other_currency, 'company': company, 'name': date(2026, 3, 1),
+            'rate': Decimal('3'), 'company_rate': Decimal('4')}])
         row.refresh_from_db()
         assert row.rate == Decimal('3')
 

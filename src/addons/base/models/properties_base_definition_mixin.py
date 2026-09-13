@@ -71,6 +71,7 @@ tres dependencias: ``_traverse_related_sql``, ``_check_field_access`` y el par
 import logging
 
 import fields
+import api
 import models
 from tools.sql import SQL
 
@@ -156,6 +157,7 @@ class PropertiesBaseDefinitionMixin(FieldSqlMixin, models.Model):
         return (Domain.TRUE if properties_base_definition_id in value
                 else Domain.FALSE)
 
+    @api.model_create_multi
     @classmethod
     def create(cls, vals_list):
         """``create`` — siembra la definición antes de insertar.
@@ -167,8 +169,6 @@ class PropertiesBaseDefinitionMixin(FieldSqlMixin, models.Model):
         fila de definición **exista**— se hace llamando al mismo método que
         ella llama.
         """
-        if isinstance(vals_list, dict):
-            vals_list = [vals_list]
         parent = PropertiesBaseDefinition._get_definition_id_for_property_field(
             cls.properties_model_label(), PROPERTIES_FIELD_NAME)
         created = []

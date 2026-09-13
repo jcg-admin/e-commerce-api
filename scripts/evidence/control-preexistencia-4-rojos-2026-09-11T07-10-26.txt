@@ -1,0 +1,9 @@
+=== CON mis cambios (HEAD + working tree) ===
+FAILED tests/integration/test_schema.py::TestSchemaEndpoint::test_schema_titulo_nombra_la_plataforma
+FAILED tests/unit/base/test_system_parameter.py::TestBusinessKeysL2::test_backup_alert_email_seeded_without_stale_domain
+6 failed, 123 passed, 23 skipped, 1 warning in 30.98s
+=== SIN mis cambios (stash de src/orm/{fields,models,utils}.py) ===
+FAILED tests/integration/test_schema.py::TestSchemaEndpoint::test_schema_titulo_nombra_la_plataforma
+FAILED tests/unit/base/test_system_parameter.py::TestBusinessKeysL2::test_backup_alert_email_seeded_without_stale_domain
+6 failed, 123 passed, 23 skipped, 1 warning in 30.88s
+restaurado:  M src/orm/fields.py  M src/orm/models.py  M src/orm/utils.py 

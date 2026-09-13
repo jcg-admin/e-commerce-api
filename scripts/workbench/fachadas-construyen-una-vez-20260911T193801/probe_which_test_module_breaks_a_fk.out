@@ -1,0 +1,404 @@
+base: []
+test_access_manager.py: ok
+test_bare_store_false_declaration.py: ok
+test_base_model_recordset.py: ok
+test_check_company.py: ok
+test_checks_irresolvable_fk.py: ok
+test_comodel_name_contract.py: ok
+test_company_dependent.py: ok
+test_compute_declaration.py: ok
+test_compute_wiring.py: ok
+test_compute_writes_m2m.py: ok
+test_condition_company_index.py: ok
+test_copy.py: ok
+test_declared_source_vocabulary.py: ok
+test_default_get.py: ok
+test_deferred_model_name.py: ok
+test_determine_inverse.py: ok
+test_display_name.py: ok
+test_domain_any_optimizers.py: ok
+test_domain_any_with_rights.py: ok
+test_domain_hierarchy.py: ok
+test_domain_in_required.py: ok
+test_domain_nary_merges.py: ok
+test_domain_operator_optimizers.py: ok
+test_domain_optimizer_registry.py: ok
+test_domain_relational_optimizers.py: ok
+test_domain_type_optimizers.py: ok
+test_domains.py: ok
+test_environments_cache.py: ok
+test_environments_channels.py: ok
+test_environments_pooling_and_flush.py: ok
+test_environments_transaction.py: ok
+test_extend_model_selection_and_indexes.py: ok
+test_extension_tardia_por_nombre.py: ok
+test_field_cache.py: ok
+test_field_class_attributes.py: ok
+test_field_conversion.py: ok
+test_field_definition_collection.py: ok
+test_field_descriptor.py: ok
+test_field_get_depends.py: ok
+test_field_lifecycle_methods.py: ok
+test_field_required_declared.py: ok
+test_field_resolve_depends.py: ok
+test_field_search_method.py: ok
+test_field_setup_attrs.py: ok
+test_field_to_sql.py: ok
+test_field_triggers.py: ok
+test_field_type_vocabulary.py: ok
+test_field_update_db.py: ok
+test_fields_char_signature_aliases.py: ok
+test_fields_description_protocol.py: ok
+test_fields_facade.py: ok
+test_fields_html.py: ok
+test_fields_map_contract.py: ok
+test_fields_module_symbols.py: ok
+test_fields_properties.py: ok
+test_fields_related.py: ok
+test_fields_relational_update_inverse.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_fields_relational_update_inverse.py", line 83, in <module>
+    class InverseProbeChild(django_models.Model):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 213, in __new__
+    new_class.add_to_class(obj_name, obj)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 393, in add_to_class
+    value.contribute_to_class(cls, name)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/fields/related.py", line 2000, in contribute_to_class
+    self.remote_field.through = create_many_to_many_intermediary_model(
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/fields/related.py", line 1336, in create_many_to_many_intermediary_model
+    return type(
+           ^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+test_fields_temporal_to_string.py: ok
+test_filtered_domain.py: ok
+test_fk_column_naming.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_fk_column_naming.py", line 33, in <module>
+    from addons.account.report.account_invoice_report import AccountInvoiceReport
+  File "/home/user/kaupamex-api/addons/account/report/__init__.py", line 30, in <module>
+    from . import account_invoice_report  # noqa: F401
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/addons/account/report/account_invoice_report.py", line 141, in <module>
+    class AccountInvoiceReport(models.Model):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+test_fk_drf_contract.py: ok
+test_fk_three_axes.py: ok
+test_level_one_symbols.py: ok
+test_level_two_symbols.py: ok
+test_load.py: ok
+test_many2one_ondelete.py: ok
+test_many2one_ondelete_transient.py: ok
+test_marked_method_collectors.py: ok
+test_method_chain.py: ok
+test_model_class_construction.py: ok
+test_model_class_lifecycle.py: ok
+test_models_item_access.py: ok
+test_modified_engine.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_modified_engine.py", line 41, in <module>
+    class EngineOwner(django_models.Model):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+test_multidb_router.py: ok
+test_nonstored_compute_dispatch.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_nonstored_compute_dispatch.py", line 59, in <module>
+    class ComputeDispatchProbe(models.Model):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+test_one2many.py: ok
+test_origin_mixin.py: ok
+test_orm_utils_read_group_and_sql.py: ok
+test_precompute_before_insert.py: ok
+test_read_path_mechanism.py: ok
+test_record_loader.py: ok
+test_registry_class.py: ok
+test_registry_field_axis.py: ok
+test_registry_load_axis.py: ok
+test_registry_schema_axis.py: ok
+test_registry_signaling_axis.py: ok
+test_related_field_declaration.py: ok
+test_related_field_setup.py: ok
+test_related_in_every_field_type.py: ok
+test_related_shape_in_the_reference.py: ok
+test_related_write_reaches_the_far_end.py: ok
+test_router_failclosed.py: ok
+test_sorted_order_to_function.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_sorted_order_to_function.py", line 62, in <module>
+    class SortParentProbe(BaseModel):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+test_sugar_packages.py: ok
+test_table_objects.py: ok
+test_temporal_field_shape.py: ok
+test_trigger_tree.py: ok
+test_unaccent.py: ok
+test_utils_record_adaptation.py: IMPORT-ERROR AttributeError: 'NoneType' object has no attribute '_meta'
+Traceback (most recent call last):
+  File "/home/user/kaupamex-api/scripts/workbench/fachadas-construyen-una-vez-20260911T193801/probe_which_test_module_breaks_a_fk.py", line 28, in <module>
+    importlib.import_module(mod)
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/user/kaupamex-api/tests/unit/orm/test_utils_record_adaptation.py", line 52, in <module>
+    class UtilsRecordsetProbe(BaseModel):
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/base.py", line 388, in __new__
+    new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 239, in register_model
+    self.do_pending_operations(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 435, in do_pending_operations
+    function(model)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 413, in apply_next_model
+    self.lazy_model_operation(next_function, *more_models)
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/apps/registry.py", line 399, in lazy_model_operation
+    function()
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1179, in _setup_fields_of
+    prepare_field_setup(model_cls)
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1137, in prepare_field_setup
+    fields_ = _fields_with_setup(model_cls)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/src/orm/model_classes.py", line 1090, in _fields_with_setup
+    return [f for f in model_cls._meta.get_fields() if isinstance(f, models.Field)]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 870, in get_fields
+    return self._get_fields(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 943, in _get_fields
+    all_fields = self._relation_tree
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 843, in _relation_tree
+    return self._populate_directed_relation_graph()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/kaupamex-api/.venv/lib/python3.12/site-packages/django/db/models/options.py", line 824, in _populate_directed_relation_graph
+    remote_label = f.remote_field.model._meta.concrete_model._meta.label
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '_meta'
+EXIT=0
